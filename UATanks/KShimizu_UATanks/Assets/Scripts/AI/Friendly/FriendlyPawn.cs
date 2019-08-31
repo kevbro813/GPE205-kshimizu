@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPawn : MonoBehaviour
+public class FriendlyPawn : TankPawn
 {
     // Start is called before the first frame update
     void Start()

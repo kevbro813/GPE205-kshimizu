@@ -13,6 +13,6 @@ public class EnemyPawn : TankPawn
     // Update is called once per frame
     void Update()
     {
-        
+        SingleCannonFire();
     }
 }

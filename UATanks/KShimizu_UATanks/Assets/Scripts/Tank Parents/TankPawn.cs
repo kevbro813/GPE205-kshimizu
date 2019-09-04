@@ -2,32 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankPawn : MonoBehaviour
+public abstract class TankPawn : MonoBehaviour
 {
     public Transform tf;
     public PlayerData playerData;
+    public CharacterController characterController;
+    public PlayerController playerController;
+    public CannonSource cannonSource; // Component on child object that will instantiate the projectile
 
-    // Tank Movement Methods
-    public void Forward()
+
+    // Tank forward and reverse movement method
+    public void MoveTank(float _moveSpeed)
     {
-        tf.Translate((Vector3.forward * playerData.moveSpeed * Time.deltaTime), Space.Self);
-    }
-    public void Reverse()
-    {
-        tf.Translate((Vector3.back * playerData.moveSpeed * Time.deltaTime), Space.Self);
-    }
-    public void RotateRight()
-    {
-        tf.Rotate((Vector3.up * playerData.rotationSpeed * Time.deltaTime), Space.Self);
-    }
-    public void RotateLeft()
-    {
-        tf.Rotate((Vector3.down * playerData.rotationSpeed * Time.deltaTime), Space.Self);
+        // Forward and reverse movement using SimpleMove
+        characterController.SimpleMove(tf.forward * _moveSpeed); // moveSpeed accounts for movement direction and forward/reverse speed
     }
 
-    // Tank Attack Methods
+    // Tank rotation method
+    public void RotateTank(float _rotationSpeed) // rotationSpeed also determines rotation direction
+    {
+        // Rotates the tank by multiplying the vector3 by the rotation speed and delta time
+        tf.Rotate((Vector3.up * _rotationSpeed * Time.deltaTime), Space.Self);
+    }
+
+    // Tank single cannon fire attack method
     public void SingleCannonFire()
     {
-
+        // Set cannonSource if null
+        if (cannonSource == null)
+        {
+            cannonSource = GetComponentInChildren<CannonSource>(); // Get the cannonSource component in the child of the tank object
+        }
+        else
+        {
+            cannonSource.FireCannon(); // Fire cannon
+        }
     }
 }

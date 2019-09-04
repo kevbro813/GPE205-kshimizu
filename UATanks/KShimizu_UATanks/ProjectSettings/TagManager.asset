@@ -8,6 +8,8 @@ TagManager:
   - PlayerSpawn
   - Enemy
   - Arena
+  - EnemySpawn
+  - HUD
   layers:
   - Default
   - TransparentFX

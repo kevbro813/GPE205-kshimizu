@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   m_Layer: 0
   m_Name: Front
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 400002}
   m_Layer: 0
   m_Name: Cannon
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 400004}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,9 +153,10 @@ GameObject:
   - component: {fileID: 400006}
   - component: {fileID: 3300002}
   - component: {fileID: 2300002}
+  - component: {fileID: 3784236054747947691}
   m_Layer: 0
   m_Name: Barrel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -220,6 +221,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &3784236054747947691
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100006}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &100008
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +247,7 @@ GameObject:
   - component: {fileID: 2300004}
   m_Layer: 0
   m_Name: Base
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -309,7 +323,7 @@ GameObject:
   - component: {fileID: 400010}
   m_Layer: 0
   m_Name: Visuals
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,7 +356,8 @@ GameObject:
   - component: {fileID: 14300000}
   - component: {fileID: 7997903189096085886}
   - component: {fileID: 236030955226545614}
-  - component: {fileID: 3347649485186875237}
+  - component: {fileID: 8673690306303717592}
+  - component: {fileID: 2892628381576399490}
   m_Layer: 0
   m_Name: PlayerTank
   m_TagString: Player
@@ -362,6 +377,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
+  - {fileID: 1859702919725963511}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -378,11 +394,11 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.001
+  m_SlopeLimit: 0
+  m_StepOffset: 0
+  m_SkinWidth: 0.01
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!114 &7997903189096085886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,8 +413,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tf: {fileID: 0}
   playerData: {fileID: 0}
-  rotateVector: {x: 0, y: 0, z: 0}
+  characterController: {fileID: 0}
   playerController: {fileID: 0}
+  cannonSource: {fileID: 3273725379582519318}
 --- !u!114 &236030955226545614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,11 +430,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankHealth: 100
   tankArmor: 0
-  tankCannonDamage: 50
-  moveSpeed: 2
-  rotationSpeed: 20
---- !u!135 &3347649485186875237
-SphereCollider:
+  forwardSpeed: 5
+  reverseSpeed: 3
+  rotationSpeed: 50
+  projectileDuration: 0.5
+  cannonDelay: 1
+  shellForce: 50
+  shellDamage: 50
+  playerScore: 0
+--- !u!54 &8673690306303717592
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100012}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
+--- !u!136 &2892628381576399490
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -426,8 +464,9 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
+  m_Height: 0.25
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &100014
 GameObject:
@@ -442,7 +481,7 @@ GameObject:
   - component: {fileID: 2300006}
   m_Layer: 0
   m_Name: Shell
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -507,3 +546,49 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &1310837236532366058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1859702919725963511}
+  - component: {fileID: 3273725379582519318}
+  m_Layer: 0
+  m_Name: ProjectileSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1859702919725963511
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310837236532366058}
+  m_LocalRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400012}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 90, y: 90, z: 90}
+--- !u!114 &3273725379582519318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310837236532366058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be7f7704b63089408e12efa6a7569c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
+    type: 3}
+  playerData: {fileID: 236030955226545614}

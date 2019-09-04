@@ -70,6 +70,8 @@
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyController.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyData.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyPawn.cs" />
+    <Compile Include="Assets\Scripts\Attacks\CannonShell.cs" />
+    <Compile Include="Assets\Scripts\Attacks\CannonSource.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerPawn.cs" />
     <Compile Include="Assets\Scripts\Tank Parents\TankData.cs" />
     <Compile Include="Assets\Scripts\Tank Parents\TankPawn.cs" />
+    <Compile Include="Assets\Scripts\UI\HUD.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Unity Projects/GPE205/GPE205-kshimizu/UATanks/KShimizu_UATanks/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

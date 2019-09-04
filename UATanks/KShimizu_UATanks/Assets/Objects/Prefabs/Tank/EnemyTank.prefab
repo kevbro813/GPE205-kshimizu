@@ -343,6 +343,8 @@ GameObject:
   - component: {fileID: 8744939642639530500}
   - component: {fileID: 6464525225311272216}
   - component: {fileID: 2957852750035039778}
+  - component: {fileID: 2739427385053190658}
+  - component: {fileID: 905196944557052418}
   m_Layer: 0
   m_Name: EnemyTank
   m_TagString: Enemy
@@ -362,6 +364,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
+  - {fileID: 9097669562400729956}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -378,11 +381,11 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.001
+  m_SlopeLimit: 0
+  m_StepOffset: 0
+  m_SkinWidth: 0.01
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!114 &8744939642639530500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +400,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tf: {fileID: 0}
   playerData: {fileID: 0}
-  rotateVector: {x: 0, y: 0, z: 0}
+  characterController: {fileID: 0}
+  playerController: {fileID: 0}
+  cannonSource: {fileID: 215966559274695101}
 --- !u!114 &6464525225311272216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,7 +429,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankHealth: 100
   tankArmor: 0
-  tankCannonDamage: 25
+  forwardSpeed: 5
+  reverseSpeed: 3
+  rotationSpeed: 50
+  projectileDuration: 0.5
+  cannonDelay: 1
+  shellForce: 50
+  shellDamage: 25
+  pointValue: 100
+--- !u!54 &2739427385053190658
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100012}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
+--- !u!136 &905196944557052418
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 0.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,3 +545,49 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &6962454970732480845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9097669562400729956}
+  - component: {fileID: 215966559274695101}
+  m_Layer: 0
+  m_Name: ProjectileSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9097669562400729956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962454970732480845}
+  m_LocalRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400012}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 90, y: 90, z: 90}
+--- !u!114 &215966559274695101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962454970732480845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be7f7704b63089408e12efa6a7569c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
+    type: 3}
+  playerData: {fileID: 0}

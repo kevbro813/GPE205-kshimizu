@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Camera script used to follow the player
 public class CameraFollow : MonoBehaviour
 {
-    // Camera script used to follow the player
     public GameObject playerTank; // player object
     public float speed = 0.5f; // Sets the speed the camera follows behind player
     public float cameraTrailDistance = 15.0f;

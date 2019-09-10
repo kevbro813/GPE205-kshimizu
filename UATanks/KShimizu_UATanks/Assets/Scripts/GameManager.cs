@@ -12,16 +12,15 @@ public class GameManager : MonoBehaviour
     public Transform playerSpawn;
     public Camera mainCamera;
     public PlayerData playerData;
+    public HUD hud;
     public List<GameObject> enemyTankList; // List of enemy tanks, will be used for spawning enemies
     public List<Transform> enemyTankSpawnList; // List of all spawn points for enemies
     public GameObject[] enemyObjectsArray; // Array of all current enemy objects
     public EnemyData[] enemyDataArray; // Array of all EnemyData components
-    public float spawnDelay = 0;
-    public float maxEnemies = 8;
-    private float enemiesSpawned;
-    private Transform spawnPoint;
-    private GameObject randomEnemy;
-    public HUD hud;
+    public float spawnDelay = 0; // Delay between enemies being spawned into the world
+    public float maxEnemies = 8; // Maximum number of enmies spawned
+    private float enemiesSpawned; // Tracks the number of enemies spawned into the world. May need to be public in the future
+    
 
 
     private void Awake()
@@ -91,8 +90,8 @@ public class GameManager : MonoBehaviour
             // Check that enemyCount does not exceed maxEnemies
             if (maxEnemies > enemiesSpawned)
             {
-                spawnPoint = enemyTankSpawnList[Random.Range(0, enemyTankSpawnList.Count)]; // Random spawnPoint from list
-                randomEnemy = enemyTankList[Random.Range(0, enemyTankList.Count)]; // Random enemy from list
+                Transform spawnPoint = enemyTankSpawnList[Random.Range(0, enemyTankSpawnList.Count)]; // Random spawnPoint from list
+                GameObject randomEnemy = enemyTankList[Random.Range(0, enemyTankList.Count)]; // Random enemy from list
                 enemyTankSpawnList.Remove(spawnPoint); // Remove spawn point from list when used
                 // Create enemyClone instance
                 GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation) as GameObject;

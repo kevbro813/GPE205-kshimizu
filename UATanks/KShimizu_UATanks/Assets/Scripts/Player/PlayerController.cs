@@ -8,8 +8,8 @@ public class PlayerController : MonoBehaviour
     public PlayerData playerData;
     private float inputVertical; // Variable for player vertical input, used for tank forward/reverse movement
     private float inputHorizontal; // Variable for player horizontal input, used for tank rotation
-    private float moveSpeed;
-    private float rotateSpeed;
+    private float moveSpeed; // Float variable that is passed into MoveTank method
+    private float rotateSpeed; // Float variable that is passed into RotateTank method
     public Vector3 mousePosition; // Stores the mouse cursor position, will be used for turret rotation
     
     void Update()

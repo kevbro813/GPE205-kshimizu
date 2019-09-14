@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FriendlyData : TankData
+public class FriendlyData : AIData
 {
     // Start is called before the first frame update
     void Start()

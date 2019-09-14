@@ -10,6 +10,10 @@ TagManager:
   - Arena
   - EnemySpawn
   - HUD
+  - EnemyWaypoint
+  - PlayerSenses
+  - Senses
+  - Sound
   layers:
   - Default
   - TransparentFX
@@ -19,11 +23,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerAttack
+  - EnemyAttack
+  - EnemyObject
+  - PlayerObject
+  - Environment
   - 
   - 
   - 

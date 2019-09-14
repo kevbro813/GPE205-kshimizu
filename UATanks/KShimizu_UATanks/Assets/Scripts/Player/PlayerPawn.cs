@@ -16,8 +16,8 @@ public class PlayerPawn : TankPawn
         playerController.mousePosition.y = transform.position.y + transform.localScale.y;
         Debug.Log(playerController.mousePosition);
         tf.LookAt(playerController.mousePosition);
-        Vector3 _direction = new Vector3(playerController.mousePosition.x - tf.position.x, tf.position.y, playerController.mousePosition.z - tf.position.z); // Set the direction to the mouse position on the x and y axis
-        tf.right -= _direction; // Sets the transform direction to direction vector. Negative direction because default sprite faces down.
+        Vector3 direction = new Vector3(playerController.mousePosition.x - tf.position.x, tf.position.y, playerController.mousePosition.z - tf.position.z); // Set the direction to the mouse position on the x and y axis
+        tf.right -= direction; // Sets the transform direction to direction vector. Negative direction because default sprite faces down.
         // ***Use slerp to smooth tank rotation and add a lag***
     }
 }

@@ -13,6 +13,7 @@ public abstract class TankData : MonoBehaviour
     public float cannonDelay = 3.0f; // Delay while tank is reloading
     public float shellForce = 1.0f; // Speed of the shell
     public float shellDamage = 20.0f; // Damage dealt by the shell
+    public float criticalHealth = 60.0f;
 
     // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
     public virtual void TankDestroyed()

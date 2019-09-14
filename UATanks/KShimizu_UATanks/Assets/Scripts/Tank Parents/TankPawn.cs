@@ -12,17 +12,17 @@ public abstract class TankPawn : MonoBehaviour
 
 
     // Tank forward and reverse movement method
-    public void MoveTank(float _moveSpeed)
+    public void MoveTank(float moveSpeed)
     {
         // Forward and reverse movement using SimpleMove
-        characterController.SimpleMove(tf.forward * _moveSpeed); // moveSpeed accounts for movement direction and forward/reverse speed
+        characterController.SimpleMove(tf.forward * moveSpeed * Time.deltaTime); // moveSpeed accounts for movement direction and forward/reverse speed
     }
 
     // Tank rotation method
-    public void RotateTank(float _rotationSpeed) // rotationSpeed also determines rotation direction
+    public void RotateTank(float rotationSpeed) // rotationSpeed also determines rotation direction
     {
         // Rotates the tank by multiplying the vector3 by the rotation speed and delta time
-        tf.Rotate((Vector3.up * _rotationSpeed * Time.deltaTime), Space.Self);
+        tf.Rotate((Vector3.up * rotationSpeed * Time.deltaTime), Space.Self);
     }
 
     // Tank single cannon fire attack method

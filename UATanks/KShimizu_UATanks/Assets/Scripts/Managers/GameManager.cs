@@ -17,11 +17,12 @@ public class GameManager : MonoBehaviour
     public List<Transform> enemyTankSpawnList; // List of all spawn points for enemies
     public GameObject[] enemyObjectsArray; // Array of all current enemy objects
     public EnemyData[] enemyDataArray; // Array of all EnemyData components
+    public Transform[] enemyWaypoints; // Array of all enemy waypoints to use for patrolling. Add in inspector
     public float spawnDelay = 0; // Delay between enemies being spawned into the world
     public float maxEnemies = 8; // Maximum number of enmies spawned
     private float enemiesSpawned; // Tracks the number of enemies spawned into the world. May need to be public in the future
-    
-
+    public Vector3 lastPlayerLocation;
+    public Vector3 lastSoundLocation;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -37,7 +39,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        playerController = GameObject.FindWithTag("GameManager").GetComponent<PlayerController>();
+        playerController = GetComponent<PlayerController>();
         mainCamera = Camera.main;
         hud = GameObject.FindWithTag("HUD").GetComponent<HUD>();
         CreatePlayerTank(); // Instantiate a new player

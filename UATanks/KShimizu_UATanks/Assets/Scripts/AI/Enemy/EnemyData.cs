@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyData : TankData
+public class EnemyData : AIData
 {
     public int pointValue; // Number of points granted to the player when the enemy tank is destroyed
     public PlayerData playerData;

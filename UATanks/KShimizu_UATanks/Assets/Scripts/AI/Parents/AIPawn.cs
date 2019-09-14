@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIController : MonoBehaviour
+public class AIPawn : TankPawn
 {
     // Start is called before the first frame update
     void Start()

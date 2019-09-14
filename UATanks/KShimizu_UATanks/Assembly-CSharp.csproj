@@ -63,17 +63,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Art\RoomTileTemplate\Scripts\Room.cs" />
-    <Compile Include="Assets\Scripts\AI\AIController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyData.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyPawn.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyController.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyData.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyPawn.cs" />
+    <Compile Include="Assets\Scripts\AI\Parents\AIController.cs" />
+    <Compile Include="Assets\Scripts\AI\Parents\AIData.cs" />
+    <Compile Include="Assets\Scripts\AI\Parents\AIPawn.cs" />
+    <Compile Include="Assets\Scripts\AI\Senses\AIHearing.cs" />
+    <Compile Include="Assets\Scripts\AI\Senses\AIVision.cs" />
+    <Compile Include="Assets\Scripts\AI\Senses\SensoryRange.cs" />
     <Compile Include="Assets\Scripts\Attacks\CannonShell.cs" />
     <Compile Include="Assets\Scripts\Attacks\CannonSource.cs" />
-    <Compile Include="Assets\Scripts\CameraFollow.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPawn.cs" />

@@ -28,14 +28,14 @@ public class CannonShell : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Enemy")) // Check if the collider hit has the "Enemy" tag
         {
-            EnemyData _enemyData = col.gameObject.GetComponent<EnemyData>();
+            EnemyData enemyData = col.gameObject.GetComponent<EnemyData>();
             Destroy(gameObject); // Destroy the cannon shell if it hits an enemy tank
 
             // Deal damage to enemy tank
-            _enemyData.tankHealth -= tankData.shellDamage;
-            Debug.Log(_enemyData.tankHealth);
+            enemyData.tankHealth -= tankData.shellDamage;
+            Debug.Log(enemyData.tankHealth);
         }
-        if (col.gameObject.CompareTag("Player")) // Check if the collider hit has the "Player" tag
+        else if (col.gameObject.CompareTag("Player")) // Check if the collider hit has the "Player" tag
         {
             Destroy(gameObject); // Destroy the cannon shell if it hits an enemy tank
 
@@ -43,7 +43,7 @@ public class CannonShell : MonoBehaviour
             playerData.tankHealth -= tankData.shellDamage;
             Debug.Log(playerData.tankHealth);
         }
-        else
+        else if (col.gameObject.CompareTag("Arena"))
         {
             Destroy(gameObject); // Destroy the cannon shell if it hits any other collider
         }

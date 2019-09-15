@@ -67,7 +67,6 @@ public class GameManager : MonoBehaviour
         playerController.playerPawn = playerPawn;
         playerController.playerData = playerData;
         playerPawn.playerController = playerController;
-        playerPawn.playerData = playerData;
         playerPawn.characterController = playerTank.GetComponent<CharacterController>();
         hud.playerData = playerData;
     }

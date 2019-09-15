@@ -41,7 +41,6 @@ public class CannonShell : MonoBehaviour
 
             // Deal damage to player tank
             playerData.tankHealth -= tankData.shellDamage;
-            Debug.Log(playerData.tankHealth);
         }
         else if (col.gameObject.CompareTag("Arena"))
         {

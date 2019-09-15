@@ -13,11 +13,11 @@ public class AIVision : MonoBehaviour
     void Start()
     {
         aiData = GetComponentInParent<AIData>();
+        tf = GetComponent<Transform>(); // transform component
     }
     public bool CanSee(GameObject target)
     {
         ttf = target.GetComponent<Transform>(); // Get target transform component
-        tf = GetComponent<Transform>(); // transform component
 
         // Find the vector from current object to target
 
@@ -41,11 +41,11 @@ public class AIVision : MonoBehaviour
             RaycastHit hit;
 
             // RaycastHit from object to target, maxview distance, and only affects objects in layermask
-            if (Physics.Raycast(tf.position + (transform.up * 0.5f), vectorToTarget, out hit, aiData.maxViewDistance, layerMask))
+            if (Physics.Raycast(tf.position, vectorToTarget, out hit, aiData.maxViewDistance, layerMask))
             {
                 if (hit.collider.CompareTag("Player")) // If hit is player then...
                 {
-                    Debug.DrawRay(tf.position + (transform.up * 0.5f), vectorToTarget, Color.red, aiData.maxViewDistance); // Draw rays
+                    //Debug.DrawRay(tf.position, vectorToTarget, Color.red, aiData.maxViewDistance); // Draw rays
                     lastPlayerLocation = hit.point; // Set lastPlayerLocation to raycast hit point
                     GameManager.instance.lastPlayerLocation = lastPlayerLocation; // Set lastPlayerLocation in GameManager
                     return true;
@@ -58,12 +58,10 @@ public class AIVision : MonoBehaviour
     {
         if (distanceToTarget <= aiData.maxAttackRange)
         {
-            //Debug.Log("In Attack Range");
             return true;
         }
         else
         {
-            //Debug.Log("Not in Attack Range");
             return false;
         }
     }

@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerPawn : TankPawn
 {
+    public PlayerController playerController;
     void Start()
     {
+        playerController = GetComponent<PlayerController>();
         tf = GetComponent<Transform>();
         cannonSource = GetComponentInChildren<CannonSource>();
     }
 
-    // Method that will be used to rotate tank turret (WORK IN PROGRESS)
+    // TODO: Rotate tank turret using mouse
     public void RotateTowardsMouse()
     {
         playerController.mousePosition.y = transform.position.y + transform.localScale.y;

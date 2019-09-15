@@ -11,7 +11,6 @@ public class SensoryRange : MonoBehaviour
 
         if (other.gameObject.CompareTag("PlayerSenses")) // If game object is tagged with senses
         {
-            //Debug.Log("In Range");
             inSenseRange = true; // Player is in range
         }
     }
@@ -20,7 +19,6 @@ public class SensoryRange : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PlayerSenses")) // If game object is tagged with senses
         {
-            //Debug.Log("Out of Range");
             inSenseRange = false; // Player is not in range
         }
     }

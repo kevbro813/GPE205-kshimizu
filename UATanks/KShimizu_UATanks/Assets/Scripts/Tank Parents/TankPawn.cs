@@ -5,9 +5,7 @@ using UnityEngine;
 public abstract class TankPawn : MonoBehaviour
 {
     public Transform tf;
-    public PlayerData playerData;
     public CharacterController characterController;
-    public PlayerController playerController;
     public CannonSource cannonSource; // Component on child object that will instantiate the projectile
 
 

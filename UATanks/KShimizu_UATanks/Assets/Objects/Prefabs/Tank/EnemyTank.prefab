@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Front
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,9 +87,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400002}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cannon
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,9 +119,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400004}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Body
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,9 +153,9 @@ GameObject:
   - component: {fileID: 400006}
   - component: {fileID: 3300002}
   - component: {fileID: 2300002}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Barrel
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,9 +231,9 @@ GameObject:
   - component: {fileID: 400008}
   - component: {fileID: 3300004}
   - component: {fileID: 2300004}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Base
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 400010}
   m_Layer: 10
   m_Name: Visuals
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -402,21 +402,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tf: {fileID: 0}
-  playerData: {fileID: 0}
   characterController: {fileID: 0}
-  playerController: {fileID: 0}
   cannonSource: {fileID: 215966559274695101}
   enemyData: {fileID: 0}
-  waitDuration: 0
-  waypointRange: 1
-  searchDuration: 3
-  investigateDuration: 3
   ptf: {fileID: 0}
-  patrolType: 0
-  waypointType: 0
-  enemyWaypoints: []
   aiVision: {fileID: 0}
   aiHearing: {fileID: 0}
+  atWaypoint: 0
+  atSearchLocation: 0
+  atInvestigateLocation: 0
+  isInvestigating: 0
+  isSearching: 0
 --- !u!114 &6464525225311272216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +432,6 @@ MonoBehaviour:
   sensoryRange: {fileID: 0}
   enemyPawn: {fileID: 0}
   enemyData: {fileID: 0}
-  aiState: 0
 --- !u!114 &2957852750035039778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -450,20 +445,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankHealth: 100
-  forwardSpeed: 300
-  reverseSpeed: 175
+  forwardSpeed: 100
+  reverseSpeed: 50
   rotationSpeed: 50
   projectileDuration: 0.5
-  cannonDelay: 1
+  cannonDelay: 3
   shellForce: 50
-  shellDamage: 25
+  shellDamage: 20
   criticalHealth: 60
   fieldOfView: 55
-  maxViewDistance: 8
+  maxViewDistance: 7
   maxAttackRange: 5
-  hearingRadius: 5
+  hearingRadius: 3
+  waitDuration: 1
+  waypointRange: 1
+  searchDuration: 5
+  investigateDuration: 5
+  avoidanceDistance: 2
+  rotationHigh: 1
+  rotationLow: 3
+  randomRotation: 0
   pointValue: 100
   playerData: {fileID: 0}
+  enemyWaypoints: []
+  currentWaypoint: 0
+  patrolType: 0
+  waypointType: 0
+  aiState: 0
+  tempState: 0
 --- !u!54 &2739427385053190658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -505,9 +514,9 @@ GameObject:
   - component: {fileID: 400014}
   - component: {fileID: 3300006}
   - component: {fileID: 2300006}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Shell
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -582,7 +591,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3248350127788728330}
   - component: {fileID: 8540514951470756688}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Vision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +638,7 @@ GameObject:
   - component: {fileID: 5225274441258105106}
   - component: {fileID: 7887875061630931569}
   - component: {fileID: 1818614071216381474}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: SensoryRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,9 +695,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9097669562400729956}
   - component: {fileID: 215966559274695101}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: ProjectileSource
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -733,7 +742,7 @@ GameObject:
   - component: {fileID: 480861186860336543}
   - component: {fileID: 6664435175421611158}
   - component: {fileID: 697247150754655680}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Hearing
   m_TagString: Untagged
   m_Icon: {fileID: 0}

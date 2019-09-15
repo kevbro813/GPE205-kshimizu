@@ -15,12 +15,12 @@ public class AIHearing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerTank = GameManager.instance.playerTank; // Get player object from GameManager
-        ttf = playerTank.GetComponent<Transform>(); // Get target transform component
-        tf = GetComponent<Transform>(); // transform component
+        playerTank = GameManager.instance.playerTank;
+        ttf = playerTank.GetComponent<Transform>(); // Get player transform component
+        tf = GetComponent<Transform>();
         aiData = GetComponentInParent<AIData>();
-        col = GetComponent<SphereCollider>(); // Sphere collider 
-        col.radius = aiData.hearingRadius;
+        col = GetComponent<SphereCollider>();
+        col.radius = aiData.hearingRadius; // Set sphere collider radius to hearing radius, set in inspector
     }
     public void OnTriggerEnter(Collider other) // OnTriggerEnter for intersecting sound collider
     {
@@ -46,12 +46,14 @@ public class AIHearing : MonoBehaviour
            
             //RaycastHit from object to target, max hearing distance, and only affects objects in layermask
             RaycastHit hit;
+
             if (Physics.Raycast(tf.position, vectorToSound, out hit, col.radius))
             {
                 if (hit.collider.CompareTag("Sound")) // If hit is player then...
                 {
-                    Debug.DrawRay(tf.position, vectorToSound, Color.blue, col.radius); // Draw rays
+                    //Debug.DrawRay(tf.position, vectorToSound, Color.blue, col.radius); // Draw rays
                     lastSoundLocation = hit.point; // Save ray hit point as lastSoundLocation
+                    //Debug.Log(lastSoundLocation);
                     GameManager.instance.lastSoundLocation = lastSoundLocation; // Set lastSoundLocation in GameManager
                 }
             }

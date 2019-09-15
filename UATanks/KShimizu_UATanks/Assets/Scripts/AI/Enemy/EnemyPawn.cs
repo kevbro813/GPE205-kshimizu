@@ -5,29 +5,21 @@ using UnityEngine;
 public class EnemyPawn : AIPawn
 {
     public EnemyData enemyData;
-    private Vector3 vectorToTarget;
-    private Quaternion targetRotation;
-    private int currentWaypoint = 0;
-    private float waitTime;
-    public float waitDuration;
-    private bool atWaypoint = false;
-    public float waypointRange = 1.0f;
-    private float searchTime;
-    public float searchDuration = 3;
-    private float investigateTime;
-    public float investigateDuration = 3;
-    private bool isPatrolForward = true;
-    public bool isInvestigating = false;
-    public bool isSearching = false;
     public Transform ptf;
-    public PatrolType patrolType;
-    public WaypointType waypointType;
-    public Transform[] enemyWaypoints;
     public AIVision aiVision;
     public AIHearing aiHearing;
-    public enum WaypointType { Global, Local}
-    public enum PatrolType { Random, Stop, Loop, PingPong };
-
+    public bool atWaypoint = false;
+    public bool atSearchLocation = false;
+    public bool atInvestigateLocation = false;
+    [HideInInspector] public bool isInvestigating = false;
+    [HideInInspector] public bool isSearching = false;
+    private Quaternion targetRotation;
+    private float waitTime;
+    private bool isPatrolForward = true;
+    private float investigateTime;
+    private float searchTime;
+    private bool isTurned = false;
+    public RaycastHit obstacleHit;
     void Start()
     {
         tf = GetComponent<Transform>();
@@ -36,21 +28,14 @@ public class EnemyPawn : AIPawn
         ptf = GameManager.instance.playerTank.GetComponent<Transform>();
         aiVision = GetComponentInChildren<AIVision>();
         aiHearing = GetComponentInChildren<AIHearing>();
+        investigateTime = enemyData.investigateDuration;
+        searchTime = enemyData.searchDuration;
     }
-    public void Awake()
-    {
-        if (waypointType == WaypointType.Global)
-        {
-            enemyWaypoints = GameManager.instance.enemyWaypoints;
-        }
-        if (patrolType == PatrolType.Random)
-        {
-            currentWaypoint = Random.Range(0, enemyWaypoints.Length);
-        }
-    }
+
+    // Check if the tank is facing the target and return a bool
     public bool FacingTarget(Vector3 target)
     {
-        vectorToTarget = target - tf.position;
+        Vector3 vectorToTarget = target - tf.position;
 
         Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget);
 
@@ -63,55 +48,125 @@ public class EnemyPawn : AIPawn
             return false;
         }
     }
+    public bool BackToTarget(Vector3 target)
+    {
+        Vector3 vectorAwayFromTarget = (target - tf.position) * -1;
+
+        Quaternion targetRotation = Quaternion.LookRotation(vectorAwayFromTarget);
+
+        if (tf.rotation == targetRotation)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    // Rotate the tank towards a target
     public void RotateTowards(Vector3 target, float rotationSpeed)
     {
-        vectorToTarget = target - tf.position;
+        Vector3 vectorToTarget = target - tf.position;
         Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget);
         tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
-    public void Patrol()
+    // Rotate tank away from target
+    public void RotateAway(Vector3 target, float rotationSpeed)
     {
+        Vector3 vectorAwayFromTarget = (target - tf.position) * -1;
+        Quaternion targetRotation = Quaternion.LookRotation(vectorAwayFromTarget);
+        tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+    // TODO: Create a random rotation value to add randomness to AI obstacle avoidance maneuvering
+    public void RandomRotation(Vector3 target, float rotationSpeed)
+    {
+        Vector3 vectorAwayFromTarget = (target - tf.position) * enemyData.randomRotation;
+        Debug.Log(enemyData.randomRotation);
+        Quaternion targetRotation = Quaternion.LookRotation(vectorAwayFromTarget);
+        tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    // Rotate and move away from obstacles
+    public void ObstacleAvoidance(RaycastHit hit)
+    {
+        RotateAway(obstacleHit.point, enemyData.rotationSpeed);
+        MoveTank(enemyData.forwardSpeed);
+    }
+
+    // Check if there is an obstacle in the way and return a bool
+    public bool ObstacleCheck()
+    {
+        if (Physics.Raycast(tf.position, tf.forward, out obstacleHit, enemyData.avoidanceDistance))
+        {
+            if (obstacleHit.collider.CompareTag("Arena") || obstacleHit.collider.CompareTag("Enemy"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    // Flee when health is low
+    public void Flee()
+    {
+        // Flee when health is low
+        if (BackToTarget(ptf.position) == false && isTurned == false)
+        {
+            RotateAway(ptf.position, enemyData.rotationSpeed);
+        }
+        if (BackToTarget(ptf.position) == true)
+        {
+            isTurned = true;
+        }
+        if (isTurned == true)
+        {
+            MoveTank(enemyData.forwardSpeed);
+        }
+    }
+
+    // Patrol function with alternative patrol types
+    public void Patrol()
+    { 
         // If not facing target and not at waypoint
-        if (FacingTarget(enemyWaypoints[currentWaypoint].position) == false && atWaypoint == false)
+        if (FacingTarget(enemyData.enemyWaypoints[enemyData.currentWaypoint].position) == false && atWaypoint == false)
         {
             // Rotate towards target
-            RotateTowards(enemyWaypoints[currentWaypoint].position, enemyData.rotationSpeed);
+            RotateTowards(enemyData.enemyWaypoints[enemyData.currentWaypoint].position, enemyData.rotationSpeed);
         }
         // If facing target and not at waypoint
-        if (FacingTarget(enemyWaypoints[currentWaypoint].position) == true && atWaypoint == false)
+        if (FacingTarget(enemyData.enemyWaypoints[enemyData.currentWaypoint].position) == true && atWaypoint == false)
         {
             // Move to target
             MoveTank(enemyData.forwardSpeed);
         }
         // Stop at target
-        if (Vector3.SqrMagnitude(enemyWaypoints[currentWaypoint].position - tf.position) < (waypointRange * waypointRange))
+        if (Vector3.SqrMagnitude(enemyData.enemyWaypoints[enemyData.currentWaypoint].position - tf.position) < (enemyData.waypointRange * enemyData.waypointRange))
         {
             atWaypoint = true; // Tank stops moving
             // After waitTime delay
             if (waitTime <= 0)
             {
                 // Next waypoint is random
-                if (patrolType == PatrolType.Random)
+                if (enemyData.patrolType == EnemyData.PatrolType.Random)
                 {
                     RandomPatrol();
                 }
                 // Loop back to first waypoint
-                if (patrolType == PatrolType.Loop)
+                if (enemyData.patrolType == EnemyData.PatrolType.Loop)
                 {
                     LoopPatrol();
                 }
                 // Stop at the last waypoint
-                if (patrolType == PatrolType.Stop)
+                if (enemyData.patrolType == EnemyData.PatrolType.Stop)
                 {
                     StopPatrol();
                 }
                 // Reverse through the order of waypoints
-                if (patrolType == PatrolType.PingPong)
+                if (enemyData.patrolType == EnemyData.PatrolType.PingPong)
                 {
                     PingPongPatrol();
                 }
                 atWaypoint = false; // No longer at waypoint
-                waitTime = waitDuration; // Reset waitTime
+                waitTime = enemyData.waitDuration; // Reset waitTime
             }
             else
             {
@@ -119,10 +174,8 @@ public class EnemyPawn : AIPawn
             }
         }
     }
-    public void Flee()
-    {
-        // Flee when health is low
-    }
+
+    // Attack the player tank
     public void Attack()
     {
         // Rotate towards player
@@ -137,8 +190,9 @@ public class EnemyPawn : AIPawn
             // Fire projectile
             SingleCannonFire();
         }
-
     }
+
+    // Pursue the player tank
     public void Pursue()
     {
         // Chase after player
@@ -154,91 +208,137 @@ public class EnemyPawn : AIPawn
             MoveTank(enemyData.forwardSpeed);
         }
     }
+
+    // Search when player tank goes from in view to out of view. Tank will navigate to the last location the player was seen
     public void Search()
     {
-        // Search for player at last known location
-        if (FacingTarget(aiVision.lastPlayerLocation) == false)
+        if (isSearching == true)
         {
-            // Rotate towards target
-            RotateTowards(aiVision.lastPlayerLocation, enemyData.rotationSpeed);
+            // Search for player at last known location
+            if (FacingTarget(aiVision.lastPlayerLocation) == false && atSearchLocation == false)
+            {
+                // Rotate towards target
+                RotateTowards(aiVision.lastPlayerLocation, enemyData.rotationSpeed);
+            }
+            // Stop when facing player
+            if (FacingTarget(aiVision.lastPlayerLocation) == true && atSearchLocation == false)
+            {
+                // Move towards player
+                MoveTank(enemyData.forwardSpeed);
+            }
+            // If the tank is within range of the last known location of the player...
+            if (Vector3.SqrMagnitude(tf.position - aiVision.lastPlayerLocation) < (enemyData.waypointRange * enemyData.waypointRange))
+            {
+                atSearchLocation = true; // AI tank is now at the location
+                if (atSearchLocation == true)
+                {
+                    if(searchTime < 0) // After a delay...
+                    {
+                        searchTime = enemyData.searchDuration; // Reset timer
+                        isSearching = false; // AI is no longer searching, allows AI to return to patrol
+                        /* Resets boolean that indicates whether AI is at the search location
+                        Prevents bug when changing states before AI finished looking at location */
+                        atSearchLocation = false; 
+                    }
+                    else
+                    {
+                        searchTime -= Time.deltaTime; // Decrement time
+                    }
+                }
+            }
+            // TODO: Rotate 360 degrees
         }
-        // Stop when facing player
-        if (FacingTarget(aiVision.lastPlayerLocation) == true)
-        {
-            // Move towards player
-            MoveTank(enemyData.forwardSpeed);
-        }
-        // Rotate 360 degrees
     }
+
+    // Investigate when the player is heard. AI will rotate towards the sound origin 
     public void Investigate()
     {
-        isInvestigating = true;
-        // If not facing the direction of the sound origin
-        if (FacingTarget(aiHearing.lastSoundLocation) == false)
+        if (isInvestigating == true)
         {
-            // Rotate towards sound origin
-            RotateTowards(aiHearing.lastSoundLocation, enemyData.rotationSpeed);
+            // If not facing the direction of the sound origin
+            if (FacingTarget(aiHearing.lastSoundLocation) == false)
+            {
+                // Rotate towards sound origin
+                RotateTowards(aiHearing.lastSoundLocation, enemyData.rotationSpeed);
+            }
+            // If the AI is facing the sound location...
+            if (FacingTarget(aiHearing.lastSoundLocation) == true)
+            {
+                atInvestigateLocation = true; // Indicates the AI is currently facing the sound location
+                if (atInvestigateLocation == true)
+                {
+                    if (investigateTime < 0) // After a delay...
+                    {
+                        investigateTime = enemyData.investigateDuration; // Reset timer
+                        isInvestigating = false; // AI is no longer investigating, required for AI to return to patrol
+                        /* Resets boolean that indicates the AI is at the investigation location 
+                         Prevents bug when changing states before AI finished looking at location */
+                        atInvestigateLocation = false; 
+                    }
+                    else
+                    {
+                        investigateTime -= Time.deltaTime; // Decrement time
+                    }
+                }
+                // TODO: Rotate 360 degrees
+            }
         }
-        // Stop when facing the sound origin
-        if (FacingTarget(aiHearing.lastSoundLocation) == true)
-        {
-            // Move towards sound origin
-            MoveTank(enemyData.forwardSpeed);
-        }
-        if (tf.position == aiHearing.lastSoundLocation)
-        {
-            Debug.Log("Done Investigating");
-            isInvestigating = false;
-        }
-        // TODO: Rotate 360 degrees
     }
+
+    // Tank in an idle state
     public void Idle()
     {
         // Do nothing.
     }
+
+    // PATROL METHODS
+
     // Forward then reverse order waypoint movement
     public void PingPongPatrol()
     {
-        if (currentWaypoint == enemyWaypoints.Length - 1)
+        if (enemyData.currentWaypoint == enemyData.enemyWaypoints.Length - 1)
         {
             isPatrolForward = false;
         }
-        if (currentWaypoint == 0)
+        if (enemyData.currentWaypoint == 0)
         {
             isPatrolForward = true;
         }
         if (isPatrolForward == true)
         {
-            currentWaypoint++;
+            enemyData.currentWaypoint++;
         }
         if (isPatrolForward == false)
         {
-            currentWaypoint--;
+            enemyData.currentWaypoint--;
         }
     }
+
     // Move to a random waypoint
     public void RandomPatrol()
     {
-        currentWaypoint = Random.Range(0, enemyWaypoints.Length);
+        enemyData.currentWaypoint = Random.Range(0, enemyData.enemyWaypoints.Length);
     }
+
     // Loop through waypoints
     public void LoopPatrol()
     {
-        if (currentWaypoint < enemyWaypoints.Length - 1)
+        if (enemyData.currentWaypoint < enemyData.enemyWaypoints.Length - 1)
         {
-            currentWaypoint++;
+            enemyData.currentWaypoint++;
         }
         else
         {
-            currentWaypoint = 0;
+            enemyData.currentWaypoint = 0;
         }
     }
+
     // Stop at last waypoint
     public void StopPatrol()
     {
-        if (currentWaypoint < enemyWaypoints.Length - 1)
+        if (enemyData.currentWaypoint < enemyData.enemyWaypoints.Length - 1)
         {
-            currentWaypoint++;
+            enemyData.currentWaypoint++;
         }
     }
 }

@@ -462,8 +462,8 @@ MonoBehaviour:
   searchDuration: 5
   investigateDuration: 5
   avoidanceDistance: 2
-  rotationHigh: 1
-  rotationLow: 3
+  rotationHigh: 2
+  rotationLow: 1
   randomRotation: 0
   pointValue: 100
   playerData: {fileID: 0}

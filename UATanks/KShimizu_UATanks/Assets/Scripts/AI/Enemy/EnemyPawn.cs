@@ -12,12 +12,15 @@ public class EnemyPawn : AIPawn
     public bool atWaypoint = false; // Indicates whether the AI is currently at a waypoint while patrolling
     public bool atSearchLocation = false; // Indicates whether the AI is currently at the last known player location while searching
     public bool atInvestigateLocation = false; // Indicates whether the AI is currently looking in the direction of a sound while investigating
+    public bool atAlertLocation = false; // Indicates whether the AI is currently at the alert location
     [HideInInspector] public bool isInvestigating = false; // Switching from true to false allows the AI to transition from investigate state to patrol state
     [HideInInspector] public bool isSearching = false; // Switching from true to false allows the AI to transition from search state to patrol state
+    [HideInInspector] public bool isAlertActive = false; // Switching from true to false allows the AI to transition from alert state to patrol state
     private float waitTime; // Used in timer to determine how long to wait at a waypoint while patrolling
     private bool isPatrolForward = true; // Used in "PingPong" patrol type to loop through the waypoints in reverse order
     private float investigateTime; // How long the AI will investigate before returning to patrol
     private float searchTime; // How long the AI will search before returning to patrol
+    private float alertTime; // How long the AI will be alert before returning to patrol
     private bool isTurned = false; // Is the tank turned around (Used in Flee function)
     public RaycastHit obstacleHit; // Raycast hit for obstacles (Includes the arena and other enemy tanks)
     void Start()
@@ -33,6 +36,7 @@ public class EnemyPawn : AIPawn
         investigateTime = enemyData.investigateDuration; 
         searchTime = enemyData.searchDuration;
         waitTime = enemyData.waitDuration;
+        alertTime = enemyData.alertDuration;
     }
 
     // Check if the tank is facing the target and return a bool
@@ -183,6 +187,46 @@ public class EnemyPawn : AIPawn
         }
     }
 
+    public void Alerted()
+    {
+        if (isAlertActive == true)
+        {
+            // Go to the last known player location (global)
+            if (FacingTarget(GameManager.instance.lastPlayerLocation) == false && atAlertLocation == false)
+            {
+                // Rotate towards target
+                RotateTowards(GameManager.instance.lastPlayerLocation, enemyData.rotationSpeed);
+            }
+            // Stop when facing target
+            if (FacingTarget(GameManager.instance.lastPlayerLocation) == true && atAlertLocation == false)
+            {
+                // Move towards target
+                MoveTank(enemyData.forwardSpeed);
+            }
+            // If the tank is within range of the last known location of the player...
+            if (Vector3.SqrMagnitude(tf.position - GameManager.instance.lastPlayerLocation) < (enemyData.waypointRange * enemyData.waypointRange))
+            {
+                atAlertLocation = true; // AI tank is now at the location
+                if (atAlertLocation == true)
+                {
+                    if (alertTime < 0) // After a delay...
+                    {
+                        alertTime = enemyData.alertDuration; // Reset timer
+                        isAlertActive = false; // AI is no longer alert, allows AI to return to patrol
+                        GameManager.instance.isAlerted = false;
+                        Debug.Log(isAlertActive);
+                        /* Resets boolean that indicates whether AI is at the alert location
+                        Prevents bug when changing states before AI finished moving to location */
+                        atAlertLocation = false;
+                    }
+                    else
+                    {
+                        alertTime -= Time.deltaTime; // Decrement time
+                    }
+                }
+            }
+        }
+    }
     // Attack the player tank
     public void Attack()
     {

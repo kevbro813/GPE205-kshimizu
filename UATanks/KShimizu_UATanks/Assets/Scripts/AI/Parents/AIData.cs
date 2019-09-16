@@ -13,6 +13,7 @@ public abstract class AIData : TankData
     public float waypointRange = 1.0f; // Distance from the waypoint the AI must be for it to register as reaching the waypoint
     public float searchDuration = 3; // Duration the AI will stay in the Search State before returning to patrol
     public float investigateDuration = 3; // Duration the AI will stay in the Investigate State before returning to patrol
+    public float alertDuration = 3; // Duration the AI will stay in alert state before returning to patrol
     public float avoidanceDistance = 2; // Length of the raycast used for obstacle avoidance
     public float rotationHigh = 3; // High value used in Random.Range function to create a random length of time the AI will rotate
     public float rotationLow = 1; // Low value used in Random.Range function to create a random length of time the AI will rotate

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Child of AI Controller, includes FSM for enemy tanks
+// Enemy Controller can be used for an AI with all states
 public class EnemyController : AIController
 {
     public EnemyPawn enemyPawn;
     public EnemyData enemyData;
     private float stateEnterTime; // Saves the last time the AI transitioned to a new state
     private bool isFleeing = false; // Indicates whether the AI tank is in the act of fleeing (The flee state has multiple stages)
-    void Start(D:\Unity Projects\GPE205\GPE205-kshimizu\UATanks\KShimizu_UATanks\Assets\Scripts\AI\Friendly\FriendlyController.cs)
+    void Start()
     {
         enemyPawn = GetComponent<EnemyPawn>();
         enemyData = GetComponent<EnemyData>();
@@ -121,6 +121,8 @@ public class EnemyController : AIController
                 enemyData.randomRotation -= Time.deltaTime; // Decrement time
             }
         }
+        // Run transition to alert function during all states
+        TransitionAlerted();
 
         // Run transition to flee function during all states
         TransitionFlee();
@@ -130,9 +132,28 @@ public class EnemyController : AIController
         {
             TransitionAvoidance(); 
         }
+        // ALERTED STATE
+        if (enemyData.aiState == EnemyData.AIState.Alerted)
+        {
+            DoAlerted();
+            // If the AI is not currently alert, allow it to transition to patrol state
+            if (enemyPawn.isAlertActive == false)
+            {
+                // If the player is not seen or heard, transition to patrol
+                TransitionPatrol();
+            }
+            // If the player is seen while alert but out of firing range, transition to pursue
+            TransitionPursue();
+
+            // If the player is heard while alert, transition to investigate (go to sound origin)
+            TransitionInvestigate();
+
+            // If the player is seen and in firing range, transition to attack
+            TransitionAttack();
+        }
     }
-    // CALLS ENEMY PAWN FUNCTIONS
-    public void DoIdle()
+// CALLS ENEMY PAWN FUNCTIONS
+public void DoIdle()
     {
         Debug.Log("Idle");
         enemyPawn.Idle();
@@ -172,6 +193,11 @@ public class EnemyController : AIController
         Debug.Log("Obstacle Avoidance");
         enemyPawn.ObstacleAvoidance(enemyPawn.obstacleHit);
     }
+    public void DoAlerted()
+    {
+        Debug.Log("Alerted");
+        enemyPawn.Alerted();
+    }
     // TRANSITION FUNCTIONS (Transitions AI to the various states)
 
     // Transition to Obstacle Avoidance State
@@ -180,6 +206,7 @@ public class EnemyController : AIController
         // If an obstacle is detected...
         if(enemyPawn.ObstacleCheck() == true) // If an obstacle is detected...
         {
+            enemyPawn.atWaypoint = false;
             enemyData.tempState = enemyData.aiState; // Save the current state
             ChangeState(EnemyData.AIState.Avoidance); // Change to Avoidance state
         }
@@ -193,6 +220,7 @@ public class EnemyController : AIController
             // Reset boolean variables in case they are still true after a state change
             enemyPawn.isInvestigating = false;
             enemyPawn.isSearching = false;
+            enemyPawn.atWaypoint = false;
             ChangeState(EnemyData.AIState.Patrol); // Change to Patrol state
         }
     }
@@ -209,6 +237,7 @@ public class EnemyController : AIController
                 enemyPawn.isInvestigating = false;
                 enemyPawn.isSearching = false;
                 enemyPawn.atWaypoint = false;
+                enemyPawn.isAlertActive = false;
                 ChangeState(EnemyData.AIState.Attack); // Change to Attack State
             }
         }
@@ -224,6 +253,7 @@ public class EnemyController : AIController
             enemyPawn.isInvestigating = false;
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
+            enemyPawn.isAlertActive = false;
             ChangeState(EnemyData.AIState.Flee); // Change to Flee State
         }
     }
@@ -239,6 +269,7 @@ public class EnemyController : AIController
             enemyPawn.isInvestigating = false;
             enemyPawn.atWaypoint = false;
             enemyPawn.atSearchLocation = false;
+            enemyPawn.isAlertActive = false;
             ChangeState(EnemyData.AIState.Search); // Change to Search State
         }
     }
@@ -248,12 +279,13 @@ public class EnemyController : AIController
         // If the player is not seen, but heard...
         if (aiVision.CanSee(GameManager.instance.playerTank) == false && aiHearing.canHear == true)
         {
-            // isInvestigating must be true to run Investigate method, set once during transition
+            // isInvestigating must be true to run Investigate function, set once during transition
             enemyPawn.isInvestigating = true;
             // Reset boolean variables in case they are still true after a state change
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
             enemyPawn.atInvestigateLocation = false;
+            enemyPawn.isAlertActive = false;
             ChangeState(EnemyData.AIState.Investigate); // Change to Investigate State
         }
     }
@@ -270,6 +302,7 @@ public class EnemyController : AIController
                 enemyPawn.isInvestigating = false;
                 enemyPawn.isSearching = false;
                 enemyPawn.atWaypoint = false;
+                enemyPawn.isAlertActive = false;
                 ChangeState(EnemyData.AIState.Pursue); // Change to Pursue State
             }
         }
@@ -281,7 +314,33 @@ public class EnemyController : AIController
         enemyPawn.isInvestigating = false;
         enemyPawn.isSearching = false;
         enemyPawn.atWaypoint = false;
+        enemyPawn.isAlertActive = false;
         // Do nothing for now
+    }
+    public void TransitionAlerted()
+    {
+        // If the player is not in attack range...
+        if (GameManager.instance.isAlerted == true)
+        {
+            // isAlertActive must be true to run Alerted function, set once during transition
+            enemyPawn.isAlertActive = true;
+
+            enemyData.tempState = enemyData.aiState; // Save the current state
+
+            // Reset boolean variables in case they are still true after a state change
+            enemyPawn.isInvestigating = false;
+            enemyPawn.isSearching = false;
+            enemyPawn.atWaypoint = false;
+            ChangeState(EnemyData.AIState.Alerted); // Change to Pursue State
+        }
+        if (GameManager.instance.isAlerted == false)
+        {
+            enemyPawn.isAlertActive = false;
+            enemyPawn.isInvestigating = false;
+            enemyPawn.isSearching = false;
+            enemyPawn.atWaypoint = false;
+            ChangeState(EnemyData.AIState.Patrol); // Return AI to patrol
+        }
     }
     // Changes the AIState to a new state and keeps track of the time this is done
     public void ChangeState (EnemyData.AIState newState)

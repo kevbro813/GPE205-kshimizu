@@ -232,7 +232,6 @@ Transform:
   - {fileID: 2081170956}
   - {fileID: 9790349}
   - {fileID: 609380204}
-  - {fileID: 1564175299}
   m_Father: {fileID: 1326208304}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3021,81 +3020,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1326794261
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 5362826}
-    m_Modifications:
-    - target: {fileID: 1822766553153631322, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemySpawn (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.52
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.92
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 03b407a654699114fb4ddaa278407dbc, type: 3}
---- !u!4 &1564175299 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1326794261}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1652721280 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7446583297752785656, guid: 03b407a654699114fb4ddaa278407dbc,
@@ -4089,13 +4013,12 @@ MonoBehaviour:
   playerData: {fileID: 0}
   hud: {fileID: 0}
   enemyTankList:
+  - {fileID: 100012, guid: b9e6db1de2d8d6046a05ae561ed1d3f2, type: 3}
   - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
+  - {fileID: 100012, guid: 84f05b521e1061548ab889af1c5715de, type: 3}
+  - {fileID: 100012, guid: a6089321b77c7004eb221a2e40c405b4, type: 3}
+  - {fileID: 100012, guid: c30130572f9f2b4409c68d99235fa136, type: 3}
+  - {fileID: 100012, guid: 2f79259b5ad2c1a48a94c6f124fa84b3, type: 3}
   enemyTankSpawnList:
   - {fileID: 3492855665669487932}
   - {fileID: 669029863}
@@ -4103,7 +4026,6 @@ MonoBehaviour:
   - {fileID: 2081170956}
   - {fileID: 9790349}
   - {fileID: 609380204}
-  - {fileID: 1564175299}
   enemyObjectsArray: []
   enemyDataArray: []
   enemyWaypoints:
@@ -4118,6 +4040,7 @@ MonoBehaviour:
   - {fileID: 1662538266}
   - {fileID: 660218331}
   spawnDelay: 0
-  maxEnemies: 7
+  maxEnemies: 6
   lastPlayerLocation: {x: 0, y: 0, z: 0}
   lastSoundLocation: {x: 0, y: 0, z: 0}
+  isAlerted: 0

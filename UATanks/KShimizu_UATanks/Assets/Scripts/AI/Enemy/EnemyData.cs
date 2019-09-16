@@ -15,7 +15,7 @@ public class EnemyData : AIData
     public AIState tempState; // Saves the previous state temporarily (similar to a double buffer pattern) Used to transition from obstacle avoidance state back to the previous state
     public enum WaypointType { Global, Local } // Selection for Waypoint Type (Global are waypoints saved in GameManager, local would be local waypoints that are used with prefabs in local space
     public enum PatrolType { Random, Stop, Loop, PingPong }; // Selections for Patrol Type
-    public enum AIState { Idle, Patrol, Attack, Search, Pursue, Flee, Investigate, Avoidance } // Selections for AI State
+    public enum AIState { Idle, Patrol, Attack, Search, Pursue, Flee, Investigate, Avoidance, Alerted } // Selections for AI State
     // Start is called before the first frame update
     void Start()
     {

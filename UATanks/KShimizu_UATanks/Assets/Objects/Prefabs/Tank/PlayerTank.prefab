@@ -429,15 +429,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1d9c9e27fd772459b7c2843b64e93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankHealth: 100
+  tankHealth: 500
   forwardSpeed: 300
   reverseSpeed: 175
-  rotationSpeed: 50
+  rotationSpeed: 70
   projectileDuration: 0.5
   cannonDelay: 1
   shellForce: 50
   shellDamage: 50
-  criticalHealth: 60
+  criticalHealth: 10
   playerScore: 0
 --- !u!114 &-3190469483590712858
 MonoBehaviour:
@@ -452,10 +452,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tf: {fileID: 0}
-  playerData: {fileID: 0}
   characterController: {fileID: 0}
-  playerController: {fileID: 0}
   cannonSource: {fileID: 0}
+  playerController: {fileID: 0}
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0

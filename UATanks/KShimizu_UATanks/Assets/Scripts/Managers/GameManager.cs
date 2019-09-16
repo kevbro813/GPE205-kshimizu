@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private float enemiesSpawned; // Tracks the number of enemies spawned into the world. May need to be public in the future
     public Vector3 lastPlayerLocation;
     public Vector3 lastSoundLocation;
+    public bool isAlerted = false;
 
     private void Awake()
     {
@@ -95,6 +96,7 @@ public class GameManager : MonoBehaviour
                 Transform spawnPoint = enemyTankSpawnList[Random.Range(0, enemyTankSpawnList.Count)]; // Random spawnPoint from list
                 GameObject randomEnemy = enemyTankList[Random.Range(0, enemyTankList.Count)]; // Random enemy from list
                 enemyTankSpawnList.Remove(spawnPoint); // Remove spawn point from list when used
+                enemyTankList.Remove(randomEnemy); // Remove spawn point from list when used
                 // Create enemyClone instance
                 GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation) as GameObject;
 

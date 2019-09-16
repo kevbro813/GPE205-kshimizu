@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Player Controller component, accepts all player inputs
 public class PlayerController : MonoBehaviour
 {
     public PlayerPawn playerPawn;

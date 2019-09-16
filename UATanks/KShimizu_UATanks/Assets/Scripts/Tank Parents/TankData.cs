@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Parent of all AI and player Data components
 public abstract class TankData : MonoBehaviour
 {
     // Public variables for tanks

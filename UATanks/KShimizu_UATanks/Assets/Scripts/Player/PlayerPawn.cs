@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Player Pawn component, this contains functions unique to the player, child of TankPawn
 public class PlayerPawn : TankPawn
 {
     public PlayerController playerController;

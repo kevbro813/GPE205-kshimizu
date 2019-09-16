@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Parent component of all AI and player pawns
 public abstract class TankPawn : MonoBehaviour
 {
     public Transform tf;

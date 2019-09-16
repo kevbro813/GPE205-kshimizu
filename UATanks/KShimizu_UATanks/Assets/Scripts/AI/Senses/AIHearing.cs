@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Component that simulates AI hearing. Uses a sphere collider to detect nearby players
 public class AIHearing : MonoBehaviour
 {
     private GameObject playerTank; // player game object
     private Transform tf; // transform component
     private Transform ttf; // target (player) transform component
-    private SphereCollider col;
+    private SphereCollider col; // Sphere collider
     public AIData aiData;
     [HideInInspector] public bool canHear; // Used to activate the sound raycast
     [HideInInspector] public Vector3 lastSoundLocation; // lastSoundLocation vector set by raycast.point
@@ -44,9 +45,9 @@ public class AIHearing : MonoBehaviour
             // Find the vector from current object to target
             Vector3 vectorToSound = ttf.position - tf.position;
            
-            //RaycastHit from object to target, max hearing distance, and only affects objects in layermask
-            RaycastHit hit;
+            RaycastHit hit; // Used to find location of hit
 
+            //RaycastHit from AI to target
             if (Physics.Raycast(tf.position, vectorToSound, out hit, col.radius))
             {
                 if (hit.collider.CompareTag("Sound")) // If hit is player then...

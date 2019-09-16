@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Component attached to a child of the player and AI tank objects. Instantiates a projectile for the main cannon
 public class CannonSource : MonoBehaviour
 {
     public GameObject projectile; // Set the projectile in the inspector

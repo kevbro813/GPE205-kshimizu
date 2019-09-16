@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Game Manager singleton
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;

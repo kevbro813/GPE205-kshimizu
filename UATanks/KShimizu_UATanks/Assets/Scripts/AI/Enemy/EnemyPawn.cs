@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Contains all the Enemy Pawn Functions: movement, attacks, obstacle avoidance, etc.
 public class EnemyPawn : AIPawn
 {
     public EnemyData enemyData;
-    public Transform ptf;
-    public AIVision aiVision;
-    public AIHearing aiHearing;
-    public bool atWaypoint = false;
-    public bool atSearchLocation = false;
-    public bool atInvestigateLocation = false;
-    [HideInInspector] public bool isInvestigating = false;
-    [HideInInspector] public bool isSearching = false;
-    private Quaternion targetRotation;
-    private float waitTime;
-    private bool isPatrolForward = true;
-    private float investigateTime;
-    private float searchTime;
-    private bool isTurned = false;
-    public RaycastHit obstacleHit;
+    public Transform ptf; // Player transform component
+    public AIVision aiVision; // Vision component
+    public AIHearing aiHearing; // Hearing component
+    public bool atWaypoint = false; // Indicates whether the AI is currently at a waypoint while patrolling
+    public bool atSearchLocation = false; // Indicates whether the AI is currently at the last known player location while searching
+    public bool atInvestigateLocation = false; // Indicates whether the AI is currently looking in the direction of a sound while investigating
+    [HideInInspector] public bool isInvestigating = false; // Switching from true to false allows the AI to transition from investigate state to patrol state
+    [HideInInspector] public bool isSearching = false; // Switching from true to false allows the AI to transition from search state to patrol state
+    private float waitTime; // Used in timer to determine how long to wait at a waypoint while patrolling
+    private bool isPatrolForward = true; // Used in "PingPong" patrol type to loop through the waypoints in reverse order
+    private float investigateTime; // How long the AI will investigate before returning to patrol
+    private float searchTime; // How long the AI will search before returning to patrol
+    private bool isTurned = false; // Is the tank turned around (Used in Flee function)
+    public RaycastHit obstacleHit; // Raycast hit for obstacles (Includes the arena and other enemy tanks)
     void Start()
     {
         tf = GetComponent<Transform>();
@@ -28,16 +28,19 @@ public class EnemyPawn : AIPawn
         ptf = GameManager.instance.playerTank.GetComponent<Transform>();
         aiVision = GetComponentInChildren<AIVision>();
         aiHearing = GetComponentInChildren<AIHearing>();
-        investigateTime = enemyData.investigateDuration;
+
+        // Set investigateTime, searchTime and waitTime to the default values saved in Enemy Data
+        investigateTime = enemyData.investigateDuration; 
         searchTime = enemyData.searchDuration;
+        waitTime = enemyData.waitDuration;
     }
 
     // Check if the tank is facing the target and return a bool
     public bool FacingTarget(Vector3 target)
     {
-        Vector3 vectorToTarget = target - tf.position;
+        Vector3 vectorToTarget = target - tf.position; // Set target vector towards target
 
-        Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget);
+        Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget); // Rotate towards target
 
         if (tf.rotation == targetRotation)
         {
@@ -48,11 +51,12 @@ public class EnemyPawn : AIPawn
             return false;
         }
     }
+    // Check if the tank is facing away from the target and return a bool
     public bool BackToTarget(Vector3 target)
     {
-        Vector3 vectorAwayFromTarget = (target - tf.position) * -1;
+        Vector3 vectorAwayFromTarget = (target - tf.position) * -1; // Set vector in the opposite direction of target
 
-        Quaternion targetRotation = Quaternion.LookRotation(vectorAwayFromTarget);
+        Quaternion targetRotation = Quaternion.LookRotation(vectorAwayFromTarget); // Rotate away from target
 
         if (tf.rotation == targetRotation)
         {
@@ -96,8 +100,10 @@ public class EnemyPawn : AIPawn
     // Check if there is an obstacle in the way and return a bool
     public bool ObstacleCheck()
     {
+        // Raycast forward from AI
         if (Physics.Raycast(tf.position, tf.forward, out obstacleHit, enemyData.avoidanceDistance))
         {
+            // If the collider hit is the arena or another enemy tank...
             if (obstacleHit.collider.CompareTag("Arena") || obstacleHit.collider.CompareTag("Enemy"))
             {
                 return true;
@@ -108,15 +114,17 @@ public class EnemyPawn : AIPawn
     // Flee when health is low
     public void Flee()
     {
-        // Flee when health is low
+        // Rotate away from the target
         if (BackToTarget(ptf.position) == false && isTurned == false)
         {
             RotateAway(ptf.position, enemyData.rotationSpeed);
         }
+        // Once facing away from target, set isTurned to true
         if (BackToTarget(ptf.position) == true)
         {
             isTurned = true;
         }
+        // When the tank is done rotating, move the tank forward
         if (isTurned == true)
         {
             MoveTank(enemyData.forwardSpeed);
@@ -170,7 +178,7 @@ public class EnemyPawn : AIPawn
             }
             else
             {
-                waitTime -= Time.deltaTime;
+                waitTime -= Time.deltaTime; // Decrement time
             }
         }
     }
@@ -313,13 +321,11 @@ public class EnemyPawn : AIPawn
             enemyData.currentWaypoint--;
         }
     }
-
     // Move to a random waypoint
     public void RandomPatrol()
     {
         enemyData.currentWaypoint = Random.Range(0, enemyData.enemyWaypoints.Length);
     }
-
     // Loop through waypoints
     public void LoopPatrol()
     {
@@ -332,7 +338,6 @@ public class EnemyPawn : AIPawn
             enemyData.currentWaypoint = 0;
         }
     }
-
     // Stop at last waypoint
     public void StopPatrol()
     {

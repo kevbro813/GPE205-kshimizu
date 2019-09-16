@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIPawn : TankPawn
+// Parent AI Pawn to enemy and friendly pawns
+public abstract class AIPawn : TankPawn
 {
     // Start is called before the first frame update
     void Start()

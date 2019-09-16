@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Component attached to a cannon shell, provides movement and collision detection
 public class CannonShell : MonoBehaviour
 {
     private Rigidbody rb;

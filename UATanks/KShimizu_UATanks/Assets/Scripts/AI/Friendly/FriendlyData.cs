@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Friendly AI Data component
 public class FriendlyData : AIData
 {
     // Start is called before the first frame update

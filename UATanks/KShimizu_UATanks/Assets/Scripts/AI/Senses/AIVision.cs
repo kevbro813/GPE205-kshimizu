@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Component that simulates AI vision. Uses raycasting within a set range (FoV and maxDistance) to detect the player
 public class AIVision : MonoBehaviour
 {
     private Transform ttf; // Target transform component
-    private Transform tf; // This object's transform component
+    private Transform tf;
     public AIData aiData;
-    public float targetDistance;
+    public float targetDistance; // Distance from the AI to the target
     [HideInInspector] public Vector3 lastPlayerLocation; // lastPlayerLocation vector set by raycast.point
 
     void Start()
     {
         aiData = GetComponentInParent<AIData>();
-        tf = GetComponent<Transform>(); // transform component
+        tf = GetComponent<Transform>();
     }
     public bool CanSee(GameObject target)
     {
@@ -48,12 +49,13 @@ public class AIVision : MonoBehaviour
                     //Debug.DrawRay(tf.position, vectorToTarget, Color.red, aiData.maxViewDistance); // Draw rays
                     lastPlayerLocation = hit.point; // Set lastPlayerLocation to raycast hit point
                     GameManager.instance.lastPlayerLocation = lastPlayerLocation; // Set lastPlayerLocation in GameManager
-                    return true;
+                    return true; // Returns true if the collider hit is the player
                 }
             }
         }
-        return false;
+        return false; // Returns false if anything else is hit
     }
+    // Function to check whether the player is within attack rnage, returns a bool
     public bool AttackRange(float distanceToTarget)
     {
         if (distanceToTarget <= aiData.maxAttackRange)

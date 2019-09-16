@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Friendly AI controller component
 public class FriendlyController : AIController
 {
     // Start is called before the first frame update

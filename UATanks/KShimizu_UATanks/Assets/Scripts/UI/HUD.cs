@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Component that contains all HUD elements
 public class HUD : MonoBehaviour
 {
     public PlayerData playerData;

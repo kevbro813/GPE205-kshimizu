@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Holds all the player data variables, most of the variables are found in the "TankData" parent
 public class PlayerData : TankData
 {
     public int playerScore = 0; // Integer that tracks the player's score

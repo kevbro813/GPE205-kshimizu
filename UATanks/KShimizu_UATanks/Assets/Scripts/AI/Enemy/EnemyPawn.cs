@@ -13,9 +13,9 @@ public class EnemyPawn : AIPawn
     public bool atSearchLocation = false; // Indicates whether the AI is currently at the last known player location while searching
     public bool atInvestigateLocation = false; // Indicates whether the AI is currently looking in the direction of a sound while investigating
     public bool atAlertLocation = false; // Indicates whether the AI is currently at the alert location
-    [HideInInspector] public bool isInvestigating = false; // Switching from true to false allows the AI to transition from investigate state to patrol state
-    [HideInInspector] public bool isSearching = false; // Switching from true to false allows the AI to transition from search state to patrol state
-    [HideInInspector] public bool isAlertActive = false; // Switching from true to false allows the AI to transition from alert state to patrol state
+    public bool isInvestigating = false; // Switching from true to false allows the AI to transition from investigate state to patrol state
+    public bool isSearching = false; // Switching from true to false allows the AI to transition from search state to patrol state
+    public bool isAlertActive = false; // Switching from true to false allows the AI to transition from alert state to patrol state
     private float waitTime; // Used in timer to determine how long to wait at a waypoint while patrolling
     private bool isPatrolForward = true; // Used in "PingPong" patrol type to loop through the waypoints in reverse order
     private float investigateTime; // How long the AI will investigate before returning to patrol
@@ -214,7 +214,6 @@ public class EnemyPawn : AIPawn
                         alertTime = enemyData.alertDuration; // Reset timer
                         isAlertActive = false; // AI is no longer alert, allows AI to return to patrol
                         GameManager.instance.isAlerted = false;
-                        Debug.Log(isAlertActive);
                         /* Resets boolean that indicates whether AI is at the alert location
                         Prevents bug when changing states before AI finished moving to location */
                         atAlertLocation = false;

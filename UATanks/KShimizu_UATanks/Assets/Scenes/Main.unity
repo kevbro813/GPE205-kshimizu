@@ -175,8 +175,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
@@ -3289,8 +3287,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
@@ -3779,7 +3775,7 @@ PrefabInstance:
     - target: {fileID: 243800868272594255, guid: 9767bbef753b04e4b97bad11b36dab18,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.53
+      value: -11.89
       objectReference: {fileID: 0}
     - target: {fileID: 243800868272594255, guid: 9767bbef753b04e4b97bad11b36dab18,
         type: 3}
@@ -3789,7 +3785,7 @@ PrefabInstance:
     - target: {fileID: 243800868272594255, guid: 9767bbef753b04e4b97bad11b36dab18,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.34
+      value: -19.77
       objectReference: {fileID: 0}
     - target: {fileID: 243800868272594255, guid: 9767bbef753b04e4b97bad11b36dab18,
         type: 3}
@@ -4014,11 +4010,11 @@ MonoBehaviour:
   hud: {fileID: 0}
   enemyTankList:
   - {fileID: 100012, guid: b9e6db1de2d8d6046a05ae561ed1d3f2, type: 3}
-  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
   - {fileID: 100012, guid: 84f05b521e1061548ab889af1c5715de, type: 3}
   - {fileID: 100012, guid: a6089321b77c7004eb221a2e40c405b4, type: 3}
-  - {fileID: 100012, guid: c30130572f9f2b4409c68d99235fa136, type: 3}
   - {fileID: 100012, guid: 2f79259b5ad2c1a48a94c6f124fa84b3, type: 3}
+  - {fileID: 100012, guid: c30130572f9f2b4409c68d99235fa136, type: 3}
+  - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
   enemyTankSpawnList:
   - {fileID: 3492855665669487932}
   - {fileID: 669029863}

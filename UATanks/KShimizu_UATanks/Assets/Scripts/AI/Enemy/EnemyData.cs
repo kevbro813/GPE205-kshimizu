@@ -11,11 +11,9 @@ public class EnemyData : AIData
     public int currentWaypoint = 0; // Tracks the waypoint that is currently being used by an AI
     public PatrolType patrolType; // Allows the patrol type to be changed in the Inspector
     public WaypointType waypointType; // Allows the type of waypoints used to be changed in the Inspector
-    public AIState aiState; // Allows the AI state to be changed in the Inspector
-    public AIState tempState; // Saves the previous state temporarily (similar to a double buffer pattern) Used to transition from obstacle avoidance state back to the previous state
+
     public enum WaypointType { Global, Local } // Selection for Waypoint Type (Global are waypoints saved in GameManager, local would be local waypoints that are used with prefabs in local space
     public enum PatrolType { Random, Stop, Loop, PingPong }; // Selections for Patrol Type
-    public enum AIState { Idle, Patrol, Attack, Search, Pursue, Flee, Investigate, Avoidance, Alerted } // Selections for AI State
     // Start is called before the first frame update
     void Start()
     {

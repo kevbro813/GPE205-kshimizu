@@ -18,13 +18,13 @@ public class ScoutController : EnemyController
     void Update()
     {
         // IDLE STATE
-        if (enemyData.aiState == EnemyData.AIState.Idle)
+        if (aiState == AIState.Idle)
         {
             DoIdle();
-            ChangeState(EnemyData.AIState.Patrol); // TEST PURPOSES ONLY - SO TANKS AREN'T STUCK IN IDLE
+            ChangeState(AIState.Patrol); // TEST PURPOSES ONLY - SO TANKS AREN'T STUCK IN IDLE
         }
         // PATROL STATE
-        if (enemyData.aiState == EnemyData.AIState.Patrol)
+        if (aiState == AIState.Patrol)
         {
             DoPatrol();
             // Check if player is in senseRange (AI is blind and deaf while patrolling, unless the player is within "sensory range." This is done to manage resources
@@ -40,7 +40,7 @@ public class ScoutController : EnemyController
             TransitionAttack();
         }
         // ATTACK STATE
-        if (enemyData.aiState == EnemyData.AIState.Attack)
+        if (aiState == AIState.Attack)
         {
             DoAttack();
 
@@ -51,7 +51,7 @@ public class ScoutController : EnemyController
             TransitionSearch();
         }
         // SEARCH STATE
-        if (enemyData.aiState == EnemyData.AIState.Search)
+        if (aiState == AIState.Search)
         {
             DoSearch();
             // If the AI is not currently searching, allow it to transition to patrol state
@@ -70,7 +70,7 @@ public class ScoutController : EnemyController
             TransitionAttack();
         }
         // PURSUE STATE
-        if (enemyData.aiState == EnemyData.AIState.Pursue)
+        if (aiState == AIState.Pursue)
         {
             DoPursue();
 
@@ -81,7 +81,7 @@ public class ScoutController : EnemyController
             TransitionSearch();
         }
         // INVESTIGATE STATE
-        if (enemyData.aiState == EnemyData.AIState.Investigate)
+        if (aiState == AIState.Investigate)
         {
             DoInvestigate();
             // If the AI is not currently investigating, allow it to transition to patrol state
@@ -98,14 +98,14 @@ public class ScoutController : EnemyController
 
         }
         // OBSTACLE AVOIDANCE STATE
-        if (enemyData.aiState == EnemyData.AIState.Avoidance)
+        if (aiState == AIState.Avoidance)
         {
             DoObstacleAvoidance();
             /* The following will rotate the AI a random amount while avoiding obstacles, this is done by having a random duration during which the AI will rotate.
             This makes the AI have less predictable movement and creates unique patrol routes*/
             if (enemyData.randomRotation <= 0)
             {
-                enemyData.aiState = enemyData.tempState; // Return AI to the previous state
+                aiState = tempState; // Return AI to the previous state
                 // Create a new random rotation for the next time the AI enters the Avoidance State
                 enemyData.randomRotation = Random.Range(enemyData.rotationLow, enemyData.rotationHigh);
             }
@@ -116,14 +116,14 @@ public class ScoutController : EnemyController
         }
 
         // Run transition to avoidance function during all states but Avoidance
-        if (enemyData.aiState != EnemyData.AIState.Avoidance)
+        if (aiState != AIState.Avoidance)
         {
             TransitionAvoidance();
         }
         // Run transition to alert function during all states
         TransitionAlerted();
         // ALERTED STATE
-        if (enemyData.aiState == EnemyData.AIState.Alerted)
+        if (aiState == AIState.Alerted)
         {
             DoAlerted();
             // If the AI is not currently alert, allow it to transition to patrol state

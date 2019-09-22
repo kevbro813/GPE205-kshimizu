@@ -7,10 +7,11 @@ public class EnemyData : AIData
 {
     public int pointValue; // Number of points granted to the player when the enemy tank is destroyed
     public PlayerData playerData;
-    public Transform[] enemyWaypoints; // Array of all the enemy waypoints being used by the AI
+    public List<Transform> enemyWaypoints; // Array of all the enemy waypoints being used by the AI
     public int currentWaypoint = 0; // Tracks the waypoint that is currently being used by an AI
     public PatrolType patrolType; // Allows the patrol type to be changed in the Inspector
     public WaypointType waypointType; // Allows the type of waypoints used to be changed in the Inspector
+    public int enemyListIndex;
 
     public enum WaypointType { Global, Local } // Selection for Waypoint Type (Global are waypoints saved in GameManager, local would be local waypoints that are used with prefabs in local space
     public enum PatrolType { Random, Stop, Loop, PingPong }; // Selections for Patrol Type
@@ -22,14 +23,14 @@ public class EnemyData : AIData
     }
     void Awake()
     {
-        // Sets the waypoints used by the AI to the global ones saved in the Game Manager, or local waypoints that can be added in the Inspector
+        //Sets the waypoints used by the AI to the global ones saved in the Game Manager, or local waypoints that can be added in the Inspector
         if (waypointType == WaypointType.Global)
         {
-            enemyWaypoints = GameManager.instance.enemyWaypoints;
+            enemyWaypoints = GameManager.instance.enemyWaypointsList;
         }
         if (patrolType == PatrolType.Random)
         {
-            currentWaypoint = Random.Range(0, enemyWaypoints.Length);
+            currentWaypoint = Random.Range(0, enemyWaypoints.Count);
         }
     }
     // Update is called once per frame
@@ -40,11 +41,13 @@ public class EnemyData : AIData
     // Function to destroy the enemy tank and increase the player's score
     public override void TankDestroyed()
     {
-        base.TankDestroyed();
         // Add to player's score
         if(tankHealth <= 0)
         {
             playerData.playerScore += pointValue;
+            GameManager.instance.currentEnemiesList.Remove(this.gameObject);
+            GameManager.instance.enemyDataList.Remove(this.gameObject.GetComponent<EnemyData>());
         }
+        base.TankDestroyed();
     }
 }

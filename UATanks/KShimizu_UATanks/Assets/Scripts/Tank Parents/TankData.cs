@@ -7,6 +7,7 @@ public abstract class TankData : MonoBehaviour
 {
     // Public variables for tanks
     public float tankHealth; // Tank's health
+    public float maxTankHealth;
     public float forwardSpeed = 1.0f; // Tank's forward speed multiplier
     public float reverseSpeed = 0.5f; // Tank's reverse speed multiplier
     public float rotationSpeed = 1.0f; // Tank's rotation speed multiplier
@@ -15,7 +16,13 @@ public abstract class TankData : MonoBehaviour
     public float shellForce = 1.0f; // Speed of the shell
     public float shellDamage = 20.0f; // Damage dealt by the shell
     public float criticalHealth = 60.0f;
-
+    public int currentAmmo;
+    public int maxAmmo = 10;
+    public int coins;
+    public bool isInvulnerable;
+    public bool isInfiniteAmmo;
+    public bool isInvisible;
+    
     // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
     public virtual void TankDestroyed()
     {

@@ -347,7 +347,7 @@ public class EnemyPawn : AIPawn
     // Forward then reverse order waypoint movement
     public void PingPongPatrol()
     {
-        if (enemyData.currentWaypoint == enemyData.enemyWaypoints.Count - 1)
+        if (enemyData.currentWaypoint == enemyData.enemyWaypoints.Length - 1)
         {
             isPatrolForward = false;
         }
@@ -367,12 +367,12 @@ public class EnemyPawn : AIPawn
     // Move to a random waypoint
     public void RandomPatrol()
     {
-        enemyData.currentWaypoint = Random.Range(0, enemyData.enemyWaypoints.Count);
+        enemyData.currentWaypoint = Random.Range(0, enemyData.enemyWaypoints.Length);
     }
     // Loop through waypoints
     public void LoopPatrol()
     {
-        if (enemyData.currentWaypoint < enemyData.enemyWaypoints.Count - 1)
+        if (enemyData.currentWaypoint < enemyData.enemyWaypoints.Length - 1)
         {
             enemyData.currentWaypoint++;
         }
@@ -384,7 +384,7 @@ public class EnemyPawn : AIPawn
     // Stop at last waypoint
     public void StopPatrol()
     {
-        if (enemyData.currentWaypoint < enemyData.enemyWaypoints.Count - 1)
+        if (enemyData.currentWaypoint < enemyData.enemyWaypoints.Length - 1)
         {
             enemyData.currentWaypoint++;
         }

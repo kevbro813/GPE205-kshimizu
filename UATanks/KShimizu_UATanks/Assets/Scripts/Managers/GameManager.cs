@@ -10,22 +10,15 @@ public class GameManager : MonoBehaviour
     public GameObject tankPrototype; // Set in inspector
     public PlayerPawn playerPawn;
     public PlayerController playerController;
-
+    public Transform playerSpawn;
     public Camera mainCamera;
     public PlayerData playerData;
     public HUD hud;
-
-    public Transform playerSpawn;
     public List<GameObject> enemyTankList; // List of enemy tanks, will be used for spawning enemies
-    public List<Transform> enemyTankSpawnsList; // List of all spawn points for enemies
-    public List<Transform> enemyWaypointsList; // Array of all enemy waypoints to use for patrolling. Add in inspector
-
-    public List<PickupObject> pickupList;
-    public List<Transform> pickupSpawnsList;
-    public Room[,] grid;
-
-    public List<GameObject> currentEnemiesList; // List of all current enemy objects
-    public List<EnemyData> enemyDataList; // List of all EnemyData components
+    public List<Transform> enemyTankSpawnList; // List of all spawn points for enemies
+    public GameObject[] enemyObjectsArray; // Array of all current enemy objects
+    public EnemyData[] enemyDataArray; // Array of all EnemyData components
+    public Transform[] enemyWaypoints; // Array of all enemy waypoints to use for patrolling. Add in inspector
     public float spawnDelay = 0; // Delay between enemies being spawned into the world
     public float maxEnemies = 8; // Maximum number of enmies spawned
     private float enemiesSpawned; // Tracks the number of enemies spawned into the world. May need to be public in the future
@@ -51,12 +44,14 @@ public class GameManager : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         mainCamera = Camera.main;
         hud = GameObject.FindWithTag("HUD").GetComponent<HUD>();
-        CreateNewGame();
+        CreatePlayerTank(); // Instantiate a new player
+        // Start enemy spawning
+        StartCoroutine("SpawnEnemyEvent"); // Begin coroutine for SpawnEnemyEvent
     }
     void Update()
     {
+        UpdateEnemyTankData();
         // ***Game State Machine***
-
     }
     public void CreatePlayerTank()
     {
@@ -78,6 +73,18 @@ public class GameManager : MonoBehaviour
         hud.playerData = playerData;
     }
 
+    // Creates a list of all enemy objects and a second list with all of the enemy objects' EnemyData components
+    public void UpdateEnemyTankData()
+    {
+        enemyObjectsArray = GameObject.FindGameObjectsWithTag("Enemy"); // Find all objects with Enemy Tag and add them to the array
+        enemyDataArray = new EnemyData[enemyObjectsArray.Length]; // Array for EnemyData components
+
+        // Loop through enemyObjectsArray, get their EnemyData components and add them to the enemyDataArray
+        for (int i = 0; i < enemyObjectsArray.Length; i++)
+        {
+            enemyDataArray[i] = enemyObjectsArray[i].GetComponent<EnemyData>();
+        }
+    }
     private IEnumerator SpawnEnemyEvent()
     {
         while (true)
@@ -86,27 +93,16 @@ public class GameManager : MonoBehaviour
             // Check that enemyCount does not exceed maxEnemies
             if (maxEnemies > enemiesSpawned)
             {
-                Transform spawnPoint = enemyTankSpawnsList[Random.Range(0, enemyTankSpawnsList.Count)]; // Random spawnPoint from list
+                Transform spawnPoint = enemyTankSpawnList[Random.Range(0, enemyTankSpawnList.Count)]; // Random spawnPoint from list
                 GameObject randomEnemy = enemyTankList[Random.Range(0, enemyTankList.Count)]; // Random enemy from list
-                enemyTankSpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
+                enemyTankSpawnList.Remove(spawnPoint); // Remove spawn point from list when used
                 enemyTankList.Remove(randomEnemy); // Remove spawn point from list when used
                 // Create enemyClone instance
                 GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation) as GameObject;
 
-                currentEnemiesList.Add(enemyClone);
-                EnemyData tempEnemyData = enemyClone.GetComponent<EnemyData>();
-                enemyDataList.Add(tempEnemyData);
-                tempEnemyData.enemyListIndex = currentEnemiesList.Count - 1;
-
-                enemiesSpawned++; // Increase enemyCount by one           
+                enemiesSpawned++; // Increase enemyCount by one
             }
         }
-    }
-    public void CreateNewGame()
-    {
-        GetComponent<MapGenerator>().GenerateMap();
-        StartCoroutine("SpawnEnemyEvent"); // Begin coroutine for SpawnEnemyEvent
-        CreatePlayerTank(); // Instantiate a new player  
     }
     // ***Game state methods***
 }

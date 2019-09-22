@@ -6,7 +6,7 @@ using UnityEngine;
 public class CannonSource : MonoBehaviour
 {
     public GameObject projectile; // Set the projectile in the inspector
-    public TankData tankData;
+    public PlayerData playerData;
     private Transform tf;
     private float lastCannonFire; // Variable that stores the last time the cannon was fired
     private bool cannonLoaded = true; // Bool is true when the timer expires, allowing the cannon can be fired again
@@ -14,7 +14,7 @@ public class CannonSource : MonoBehaviour
     void Start()
     {
         tf = GetComponent<Transform>();
-        tankData = GetComponentInParent<TankData>();
+        playerData = GameManager.instance.playerData;
         lastCannonFire = Time.time; // Last cannon is set to Time.time by default
     }
 
@@ -24,14 +24,14 @@ public class CannonSource : MonoBehaviour
         if (cannonLoaded == true)
         {
             cannonLoaded = false; // Set cannonLoaded to false
-            tankData.isInvisible = false;
+
             // Create a projectile instance
             GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
 
             // Destroy the projectileClone after a set duration
             if (projectile != null)
             {
-                Destroy(projectileClone, tankData.projectileDuration);
+                Destroy(projectileClone, playerData.projectileDuration);
             }
 
             // Reset lastCannonFire
@@ -39,7 +39,7 @@ public class CannonSource : MonoBehaviour
         }
 
         // Timer used to determine if the cannon is loaded
-        if (Time.time >= lastCannonFire + tankData.cannonDelay)
+        if (Time.time >= lastCannonFire + playerData.cannonDelay)
         {
             cannonLoaded = true;
         }

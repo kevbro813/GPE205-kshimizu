@@ -344,7 +344,6 @@ GameObject:
   - component: {fileID: 905196944557052418}
   - component: {fileID: -2887111991502180917}
   - component: {fileID: -3190469483590712858}
-  - component: {fileID: 5026310254686490260}
   m_Layer: 11
   m_Name: PlayerTank
   m_TagString: Player
@@ -431,7 +430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankHealth: 500
-  maxTankHealth: 0
   forwardSpeed: 300
   reverseSpeed: 175
   rotationSpeed: 70
@@ -440,12 +438,6 @@ MonoBehaviour:
   shellForce: 50
   shellDamage: 50
   criticalHealth: 10
-  currentAmmo: 0
-  maxAmmo: 10
-  coins: 0
-  isInvulnerable: 0
-  isInfiniteAmmo: 0
-  isInvisible: 0
   playerScore: 0
 --- !u!114 &-3190469483590712858
 MonoBehaviour:
@@ -463,21 +455,6 @@ MonoBehaviour:
   characterController: {fileID: 0}
   cannonSource: {fileID: 0}
   playerController: {fileID: 0}
---- !u!114 &5026310254686490260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c4f28fa2c20c1045b00cf527300b6e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerups: []
-  expiredPowerups: []
-  tankData: {fileID: 0}
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,7 +622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
     type: 3}
-  tankData: {fileID: 0}
+  playerData: {fileID: 0}
 --- !u!1 &8966785205101932312
 GameObject:
   m_ObjectHideFlags: 0

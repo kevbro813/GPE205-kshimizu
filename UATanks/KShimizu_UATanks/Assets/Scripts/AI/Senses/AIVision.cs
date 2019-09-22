@@ -44,16 +44,12 @@ public class AIVision : MonoBehaviour
             // RaycastHit from object to target, maxview distance, and only affects objects in layermask
             if (Physics.Raycast(tf.position, vectorToTarget, out hit, aiData.maxViewDistance, layerMask))
             {
-                if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == false) // If hit is player then...
+                if (hit.collider.CompareTag("Player")) // If hit is player then...
                 {
                     //Debug.DrawRay(tf.position, vectorToTarget, Color.red, aiData.maxViewDistance); // Draw rays
                     lastPlayerLocation = hit.point; // Set lastPlayerLocation to raycast hit point
                     GameManager.instance.lastPlayerLocation = lastPlayerLocation; // Set lastPlayerLocation in GameManager
                     return true; // Returns true if the collider hit is the player
-                }
-                else if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == true)
-                {
-                    Debug.Log("Player is invisible");
                 }
             }
         }

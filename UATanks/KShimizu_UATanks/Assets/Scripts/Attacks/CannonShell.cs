@@ -30,18 +30,31 @@ public class CannonShell : MonoBehaviour
         if (col.gameObject.CompareTag("Enemy")) // Check if the collider hit has the "Enemy" tag
         {
             EnemyData enemyData = col.gameObject.GetComponent<EnemyData>();
+            if (enemyData.isInvulnerable == false)
+            {
+                // Deal damage to enemy tank
+                enemyData.tankHealth -= tankData.shellDamage;
+                Debug.Log(enemyData.tankHealth);
+            }
+            else
+            {
+                Debug.Log("Enemy is invulnerable");
+            }
             Destroy(gameObject); // Destroy the cannon shell if it hits an enemy tank
-
-            // Deal damage to enemy tank
-            enemyData.tankHealth -= tankData.shellDamage;
-            Debug.Log(enemyData.tankHealth);
         }
         else if (col.gameObject.CompareTag("Player")) // Check if the collider hit has the "Player" tag
         {
+            PlayerData playerData = col.gameObject.GetComponent<PlayerData>();
+            if (playerData.isInvulnerable == false)
+            {
+                // Deal damage to player tank
+                playerData.tankHealth -= tankData.shellDamage;
+            }
+            else
+            {
+                Debug.Log("Player is invulnerable");
+            }
             Destroy(gameObject); // Destroy the cannon shell if it hits an enemy tank
-
-            // Deal damage to player tank
-            playerData.tankHealth -= tankData.shellDamage;
         }
         else if (col.gameObject.CompareTag("Arena"))
         {

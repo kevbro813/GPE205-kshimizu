@@ -5,8 +5,8 @@ using UnityEngine;
 // Pickup controller is used to activate and deactivate pickups/powerups
 public class PickupController : MonoBehaviour
 {
-    public List<PickupData> pickups; 
-    public TankData tankData;
+    [HideInInspector] public List<PickupData> pickups;
+    [HideInInspector] public TankData tankData;
     private float duration;
     // Start is called before the first frame update
     void Start()

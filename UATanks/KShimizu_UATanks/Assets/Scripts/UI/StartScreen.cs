@@ -10,8 +10,8 @@ public class StartScreen : MonoBehaviour
     public Slider enemyCountSlider;
     public Toggle randomEnemies;
     public Text enemyCount;
-    public int selectedMap;
-    public int enemyQuantity;
+    [HideInInspector] public int selectedMap;
+    [HideInInspector] public int enemyQuantity;
     private List<string> mapTypes = new List<string>() { "Map of the Day", "Random", "Preset Seed" };
 
     private void Update()

@@ -6,10 +6,16 @@ using UnityEngine;
 public abstract class TankPawn : MonoBehaviour
 {
     public Transform tf;
+    public TankData tankData;
     public CharacterController characterController;
     public CannonSource cannonSource; // Component on child object that will instantiate the projectile
 
-
+    public virtual void Start()
+    {
+        tankData = GetComponent<TankData>();
+        tf = GetComponent<Transform>();
+        cannonSource = GetComponentInChildren<CannonSource>();
+    }
     // Tank forward and reverse movement method
     public void MoveTank(float moveSpeed)
     {
@@ -35,6 +41,29 @@ public abstract class TankPawn : MonoBehaviour
         else
         {
             cannonSource.FireCannon(); // Fire cannon
+        }
+    }
+    // Set tank to translucent on screen
+    public void SetInvisible()
+    {
+        MeshRenderer[] meshRenderer = GetComponentsInChildren<MeshRenderer>();
+        // Loop through all MeshRenderer components in children to make translucent
+        foreach (MeshRenderer mesh in meshRenderer)
+        {
+            Color color = mesh.material.color;
+            color.a = tankData.translucency;
+            mesh.material.color = color;
+        }
+    }
+    // Set tank to opaque on screen
+    public void SetVisible()
+    {
+        MeshRenderer[] meshRenderer = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mesh in meshRenderer)
+        {
+            Color color = mesh.material.color;
+            color.a = 1.0f; // Set to opaque
+            mesh.material.color = color;
         }
     }
 }

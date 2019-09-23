@@ -78,5 +78,15 @@ public class GuardController : EnemyController
         {
             TransitionAvoidance();
         }
+        // Set enemy visibility
+        if (enemyData.isInvisible == true)
+        {
+            Debug.Log("Enemy is invisible");
+            enemyPawn.SetInvisible();
+        }
+        else
+        {
+            enemyPawn.SetVisible();
+        }
     }
 }

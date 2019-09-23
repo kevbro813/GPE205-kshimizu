@@ -62,30 +62,6 @@ public class PickupData
         if (isInvisiblePowerup == true)
         {
             tank.isInvisible = true; // Activate isInvisible
-            if (tank.CompareTag("Player"))
-            {
-                MeshRenderer[] meshRenderer = tank.gameObject.GetComponentsInChildren<MeshRenderer>();
-                // Loop through all MeshRenderer components in children to make translucent
-                foreach (MeshRenderer mesh in meshRenderer)
-                {
-                    Color color = mesh.material.color;
-                    color.a = 0.5f; // Enemy translucency set to 50%
-                    mesh.material.color = color;
-                    // TODO: Make translucency a variable set in inspector
-                }
-            }
-            tank.isInvisible = true; // Activate isInvisible
-            if (tank.CompareTag("Enemy"))
-            {
-                MeshRenderer[] meshRenderer = tank.gameObject.GetComponentsInChildren<MeshRenderer>();
-                // Loop through all MeshRenderer components in children to make translucent
-                foreach (MeshRenderer mesh in meshRenderer)
-                {
-                    Color color = mesh.material.color;
-                    color.a = 0.1f; // Enemy translucency set to barely visible
-                    mesh.material.color = color;
-                }
-            }
         }
 
         // Activate Invulnerability

@@ -25,13 +25,13 @@ public class PlayerController : MonoBehaviour
             {
                 moveSpeed = inputVertical * playerData.forwardSpeed; // If positive, use forwardSpeed
             }
-            if (inputVertical < 0)
+            else if (inputVertical < 0)
             {
                 moveSpeed = inputVertical * playerData.reverseSpeed; // If negative, use reverseSpeed
             }
 
             // If inputVertical = 0 then set moveSpeed to 0, this fixes the tank sliding without player input
-            if (inputVertical == 0)
+            else if (inputVertical == 0)
             {
                 moveSpeed = 0;
             }
@@ -44,6 +44,16 @@ public class PlayerController : MonoBehaviour
             if (Input.GetButton("Fire1"))
             {
                 playerPawn.SingleCannonFire();
+            }
+
+            // Set player to invisible or visible
+            if (playerData.isInvisible == true)
+            {
+                playerPawn.SetInvisible();
+            }
+            else
+            {
+                playerPawn.SetVisible();
             }
             //mousePosition = Input.mousePosition;
             //playerPawn.RotateTowardsMouse();

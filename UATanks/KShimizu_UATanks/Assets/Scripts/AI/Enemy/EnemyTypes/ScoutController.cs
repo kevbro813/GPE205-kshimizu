@@ -137,5 +137,15 @@ public class ScoutController : EnemyController
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
         }
+        // Set enemy visibility
+        if (enemyData.isInvisible == true)
+        {
+            Debug.Log("Enemy is invisible");
+            enemyPawn.SetInvisible();
+        }
+        else
+        {
+            enemyPawn.SetVisible();
+        }
     }
 }

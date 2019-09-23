@@ -124,5 +124,15 @@ public class SniperController : EnemyController
         {
             TransitionAvoidance();
         }
+        // Set enemy visibility
+        if (enemyData.isInvisible == true)
+        {
+            Debug.Log("Enemy is invisible");
+            enemyPawn.SetInvisible();
+        }
+        else
+        {
+            enemyPawn.SetVisible();
+        }
     }
 }

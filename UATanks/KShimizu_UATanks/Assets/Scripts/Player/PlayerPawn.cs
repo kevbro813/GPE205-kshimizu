@@ -6,10 +6,11 @@ using UnityEngine;
 public class PlayerPawn : TankPawn
 {
     public PlayerController playerController;
-    void Start()
+    public override void Start()
     {
+        base.Start();
         playerController = GetComponent<PlayerController>();
-        cannonSource = GetComponentInChildren<CannonSource>();
+
     }
 
     // TODO: Rotate tank turret using mouse

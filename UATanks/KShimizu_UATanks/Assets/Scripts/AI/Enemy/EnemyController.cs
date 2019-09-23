@@ -154,6 +154,16 @@ public class EnemyController : AIController
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
         }
+
+        // Set enemy visibility
+        if (enemyData.isInvisible == true)
+        {
+            enemyPawn.SetInvisible();
+        }
+        else
+        {
+            enemyPawn.SetVisible();
+        }
     }
 // CALLS ENEMY PAWN FUNCTIONS
 public void DoIdle()

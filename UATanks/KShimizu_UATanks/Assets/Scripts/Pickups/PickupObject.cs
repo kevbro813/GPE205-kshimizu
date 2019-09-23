@@ -7,8 +7,8 @@ public class PickupObject : MonoBehaviour
 {
     public PickupData pickupData;
     public int pickupListIndex; // Pickup index is used to add or remove from list of active pickups
-    public SphereCollider sphereCollider;
-    public MeshRenderer[] meshRenderer;
+    [HideInInspector] public SphereCollider sphereCollider;
+    [HideInInspector] public MeshRenderer[] meshRenderer;
     private void Start()
     {
         sphereCollider = GetComponent<SphereCollider>();

@@ -403,6 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tf: {fileID: 0}
+  tankData: {fileID: 0}
   characterController: {fileID: 0}
   cannonSource: {fileID: 215966559274695101}
   enemyData: {fileID: 0}
@@ -444,6 +445,7 @@ MonoBehaviour:
   isInvulnerable: 0
   isInfiniteAmmo: 0
   isInvisible: 0
+  translucency: 0.5
   fieldOfView: 55
   maxViewDistance: 8
   maxAttackRange: 6

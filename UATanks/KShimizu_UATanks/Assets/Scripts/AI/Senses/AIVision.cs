@@ -46,7 +46,6 @@ public class AIVision : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == false) // If hit is player then...
                 {
-                    //Debug.DrawRay(tf.position, vectorToTarget, Color.red, aiData.maxViewDistance); // Draw rays
                     lastPlayerLocation = hit.point; // Set lastPlayerLocation to raycast hit point
                     GameManager.instance.lastPlayerLocation = lastPlayerLocation; // Set lastPlayerLocation in GameManager
                     return true; // Returns true if the collider hit is the player

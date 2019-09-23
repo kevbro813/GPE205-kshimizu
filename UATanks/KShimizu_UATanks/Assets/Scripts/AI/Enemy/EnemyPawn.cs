@@ -23,9 +23,9 @@ public class EnemyPawn : AIPawn
     private float alertTime; // How long the AI will be alert before returning to patrol
     private bool isTurned = false; // Is the tank turned around (Used in Flee function)
     public RaycastHit obstacleHit; // Raycast hit for obstacles (Includes the arena and other enemy tanks)
-    void Start()
+    public override void Start()
     {
-        tf = GetComponent<Transform>();
+        base.Start();
         characterController = GetComponent<CharacterController>();
         enemyData = GetComponent<EnemyData>();
         ptf = GameManager.instance.playerTank.GetComponent<Transform>();

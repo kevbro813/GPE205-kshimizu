@@ -446,6 +446,7 @@ MonoBehaviour:
   isInvulnerable: 0
   isInfiniteAmmo: 0
   isInvisible: 0
+  translucency: 0.4
   playerScore: 0
   playerLives: 3
   tf: {fileID: 0}
@@ -462,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tf: {fileID: 0}
+  tankData: {fileID: 0}
   characterController: {fileID: 0}
   cannonSource: {fileID: 0}
   playerController: {fileID: 0}

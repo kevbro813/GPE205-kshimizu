@@ -6,39 +6,34 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public GameObject playerTank;
+    [HideInInspector] public GameObject playerTank;
     public GameObject tankPrototype; // Set in inspector
-    public PlayerController playerController;
-    public Camera mainCamera;
-    public PlayerData playerData;
-    public HUD hud;
-
-    public MapGenerator mapGenerator; // Map Generator component
-    public Room[,] grid; // Grid used to store procedurally generated map
-    
-    public PlayerPawn playerPawn;
-    public List<Transform> playerSpawnsList; // List of all player spawns
-
+    [HideInInspector] public PlayerController playerController;
+    [HideInInspector] public Camera mainCamera;
+    [HideInInspector] public PlayerData playerData;
+    [HideInInspector] public HUD hud;
+    [HideInInspector] public MapGenerator mapGenerator; // Map Generator component
+    [HideInInspector] public Room[,] grid; // Grid used to store procedurally generated map
+    [HideInInspector] public PlayerPawn playerPawn;
+    [HideInInspector] public List<Transform> playerSpawnsList; // List of all player spawns
     public List<GameObject> enemyTankList; // List of enemy tanks, will be used for spawning enemies
     public List<Transform> enemySpawnsList; // List of all spawn points for enemies
-    public List<Transform> enemyWaypointsList; // Array of all enemy waypoints to use for patrolling. Add in inspector
+    public List<Transform> enemyWaypointsList; // List of all enemy waypoints to use for patrolling
     public List<GameObject> activeEnemiesList; // List of all current enemy objects
     public List<EnemyData> enemyDataList; // List of all EnemyData components
-    public float spawnDelay = 0; // Delay between enemies being spawned into the world
-    public int maxEnemies = 8; // Maximum number of enmies spawned
-    private float enemiesSpawned = 0; // Tracks the number of enemies spawned into the world. May need to be public in the future
-
     public List<GameObject> pickupList; // List of available pickups, set in inspector
     public List<Transform> pickupSpawnsList; // List of all pickup spawns, set automatically when map is generated
     public List<GameObject> activePickupList; // List of all active pickups
     public List<PickupObject> pickupObjectList; // List of all active pickup objects
+    [HideInInspector] public float enemiesSpawned = 0; // Tracks the number of enemies spawned into the world
+    public float spawnDelay = 0; // Delay between enemies being spawned into the world
+    public int maxEnemies = 8; // Maximum number of enmies spawned
     public int maxPickups = 10; // Maximum number of pickups that will spawn, set in inspector
     public float pickupRespawnDelay = 5.0f; // This is the delay between when a pickup is taken and when it reappears
-    private float currentPickupQuantity = 0; // Tracks the number of pickups spawned in the world
+    [HideInInspector] public float currentPickupQuantity = 0; // Tracks the number of pickups spawned in the world
     public float pickupSpawnDelay = 0; // Delay to spawn pickups when the game is first started
-
-    public Vector3 lastPlayerLocation; // Last known location of the player, visible to all AI. Used in Alert system
-    public Vector3 lastSoundLocation; // Last known sound detected, visible to all AI
+    [HideInInspector] public Vector3 lastPlayerLocation; // Last known location of the player, visible to all AI. Used in Alert system
+    [HideInInspector] public Vector3 lastSoundLocation; // Last known sound detected, visible to all AI
     public bool isAlerted = false; // If the player is seen by a guard or captain, this will be set to true, calling other enemy tanks to go to last known player location
     public bool isRandomEnemy = false; // Generate a random assortment of enemies or one based on a preset seed (Map of Day or Preset Seed)
 

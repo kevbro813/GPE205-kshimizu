@@ -22,6 +22,7 @@ public abstract class TankData : MonoBehaviour
     public bool isInvulnerable; // If true, the tank cannot be damaged
     public bool isInfiniteAmmo; // If true the tank has infinite ammo
     public bool isInvisible; // If true, the player tank can only be heard by AI, AI tanks will be translucent
+    public float translucency; // Set level of translucency 0 to 1
     
     public virtual void Start()
     {

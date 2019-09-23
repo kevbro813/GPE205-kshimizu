@@ -64,8 +64,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyData.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyPawn.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\CaptainController.cs" />
-    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\EnemyPawn.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\GuardController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\PatrolController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\ScoutController.cs" />

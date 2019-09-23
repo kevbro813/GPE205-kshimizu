@@ -15,21 +15,19 @@ public class MapGenerator : MonoBehaviour
     public MapType mapType;
     public enum MapType { MapOfTheDay, Random, PresetSeed }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
     public void GenerateMap()
     {
+        // If set to Map of the Day, use date to determine seed
         if (mapType == MapType.MapOfTheDay)
         {
             mapSeed = DateToInt(DateTime.Now.Date);
         }
+        // If set to Random, use time to determine seed
         else if (mapType == MapType.Random)
         {
             mapSeed = DateToInt(DateTime.Now);
         }
+        // If set to preset seed, use the seed set in the inspector
         else if (mapType == MapType.PresetSeed)
         {
             // Do nothing. Allows seed to be set in inspector
@@ -102,12 +100,21 @@ public class MapGenerator : MonoBehaviour
     }
     public void CreateSpawnList()
     {
-        GameObject[] tempEnemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
-        
+        GameObject[] tempPlayerSpawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
+        for (int i = 0; i < tempPlayerSpawns.Length; i++)
+        {
+            GameManager.instance.playerSpawnsList.Add(tempPlayerSpawns[i].GetComponent<Transform>());
+        }
+        GameObject[] tempEnemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn"); 
         for (int i = 0; i < tempEnemySpawns.Length; i++)
         {
-            GameManager.instance.enemyTankSpawnsList.Add(tempEnemySpawns[i].GetComponent<Transform>());
+            GameManager.instance.enemySpawnsList.Add(tempEnemySpawns[i].GetComponent<Transform>());
         }
-        GameManager.instance.playerSpawn = GameObject.FindWithTag("PlayerSpawn").GetComponent<Transform>();
+
+        GameObject[] tempPickupSpawns = GameObject.FindGameObjectsWithTag("PickupSpawn");
+        for (int i = 0; i < tempPickupSpawns.Length; i++)
+        {
+            GameManager.instance.pickupSpawnsList.Add(tempPickupSpawns[i].GetComponent<Transform>());
+        }
     }
 }

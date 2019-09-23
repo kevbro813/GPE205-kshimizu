@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 2957852750035039778}
   - component: {fileID: 2739427385053190658}
   - component: {fileID: 905196944557052418}
+  - component: {fileID: -3197157126294788417}
   m_Layer: 10
   m_Name: EnemyTank
   m_TagString: Enemy
@@ -411,8 +412,10 @@ MonoBehaviour:
   atWaypoint: 0
   atSearchLocation: 0
   atInvestigateLocation: 0
+  atAlertLocation: 0
   isInvestigating: 0
   isSearching: 0
+  isAlertActive: 0
 --- !u!114 &6464525225311272216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,6 +435,8 @@ MonoBehaviour:
   sensoryRange: {fileID: 0}
   enemyPawn: {fileID: 0}
   enemyData: {fileID: 0}
+  aiState: 0
+  tempState: 0
 --- !u!114 &2957852750035039778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +449,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2d7bd35f85bbbf428d385932cc732eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankHealth: 100
+  tankHealth: 0
+  maxTankHealth: 100
   forwardSpeed: 100
   reverseSpeed: 50
   rotationSpeed: 50
@@ -453,6 +459,12 @@ MonoBehaviour:
   shellForce: 50
   shellDamage: 20
   criticalHealth: 60
+  currentAmmo: 0
+  maxAmmo: 10
+  coins: 0
+  isInvulnerable: 0
+  isInfiniteAmmo: 0
+  isInvisible: 0
   fieldOfView: 55
   maxViewDistance: 7
   maxAttackRange: 5
@@ -461,6 +473,7 @@ MonoBehaviour:
   waypointRange: 1
   searchDuration: 5
   investigateDuration: 5
+  alertDuration: 3
   avoidanceDistance: 2
   rotationHigh: 2
   rotationLow: 1
@@ -471,8 +484,7 @@ MonoBehaviour:
   currentWaypoint: 0
   patrolType: 0
   waypointType: 0
-  aiState: 0
-  tempState: 0
+  enemyListIndex: 0
 --- !u!54 &2739427385053190658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -503,6 +515,20 @@ CapsuleCollider:
   m_Height: 0.1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3197157126294788417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4f28fa2c20c1045b00cf527300b6e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickups: []
+  tankData: {fileID: 0}
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,7 +756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
     type: 3}
-  playerData: {fileID: 0}
+  tankData: {fileID: 0}
 --- !u!1 &7323303834225097402
 GameObject:
   m_ObjectHideFlags: 0

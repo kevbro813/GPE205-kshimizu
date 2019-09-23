@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 2739427385053190658}
   - component: {fileID: 905196944557052418}
   - component: {fileID: 7280098237012307815}
+  - component: {fileID: 6487765241526862748}
   m_Layer: 10
   m_Name: ScoutTank
   m_TagString: Enemy
@@ -427,7 +428,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2d7bd35f85bbbf428d385932cc732eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankHealth: 50
+  tankHealth: 0
+  maxTankHealth: 50
   forwardSpeed: 200
   reverseSpeed: 100
   rotationSpeed: 70
@@ -436,6 +438,12 @@ MonoBehaviour:
   shellForce: 60
   shellDamage: 15
   criticalHealth: 10
+  currentAmmo: 0
+  maxAmmo: 10
+  coins: 0
+  isInvulnerable: 0
+  isInfiniteAmmo: 0
+  isInvisible: 0
   fieldOfView: 55
   maxViewDistance: 8
   maxAttackRange: 4
@@ -455,8 +463,7 @@ MonoBehaviour:
   currentWaypoint: 0
   patrolType: 0
   waypointType: 0
-  aiState: 0
-  tempState: 0
+  enemyListIndex: 0
 --- !u!54 &2739427385053190658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -506,6 +513,22 @@ MonoBehaviour:
   sensoryRange: {fileID: 0}
   enemyPawn: {fileID: 0}
   enemyData: {fileID: 0}
+  aiState: 0
+  tempState: 0
+--- !u!114 &6487765241526862748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4f28fa2c20c1045b00cf527300b6e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickups: []
+  tankData: {fileID: 0}
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,7 +756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
     type: 3}
-  playerData: {fileID: 0}
+  tankData: {fileID: 0}
 --- !u!1 &7323303834225097402
 GameObject:
   m_ObjectHideFlags: 0

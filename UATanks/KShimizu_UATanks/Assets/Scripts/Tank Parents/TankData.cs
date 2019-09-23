@@ -23,6 +23,11 @@ public abstract class TankData : MonoBehaviour
     public bool isInfiniteAmmo;
     public bool isInvisible;
     
+    public virtual void Start()
+    {
+        tankHealth = maxTankHealth;
+        currentAmmo = maxAmmo;
+    }
     // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
     public virtual void TankDestroyed()
     {

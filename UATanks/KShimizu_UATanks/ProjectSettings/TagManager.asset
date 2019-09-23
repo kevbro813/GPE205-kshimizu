@@ -15,6 +15,7 @@ TagManager:
   - Senses
   - Sound
   - PickupSpawn
+  - StartScreen
   layers:
   - Default
   - TransparentFX

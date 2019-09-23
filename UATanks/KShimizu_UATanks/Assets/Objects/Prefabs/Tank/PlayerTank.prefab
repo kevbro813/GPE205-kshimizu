@@ -430,8 +430,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1d9c9e27fd772459b7c2843b64e93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankHealth: 500
-  maxTankHealth: 0
+  tankHealth: 0
+  maxTankHealth: 700
   forwardSpeed: 300
   reverseSpeed: 175
   rotationSpeed: 70
@@ -441,12 +441,13 @@ MonoBehaviour:
   shellDamage: 50
   criticalHealth: 10
   currentAmmo: 0
-  maxAmmo: 10
+  maxAmmo: 5
   coins: 0
   isInvulnerable: 0
   isInfiniteAmmo: 0
   isInvisible: 0
   playerScore: 0
+  playerLives: 0
 --- !u!114 &-3190469483590712858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,8 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4f28fa2c20c1045b00cf527300b6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerups: []
-  expiredPowerups: []
+  pickups: []
   tankData: {fileID: 0}
 --- !u!1 &100014
 GameObject:

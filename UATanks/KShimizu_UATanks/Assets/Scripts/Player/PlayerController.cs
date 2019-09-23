@@ -18,33 +18,35 @@ public class PlayerController : MonoBehaviour
         // Set variable for vertical and horizontal inputs
         inputVertical = Input.GetAxis("Vertical");
         inputHorizontal = Input.GetAxis("Horizontal");
-
-        // Set moveSpeed based on whether inputVertical is a negative or positive value
-        if (inputVertical > 0)
+        if (playerData != null)
         {
-            moveSpeed = inputVertical * playerData.forwardSpeed; // If positive, use forwardSpeed
-        }
-        if (inputVertical < 0)
-        {
-            moveSpeed = inputVertical * playerData.reverseSpeed; // If negative, use reverseSpeed
-        }
+            // Set moveSpeed based on whether inputVertical is a negative or positive value
+            if (inputVertical > 0)
+            {
+                moveSpeed = inputVertical * playerData.forwardSpeed; // If positive, use forwardSpeed
+            }
+            if (inputVertical < 0)
+            {
+                moveSpeed = inputVertical * playerData.reverseSpeed; // If negative, use reverseSpeed
+            }
 
-        // If inputVertical = 0 then set moveSpeed to 0, this fixes the tank sliding without player input
-        if (inputVertical == 0)
-        {
-            moveSpeed = 0;
-        }
-        rotateSpeed = inputHorizontal * playerData.rotationSpeed; // Set rotateSpeed
+            // If inputVertical = 0 then set moveSpeed to 0, this fixes the tank sliding without player input
+            if (inputVertical == 0)
+            {
+                moveSpeed = 0;
+            }
+            rotateSpeed = inputHorizontal * playerData.rotationSpeed; // Set rotateSpeed
 
-        playerPawn.MoveTank(moveSpeed); // Use moveSpeed as the parameter
-        playerPawn.RotateTank(rotateSpeed); // Use rotateSpeed as the parameter
+            playerPawn.MoveTank(moveSpeed); // Use moveSpeed as the parameter
+            playerPawn.RotateTank(rotateSpeed); // Use rotateSpeed as the parameter
 
-        // Fire a single tank round when the "Fire1" button is pressed (default is mouse0)
-        if (Input.GetButton("Fire1"))
-        {
-            playerPawn.SingleCannonFire();
+            // Fire a single tank round when the "Fire1" button is pressed (default is mouse0)
+            if (Input.GetButton("Fire1"))
+            {
+                playerPawn.SingleCannonFire();
+            }
+            //mousePosition = Input.mousePosition;
+            //playerPawn.RotateTowardsMouse();
         }
-        //mousePosition = Input.mousePosition;
-        //playerPawn.RotateTowardsMouse();
     }
 }

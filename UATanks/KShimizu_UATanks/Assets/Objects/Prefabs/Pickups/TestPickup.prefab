@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5884815421746873254}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.42, y: 0.7, z: -19.14}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -93,17 +93,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupData:
-    healthPickup: 100
+    healthPickup: 250
     ammoPickup: 1
     coinPickup: 100
     maxHealthMod: 0
-    speedMod: 2
-    fireRateMod: 2
+    speedMod: 1
+    fireRateMod: 1
+    isInvisiblePowerup: 0
+    isInvulnerablePowerup: 0
+    isInfiniteAmmoPowerup: 0
     isPermanent: 1
-    powerupDuration: 0
-    isInvisiblePickup: 1
-    isInvulnerablePickup: 0
-    isInfiniteAmmoPickup: 0
+    powerupDuration: 5
+  pickupListIndex: 0
 --- !u!135 &5884815421746873253
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -20,28 +20,34 @@ public class CannonSource : MonoBehaviour
 
     public void FireCannon()
     {
-        // If the cannon is loaded...
-        if (cannonLoaded == true)
-        {
-            cannonLoaded = false; // Set cannonLoaded to false
-            tankData.isInvisible = false;
-            // Create a projectile instance
-            GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
-
-            // Destroy the projectileClone after a set duration
-            if (projectile != null)
-            {
-                Destroy(projectileClone, tankData.projectileDuration);
-            }
-
-            // Reset lastCannonFire
-            lastCannonFire = Time.time;
-        }
-
         // Timer used to determine if the cannon is loaded
         if (Time.time >= lastCannonFire + tankData.cannonDelay)
         {
             cannonLoaded = true;
+        }
+        // If the cannon is loaded...
+        if (cannonLoaded == true)
+        {
+            // If the tank has ammo or has the infinite ammo powerup...
+            if (tankData.currentAmmo > 0 || tankData.isInfiniteAmmo == true)
+            {
+                cannonLoaded = false; // Set cannonLoaded to false
+                tankData.isInvisible = false; // Make the tank visible after a round is fired
+                // If the current ammo > 0, deduct one round
+                if (tankData.isInfiniteAmmo == false)
+                {
+                    tankData.currentAmmo--;
+                }
+                // Create a projectile instance
+                GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
+                // Destroy the projectileClone after a set duration
+                if (projectile != null)
+                {
+                    Destroy(projectileClone, tankData.projectileDuration);
+                }
+                // Reset lastCannonFire
+                lastCannonFire = Time.time;
+            }
         }
     }
 }

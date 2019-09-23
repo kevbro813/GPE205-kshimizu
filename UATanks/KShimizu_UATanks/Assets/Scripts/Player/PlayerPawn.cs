@@ -9,7 +9,6 @@ public class PlayerPawn : TankPawn
     void Start()
     {
         playerController = GetComponent<PlayerController>();
-        tf = GetComponent<Transform>();
         cannonSource = GetComponentInChildren<CannonSource>();
     }
 

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PickupController : MonoBehaviour
 {
-    public List<PickupData> powerups;
-    public List<PickupData> expiredPowerups;
+    public List<PickupData> pickups; 
     public TankData tankData;
     private float duration;
     // Start is called before the first frame update
     void Start()
     {
-        powerups = new List<PickupData>();
+        pickups = new List<PickupData>();
         tankData = GetComponent<TankData>();
     }
 
@@ -20,25 +19,27 @@ public class PickupController : MonoBehaviour
         pickup.OnActivate(tankData);
         if (!pickup.isPermanent)
         {
-            powerups.Add(pickup);
+            pickups.Add(pickup);
+            duration = pickup.powerupDuration;
         }  
     }
     // Update is called once per frame
     void Update()
     {
-        foreach (PickupData pickup in powerups)
+        List<PickupData> expiredPickups = new List<PickupData>();
+        foreach (PickupData pickup in pickups)
         {
-           pickup.powerupDuration -= Time.deltaTime;
-            if (pickup.powerupDuration <= 0)
+            duration -= Time.deltaTime;
+            if (duration <= 0)
             {
-                expiredPowerups.Add(pickup);
+                expiredPickups.Add(pickup);
             }
         }
-        foreach (PickupData pickup in expiredPowerups)
+        foreach (PickupData pickup in expiredPickups)
         {
             pickup.OnDeactivate(tankData);
-            powerups.Remove(pickup);
+            pickups.Remove(pickup);
         }
-        expiredPowerups.Clear();
+        expiredPickups.Clear();
     }
 }

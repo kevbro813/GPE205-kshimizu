@@ -5,15 +5,35 @@ using UnityEngine;
 public class PickupObject : MonoBehaviour
 {
     public PickupData pickupData;
-
+    public int pickupListIndex;
+    public SphereCollider sphereCollider;
+    public MeshRenderer[] meshRenderer;
+    private void Start()
+    {
+        sphereCollider = GetComponent<SphereCollider>();
+        meshRenderer = GetComponentsInChildren<MeshRenderer>();
+    }
     public void OnTriggerEnter(Collider other)
     {
-        PickupController powerupController = other.GetComponent<PickupController>();
-        if (powerupController != null)
+        PickupController pickupController = other.GetComponent<PickupController>();
+        if (pickupController != null)
         {
-            powerupController.Add(pickupData);
-
-            Destroy(gameObject);
+            pickupController.Add(pickupData);
+            sphereCollider.enabled = false;
+            for (int i = 0; i < meshRenderer.Length; i++)
+            {
+                meshRenderer[i].enabled = false;
+            }
+            StartCoroutine("RespawnPickupEvent");
+        }
+    }
+    private IEnumerator RespawnPickupEvent()
+    {
+        yield return new WaitForSeconds(GameManager.instance.pickupRespawnDelay);
+        sphereCollider.enabled = true;
+        for (int i = 0; i < meshRenderer.Length; i++)
+        {
+            meshRenderer[i].enabled = true;
         }
     }
 }

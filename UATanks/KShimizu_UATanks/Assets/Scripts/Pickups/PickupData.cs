@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PickupData
 {
-    // Pickups
+    // Basic Pickups
     public float healthPickup = 0f;
     public int ammoPickup = 0;
     public int coinPickup = 0;
@@ -16,26 +16,46 @@ public class PickupData
 
     // Temporary Powerups
     public float fireRateMod = 0f;
+    public bool isInvisiblePowerup = false;
+    public bool isInvulnerablePowerup = false;
+    public bool isInfiniteAmmoPowerup = false;
+
+    // Permanent or Duration
     public bool isPermanent = false;
     public float powerupDuration = 0f;
-    public bool isInvisiblePickup = false;
-    public bool isInvulnerablePickup = false;
-    public bool isInfiniteAmmoPickup = false;
 
     public void OnActivate(TankData tank)
     {
-        tank.tankHealth += healthPickup;
-        tank.currentAmmo += ammoPickup;
+        tank.maxTankHealth += maxHealthMod;
+        if (tank.tankHealth + healthPickup <= tank.maxTankHealth)
+        {
+            tank.tankHealth += healthPickup;
+        }
+        else
+        {
+            tank.tankHealth = tank.maxTankHealth;
+        }
+        
+        if (tank.currentAmmo + ammoPickup <= tank.maxAmmo)
+        {
+            tank.currentAmmo += ammoPickup;
+        }
+        else
+        {
+            tank.currentAmmo = tank.maxAmmo;
+        }
         tank.coins += coinPickup;
+
         tank.forwardSpeed *= speedMod;
         tank.reverseSpeed *= speedMod;
         tank.cannonDelay /= fireRateMod;
-        if (isInvisiblePickup == true)
+        
+
+        if (isInvisiblePowerup == true)
         {
             tank.isInvisible = true; // Activate isInvisible
             if (tank.CompareTag("Player"))
             {
-                Debug.Log("Is player invisible check");
                 MeshRenderer[] meshRenderer = tank.gameObject.GetComponentsInChildren<MeshRenderer>();
                 foreach (MeshRenderer mesh in meshRenderer)
                 {
@@ -44,23 +64,38 @@ public class PickupData
                     mesh.material.color = color;
                 }
             }
+            tank.isInvisible = true; // Activate isInvisible
+            if (tank.CompareTag("Enemy"))
+            {
+                MeshRenderer[] meshRenderer = tank.gameObject.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer mesh in meshRenderer)
+                {
+                    Color color = mesh.material.color;
+                    color.a = 0.1f;
+                    mesh.material.color = color;
+                }
+            }
         }
-        if (isInvulnerablePickup == true)
+        if (isInvulnerablePowerup == true)
         {
             tank.isInvulnerable = true; // Activate Invulnerability
         }
-        if (isInfiniteAmmoPickup == true)
+        if (isInfiniteAmmoPowerup == true)
         {
             tank.isInfiniteAmmo = true; // Activate isInfiniteAmmo
         }
     }
     public void OnDeactivate(TankData tank)
     {
+        // These are intended to be permanent mods and pickups, but can still be made temporary
         tank.tankHealth -= healthPickup;
         tank.currentAmmo -= ammoPickup;
         tank.coins -= coinPickup;
+        tank.maxTankHealth -= maxHealthMod;
         tank.forwardSpeed /= speedMod;
         tank.reverseSpeed /= speedMod;
+
+        // These are intended to be temporary powerups
         tank.cannonDelay *= fireRateMod;
         tank.isInvisible = false; // Deactivate isInvisible
         tank.isInfiniteAmmo = false; // Deactivate isInfiniteAmmo

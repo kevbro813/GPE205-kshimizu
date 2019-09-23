@@ -62,14 +62,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\AI\Enemy\CaptainController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\AI\Enemy\EnemyData.cs" />
-    <Compile Include="Assets\Scripts\AI\Enemy\EnemyPawn.cs" />
-    <Compile Include="Assets\Scripts\AI\Enemy\GuardController.cs" />
-    <Compile Include="Assets\Scripts\AI\Enemy\PatrolController.cs" />
-    <Compile Include="Assets\Scripts\AI\Enemy\ScoutController.cs" />
-    <Compile Include="Assets\Scripts\AI\Enemy\SniperController.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\CaptainController.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\EnemyPawn.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\GuardController.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\PatrolController.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\ScoutController.cs" />
+    <Compile Include="Assets\Scripts\AI\Enemy\EnemyTypes\SniperController.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyController.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyData.cs" />
     <Compile Include="Assets\Scripts\AI\Friendly\FriendlyPawn.cs" />

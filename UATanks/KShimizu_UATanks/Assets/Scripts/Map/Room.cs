@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Component used to open and close doors of the map tiles
 public class Room : MonoBehaviour {
 
 	public GameObject doorNorth;

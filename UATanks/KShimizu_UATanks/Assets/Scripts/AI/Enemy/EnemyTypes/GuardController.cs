@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Captains will try to run away from players and alert other enemy tanks
-public class CaptainController : EnemyController
+// Guards can move between waypoints but will not pursue players, player must be in range for them to attack, can alert other enemy tanks
+public class GuardController : EnemyController
 {
     private float stateEnterTime; // Saves the last time the AI transitioned to a new state
     private bool isFleeing = false; // Indicates whether the AI tank is in the act of fleeing (The flee state has multiple stages)
-    void Start()
+    public override void Start()
     {
-        enemyPawn = GetComponent<EnemyPawn>();
-        enemyData = GetComponent<EnemyData>();
-        aiVision = GetComponentInChildren<AIVision>();
-        aiHearing = GetComponentInChildren<AIHearing>();
-        sensoryRange = GetComponentInChildren<SensoryRange>();
+        base.Start();
     }
     void Update()
     {
@@ -36,6 +32,17 @@ public class CaptainController : EnemyController
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
         }
+        // ATTACK STATE
+        if (aiState == AIState.Attack)
+        {
+            DoAttack();
+
+            // Alert other enemy tanks with the player's location
+            GameManager.instance.isAlerted = true;
+
+            // If nothing is found return to "patrol"
+            TransitionPatrol();
+        }
         // INVESTIGATE STATE
         if (aiState == AIState.Investigate)
         {
@@ -48,22 +55,6 @@ public class CaptainController : EnemyController
             }
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
-        }
-        // ATTACK STATE
-        if (aiState == AIState.Attack)
-        {
-            DoAttack();
-
-            // Alert other enemy tanks with the player's location
-            GameManager.instance.isAlerted = true;
-
-            // If nothing is found return to "patrol"
-            TransitionPatrol();
-        }
-        // FLEE STATE
-        if (aiState == AIState.Flee)
-        {
-            DoFlee();
         }
         // OBSTACLE AVOIDANCE STATE
         if (aiState == AIState.Avoidance)
@@ -82,10 +73,6 @@ public class CaptainController : EnemyController
                 enemyData.randomRotation -= Time.deltaTime; // Decrement time
             }
         }
-
-        // Run transition to flee function during all states
-        TransitionFlee();
-
         // Run transition to avoidance function during all states but Avoidance
         if (aiState != AIState.Avoidance)
         {

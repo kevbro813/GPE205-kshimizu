@@ -12,7 +12,7 @@ public class EnemyController : AIController
     public AIState aiState; // Allows the AI state to be changed in the Inspector
     public AIState tempState; // Saves the previous state temporarily (similar to a double buffer pattern) Used to transition from obstacle avoidance state back to the previous state
     public enum AIState { Idle, Patrol, Attack, Search, Pursue, Flee, Investigate, Avoidance, Alerted } // Selections for AI State
-    void Start()
+    public virtual void Start()
     {
         enemyPawn = GetComponent<EnemyPawn>();
         enemyData = GetComponent<EnemyData>();

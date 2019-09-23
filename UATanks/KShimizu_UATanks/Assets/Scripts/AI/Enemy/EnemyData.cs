@@ -42,13 +42,12 @@ public class EnemyData : AIData
     // Function to destroy the enemy tank and increase the player's score
     public override void TankDestroyed()
     {
-        // Add to player's score
         if(tankHealth <= 0)
         {
-            playerData.playerScore += pointValue;
-            GameManager.instance.activeEnemiesList.Remove(this.gameObject);
-            GameManager.instance.enemyDataList.Remove(this.gameObject.GetComponent<EnemyData>());
+            playerData.playerScore += pointValue; // Add to player's score
+            GameManager.instance.activeEnemiesList.Remove(this.gameObject); // Remove tank from active enemies list
+            GameManager.instance.enemyDataList.Remove(this.gameObject.GetComponent<EnemyData>()); // Remove tankData from list
         }
-        base.TankDestroyed();
+        base.TankDestroyed(); // Destroys tank
     }
 }

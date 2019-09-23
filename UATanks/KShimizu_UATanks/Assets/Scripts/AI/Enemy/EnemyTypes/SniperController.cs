@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Scout will chase after player and go to last known player location when alerted
-public class ScoutController : EnemyController
+// Snipers will try to keep the player at a distance, heavy damage but low health
+public class SniperController : EnemyController
 {
     private float stateEnterTime; // Saves the last time the AI transitioned to a new state
     private bool isFleeing = false; // Indicates whether the AI tank is in the act of fleeing (The flee state has multiple stages)
-    void Start()
+    public override void Start()
     {
-        enemyPawn = GetComponent<EnemyPawn>();
-        enemyData = GetComponent<EnemyData>();
-        aiVision = GetComponentInChildren<AIVision>();
-        aiHearing = GetComponentInChildren<AIHearing>();
-        sensoryRange = GetComponentInChildren<SensoryRange>();
+        base.Start();
     }
     void Update()
     {
@@ -97,6 +93,11 @@ public class ScoutController : EnemyController
             TransitionAttack();
 
         }
+        // FLEE STATE
+        if (aiState == AIState.Flee)
+        {
+            DoFlee();
+        }
         // OBSTACLE AVOIDANCE STATE
         if (aiState == AIState.Avoidance)
         {
@@ -115,31 +116,13 @@ public class ScoutController : EnemyController
             }
         }
 
+        // Run transition to flee function during all states
+        TransitionFlee();
+
         // Run transition to avoidance function during all states but Avoidance
         if (aiState != AIState.Avoidance)
         {
             TransitionAvoidance();
-        }
-        // Run transition to alert function during all states
-        TransitionAlerted();
-        // ALERTED STATE
-        if (aiState == AIState.Alerted)
-        {
-            DoAlerted();
-            // If the AI is not currently alert, allow it to transition to patrol state
-            if (enemyPawn.isAlertActive == false)
-            {
-                // If the player is not seen or heard, transition to patrol
-                TransitionPatrol();
-            }
-            // If the player is seen while alert but out of firing range, transition to pursue
-            TransitionPursue();
-
-            // If the player is heard while alert, transition to investigate (go to sound origin)
-            TransitionInvestigate();
-
-            // If the player is seen and in firing range, transition to attack
-            TransitionAttack();
         }
     }
 }

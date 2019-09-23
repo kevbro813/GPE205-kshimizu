@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+// Start Screen component, used to pick map and AI settings
 public class StartScreen : MonoBehaviour
 {
     public Dropdown mapDropdown;
@@ -15,11 +16,12 @@ public class StartScreen : MonoBehaviour
 
     private void Update()
     {
-        enemyCount.text = enemyCountSlider.value.ToString();
+        enemyCount.text = enemyCountSlider.value.ToString(); // Display the enemy count
     }
+    // Set the type of map to be generated
     public void SetMapType()
     {
-        selectedMap = mapDropdown.value;
+        selectedMap = mapDropdown.value; // Set selectedMap integer variable to the corresponding dropdown value
         if (selectedMap == 0)
         {
             GameManager.instance.mapGenerator.mapType = MapGenerator.MapType.MapOfTheDay;
@@ -33,21 +35,23 @@ public class StartScreen : MonoBehaviour
             GameManager.instance.mapGenerator.mapType = MapGenerator.MapType.PresetSeed;
         }
     }
+
+    // Set the number of AI that will be spawned
     public void SetAIQuantity()
     {
         enemyQuantity = (int)enemyCountSlider.value;
-        // TODO: Finish AI quantity
         GameManager.instance.maxEnemies = enemyQuantity;
     }
     private void Start()
     {
         PopulateList();
     }
-
+    // Populate the dropdown menu with map type options
     void PopulateList()
     {
         mapDropdown.AddOptions(mapTypes);
     }
+    // Toggle whether to spawn random enemies or enemies based on a preset seed
     void ToggleRandomEnemies()
     {
         if (randomEnemies.isOn == true)
@@ -59,6 +63,7 @@ public class StartScreen : MonoBehaviour
             GameManager.instance.isRandomEnemy = false;
         }
     }
+    // Start game function when start button is pressed
     public void StartGame()
     {
         SetMapType();
@@ -67,6 +72,8 @@ public class StartScreen : MonoBehaviour
         GameManager.instance.CreateNewGame();
         this.gameObject.SetActive(false);
     }
+
+    // Quit game function when quit button is pressed
     public void QuitGame()
     {
         Application.Quit();

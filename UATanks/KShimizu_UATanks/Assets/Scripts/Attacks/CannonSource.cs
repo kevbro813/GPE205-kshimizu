@@ -33,13 +33,14 @@ public class CannonSource : MonoBehaviour
             {
                 cannonLoaded = false; // Set cannonLoaded to false
                 tankData.isInvisible = false; // Make the tank visible after a round is fired
-                // If the current ammo > 0, deduct one round
-                if (tankData.isInfiniteAmmo == false)
+                
+                if (tankData.isInfiniteAmmo == false) // If the tank does not have the infinite ammo powerup...
                 {
-                    tankData.currentAmmo--;
+                    tankData.currentAmmo--; // Deduct one round from currentAmmo
                 }
                 // Create a projectile instance
                 GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
+
                 // Destroy the projectileClone after a set duration
                 if (projectile != null)
                 {

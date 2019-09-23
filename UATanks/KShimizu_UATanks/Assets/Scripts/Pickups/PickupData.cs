@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Class that holds all pickup data
 [System.Serializable]
 public class PickupData
 {
@@ -24,65 +25,79 @@ public class PickupData
     public bool isPermanent = false;
     public float powerupDuration = 0f;
 
+    // Function run to activate pickups
     public void OnActivate(TankData tank)
     {
-        tank.maxTankHealth += maxHealthMod;
+        tank.maxTankHealth += maxHealthMod; // Increase max health (must be before healthPickup so currentHealth is also increased)
+
+        // If healthPickup does not exceed maxTankHealth, then add the health
         if (tank.tankHealth + healthPickup <= tank.maxTankHealth)
         {
             tank.tankHealth += healthPickup;
         }
+        // If healthPickup exceeds max health, then set tankHealth to max
         else
         {
             tank.tankHealth = tank.maxTankHealth;
         }
         
+        // If ammoPickup does not exceed maxAmmo, then add the ammo
         if (tank.currentAmmo + ammoPickup <= tank.maxAmmo)
         {
             tank.currentAmmo += ammoPickup;
         }
+        // If ammoPickup does exceed maxAmmo, then set currentAmmo to max
         else
         {
             tank.currentAmmo = tank.maxAmmo;
         }
-        tank.coins += coinPickup;
+        // Add coins
+        tank.coins += coinPickup;  // TODO: Will be used later to purchase upgrades
 
-        tank.forwardSpeed *= speedMod;
-        tank.reverseSpeed *= speedMod;
-        tank.cannonDelay /= fireRateMod;
+        tank.forwardSpeed *= speedMod; // Increase forwardSpeed by speedMod
+        tank.reverseSpeed *= speedMod; // Increase reverseSpeed by speedMod
+        tank.cannonDelay /= fireRateMod; // Change cannonDelay to increase fireRate (Note that division is needed for this mod)
         
-
+        // Invisibility Powerup
         if (isInvisiblePowerup == true)
         {
             tank.isInvisible = true; // Activate isInvisible
             if (tank.CompareTag("Player"))
             {
                 MeshRenderer[] meshRenderer = tank.gameObject.GetComponentsInChildren<MeshRenderer>();
+                // Loop through all MeshRenderer components in children to make translucent
                 foreach (MeshRenderer mesh in meshRenderer)
                 {
                     Color color = mesh.material.color;
-                    color.a = 0.5f;
+                    color.a = 0.5f; // Enemy translucency set to 50%
                     mesh.material.color = color;
+                    // TODO: Make translucency a variable set in inspector
                 }
             }
             tank.isInvisible = true; // Activate isInvisible
             if (tank.CompareTag("Enemy"))
             {
                 MeshRenderer[] meshRenderer = tank.gameObject.GetComponentsInChildren<MeshRenderer>();
+                // Loop through all MeshRenderer components in children to make translucent
                 foreach (MeshRenderer mesh in meshRenderer)
                 {
                     Color color = mesh.material.color;
-                    color.a = 0.1f;
+                    color.a = 0.1f; // Enemy translucency set to barely visible
                     mesh.material.color = color;
                 }
             }
         }
+
+        // Activate Invulnerability
         if (isInvulnerablePowerup == true)
         {
-            tank.isInvulnerable = true; // Activate Invulnerability
+            tank.isInvulnerable = true; 
         }
+
+        // Activate isInfiniteAmmo
         if (isInfiniteAmmoPowerup == true)
         {
-            tank.isInfiniteAmmo = true; // Activate isInfiniteAmmo
+            tank.isInfiniteAmmo = true; 
         }
     }
     public void OnDeactivate(TankData tank)

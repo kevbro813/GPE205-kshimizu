@@ -7,13 +7,9 @@ public class PatrolController : EnemyController
 {
     private float stateEnterTime; // Saves the last time the AI transitioned to a new state
     private bool isFleeing = false; // Indicates whether the AI tank is in the act of fleeing (The flee state has multiple stages)
-    void Start()
+    public override void Start()
     {
-        enemyPawn = GetComponent<EnemyPawn>();
-        enemyData = GetComponent<EnemyData>();
-        aiVision = GetComponentInChildren<AIVision>();
-        aiHearing = GetComponentInChildren<AIHearing>();
-        sensoryRange = GetComponentInChildren<SensoryRange>();
+        base.Start();
     }
     void Update()
     {

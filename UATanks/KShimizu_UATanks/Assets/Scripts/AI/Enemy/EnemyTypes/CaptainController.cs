@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Snipers will try to keep the player at a distance, heavy damage but low health
-public class SniperController : EnemyController
+// Captains will try to run away from players and alert other enemy tanks
+public class CaptainController : EnemyController
 {
     private float stateEnterTime; // Saves the last time the AI transitioned to a new state
     private bool isFleeing = false; // Indicates whether the AI tank is in the act of fleeing (The flee state has multiple stages)
-    void Start()
+    public override void Start()
     {
-        enemyPawn = GetComponent<EnemyPawn>();
-        enemyData = GetComponent<EnemyData>();
-        aiVision = GetComponentInChildren<AIVision>();
-        aiHearing = GetComponentInChildren<AIHearing>();
-        sensoryRange = GetComponentInChildren<SensoryRange>();
+        base.Start();
     }
     void Update()
     {
@@ -30,55 +26,11 @@ public class SniperController : EnemyController
             // Check if player is in senseRange (AI is blind and deaf while patrolling, unless the player is within "sensory range." This is done to manage resources
             if (sensoryRange.inSenseRange == true)
             {
-                // If the player is seen but not in attack range, transition to pursue
-                TransitionPursue();
-
                 // If the player is heard while searching, transition to investigate (go to sound origin)
                 TransitionInvestigate();
             }
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
-        }
-        // ATTACK STATE
-        if (aiState == AIState.Attack)
-        {
-            DoAttack();
-
-            // If the player is seen but not in attack range, transition to pursue
-            TransitionPursue();
-
-            // If the player is not seen, transition to search (go to last known player location)
-            TransitionSearch();
-        }
-        // SEARCH STATE
-        if (aiState == AIState.Search)
-        {
-            DoSearch();
-            // If the AI is not currently searching, allow it to transition to patrol state
-            if (enemyPawn.isSearching == false)
-            {
-                // If the player is not seen or heard, transition to patrol
-                TransitionPatrol();
-            }
-            // If the player is seen while searching but out of firing range, transition to pursue
-            TransitionPursue();
-
-            // If the player is heard while searching, transition to investigate (go to sound origin)
-            TransitionInvestigate();
-
-            // If the player is seen and in firing range, transition to attack
-            TransitionAttack();
-        }
-        // PURSUE STATE
-        if (aiState == AIState.Pursue)
-        {
-            DoPursue();
-
-            // If the player is seen and in firing range, transition to attack
-            TransitionAttack();
-
-            // If the player is not seen, transition to search (go to last known player location)
-            TransitionSearch();
         }
         // INVESTIGATE STATE
         if (aiState == AIState.Investigate)
@@ -90,12 +42,19 @@ public class SniperController : EnemyController
                 // If nothing is found return to "patrol"
                 TransitionPatrol();
             }
-            // If the player is seen "pursue"
-            TransitionPursue();
-
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
+        }
+        // ATTACK STATE
+        if (aiState == AIState.Attack)
+        {
+            DoAttack();
 
+            // Alert other enemy tanks with the player's location
+            GameManager.instance.isAlerted = true;
+
+            // If nothing is found return to "patrol"
+            TransitionPatrol();
         }
         // FLEE STATE
         if (aiState == AIState.Flee)

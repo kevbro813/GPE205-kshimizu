@@ -928,10 +928,8 @@ MonoBehaviour:
   - {fileID: 121816, guid: 41d4243be8ad3a5409422171976de7ff, type: 3}
   - {fileID: 121816, guid: e1208978eee4e5b4f8759318972f1878, type: 3}
   - {fileID: 121816, guid: 36d615c616d325f40b5aad89988b5e2b, type: 3}
-  tileRows: 2
-  tileColumns: 2
-  roomWidth: 50
-  roomHeight: 50
+  tileRows: 3
+  tileColumns: 3
   mapSeed: 2002
   mapType: 0
 --- !u!1 &1641512058

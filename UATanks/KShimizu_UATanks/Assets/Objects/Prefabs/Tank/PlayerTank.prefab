@@ -447,7 +447,8 @@ MonoBehaviour:
   isInfiniteAmmo: 0
   isInvisible: 0
   playerScore: 0
-  playerLives: 0
+  playerLives: 3
+  tf: {fileID: 0}
 --- !u!114 &-3190469483590712858
 MonoBehaviour:
   m_ObjectHideFlags: 0

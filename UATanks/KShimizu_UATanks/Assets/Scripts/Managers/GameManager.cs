@@ -12,11 +12,12 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public PlayerData playerData;
     public HUD hud;
-    public Room[,] grid;
-    public MapGenerator mapGenerator;
 
+    public MapGenerator mapGenerator; // Map Generator component
+    public Room[,] grid; // Grid used to store procedurally generated map
+    
     public PlayerPawn playerPawn;
-    public List<Transform> playerSpawnsList;
+    public List<Transform> playerSpawnsList; // List of all player spawns
 
     public List<GameObject> enemyTankList; // List of enemy tanks, will be used for spawning enemies
     public List<Transform> enemySpawnsList; // List of all spawn points for enemies
@@ -27,19 +28,19 @@ public class GameManager : MonoBehaviour
     public int maxEnemies = 8; // Maximum number of enmies spawned
     private float enemiesSpawned = 0; // Tracks the number of enemies spawned into the world. May need to be public in the future
 
-    public List<GameObject> pickupList;
-    public List<Transform> pickupSpawnsList;
-    public List<GameObject> activePickupList;
-    public List<PickupObject> pickupObjectList;
-    public int maxPickups = 10;
-    public float pickupRespawnDelay = 5.0f;
-    private float currentPickupQuantity = 0;
-    public float pickupSpawnDelay = 0;
+    public List<GameObject> pickupList; // List of available pickups, set in inspector
+    public List<Transform> pickupSpawnsList; // List of all pickup spawns, set automatically when map is generated
+    public List<GameObject> activePickupList; // List of all active pickups
+    public List<PickupObject> pickupObjectList; // List of all active pickup objects
+    public int maxPickups = 10; // Maximum number of pickups that will spawn, set in inspector
+    public float pickupRespawnDelay = 5.0f; // This is the delay between when a pickup is taken and when it reappears
+    private float currentPickupQuantity = 0; // Tracks the number of pickups spawned in the world
+    public float pickupSpawnDelay = 0; // Delay to spawn pickups when the game is first started
 
-    public Vector3 lastPlayerLocation;
-    public Vector3 lastSoundLocation;
-    public bool isAlerted = false;
-    public bool isRandomEnemy = false;
+    public Vector3 lastPlayerLocation; // Last known location of the player, visible to all AI. Used in Alert system
+    public Vector3 lastSoundLocation; // Last known sound detected, visible to all AI
+    public bool isAlerted = false; // If the player is seen by a guard or captain, this will be set to true, calling other enemy tanks to go to last known player location
+    public bool isRandomEnemy = false; // Generate a random assortment of enemies or one based on a preset seed (Map of Day or Preset Seed)
 
     private void Awake()
     {
@@ -67,11 +68,11 @@ public class GameManager : MonoBehaviour
     }
     public void CreateNewGame()
     {
-        GetComponent<MapGenerator>().GenerateMap();
-        SetRandomEnemies();
+        GetComponent<MapGenerator>().GenerateMap(); // Generates a new map
+        SetRandomEnemies(); // Sets enemies to random or preset
         StartCoroutine(SpawnEnemyEvent()); // Begin coroutine for SpawnEnemyEvent
         SpawnPlayerTank(); // Instantiate a new player 
-        StartCoroutine(SpawnPickupEvent());
+        StartCoroutine(SpawnPickupEvent()); // Begin coroutine to spawn pickups
     }
     public void SpawnPlayerTank()
     {
@@ -110,10 +111,12 @@ public class GameManager : MonoBehaviour
                 // Create enemyClone instance
                 GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation) as GameObject;
 
-                activeEnemiesList.Add(enemyClone);
-                EnemyData tempEnemyData = enemyClone.GetComponent<EnemyData>();
-                enemyDataList.Add(tempEnemyData);
-                tempEnemyData.enemyListIndex = activeEnemiesList.Count - 1;
+                activeEnemiesList.Add(enemyClone); // Adds spawned enemy to a list of active enemies
+                EnemyData tempEnemyData = enemyClone.GetComponent<EnemyData>(); // Get EnemyData component
+                enemyDataList.Add(tempEnemyData); // Adds the EnemyData component to an active list
+
+                // Assigns the spawned enemy an index number, used to remove from the two lists above when the enemy tank is destroyed
+                tempEnemyData.enemyListIndex = activeEnemiesList.Count - 1; 
 
                 enemiesSpawned++; // Increase enemyCount by one           
             }
@@ -127,30 +130,34 @@ public class GameManager : MonoBehaviour
 
             if (maxPickups > currentPickupQuantity)
             {
-                Transform spawnPoint = pickupSpawnsList[Random.Range(0, pickupSpawnsList.Count)];
-                GameObject randomPickup = pickupList[Random.Range(0, pickupList.Count)];
-                pickupSpawnsList.Remove(spawnPoint);
+                Transform spawnPoint = pickupSpawnsList[Random.Range(0, pickupSpawnsList.Count)]; // Set a random spawnpoint
+                GameObject randomPickup = pickupList[Random.Range(0, pickupList.Count)]; // Set a random pickup
+                pickupSpawnsList.Remove(spawnPoint); // Remove spawnpoint from list of pickup spawns, prevents multiple instantiations at the same location
 
+                // Instantiate pickup object
                 GameObject pickupClone = Instantiate(randomPickup, spawnPoint.position, spawnPoint.rotation) as GameObject;
 
-                activePickupList.Add(pickupClone);
-                PickupObject tempPickupObjects = pickupClone.GetComponent<PickupObject>();
-                pickupObjectList.Add(tempPickupObjects);
-                tempPickupObjects.pickupListIndex = activePickupList.Count - 1;
+                activePickupList.Add(pickupClone); // Add pickup to a list of active pickups
+                PickupObject tempPickupObjects = pickupClone.GetComponent<PickupObject>(); // Get PickupObject component for spawned pickup
+                pickupObjectList.Add(tempPickupObjects); // Add the PickupObject component to an active list
 
-                currentPickupQuantity++;        
+                // Assigns the spawned pickup an index number, used to remove from the two lists above when the pickup is used
+                tempPickupObjects.pickupListIndex = activePickupList.Count - 1; // Note: I am keeping this for now despite not destroying pickups when used
+
+                currentPickupQuantity++; // Increase pickup quantity by one       
             }
         }
     }
+    // Random Enemy option can be set to true on the Start Game Screen
     public void SetRandomEnemies()
     {
         if (isRandomEnemy == true)
         {
-            Random.InitState(System.Environment.TickCount);
+            Random.InitState(System.Environment.TickCount); // Randomization based on tick count
         }
         else
         {
-            Random.InitState(mapGenerator.mapSeed);
+            Random.InitState(mapGenerator.mapSeed); // Randomization based on the seed used to generate the map
         }
     }
     // TODO: Game state methods

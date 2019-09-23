@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Start Menu component
 public class StartMenu : MonoBehaviour
 {
     public void StartGame()

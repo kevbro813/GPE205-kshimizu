@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// Component used to generate a map based on selected settings
 public class MapGenerator : MonoBehaviour
 {
     public GameObject[] mapTiles;
-    public int tileRows;
+    // Used to change the size of the map
+    public int tileRows; 
     public int tileColumns;
-    public float roomWidth = 50.0f;
-    public float roomHeight = 50.0f;
+
+    // Set to 50.0f because that is the size of the map tiles
+    private float roomWidth = 50.0f;
+    private float roomHeight = 50.0f;
+
     private int randomTile;
-    public int mapSeed;
-    public MapType mapType;
+    public int mapSeed; // Map seed can be set to map of day or random based on day/time
+    public MapType mapType; // Enum with the map type options
     public enum MapType { MapOfTheDay, Random, PresetSeed }
     
     public void GenerateMap()
@@ -33,23 +38,34 @@ public class MapGenerator : MonoBehaviour
             // Do nothing. Allows seed to be set in inspector
         }
 
-        UnityEngine.Random.InitState(mapSeed);
+        UnityEngine.Random.InitState(mapSeed); // Set randomization state to mapSeed
 
-        GameManager.instance.grid = new Room[tileColumns, tileRows];
+        GameManager.instance.grid = new Room[tileColumns, tileRows]; // Create a new grid
         
+        // The following loops through rows and columns to generate the map
         for (int i = 0; i < tileRows; i++)
         {
             for (int j = 0; j < tileColumns; j++)
             {
+                // Used to position the tile
                 float xPosition = roomWidth * j;
                 float zPosition = roomHeight * i;
-                Vector3 tilePosition = new Vector3(xPosition, 0.0f, zPosition);
+
+                Vector3 tilePosition = new Vector3(xPosition, 0.0f, zPosition); // Set tile position
+
+                // Instantiate the map tile
                 GameObject tempTile = Instantiate(RandomTile(), tilePosition, Quaternion.identity) as GameObject;
+
+                // Set parent of map tile
                 tempTile.transform.parent = this.transform;
+
+                // Name the map tile
                 tempTile.name = "Room_" + j + "," + i;
+
+                // Get the room component of the map tile
                 Room tempRoom = tempTile.GetComponent<Room>();
 
-                // Open Doors
+                // Open Doors of the map tile based on where it is located
                 if (i == 0)
                 {
                     tempRoom.doorNorth.SetActive(false);
@@ -76,42 +92,56 @@ public class MapGenerator : MonoBehaviour
                     tempRoom.doorEast.SetActive(false);
                     tempRoom.doorWest.SetActive(false);
                 }
-                GameManager.instance.grid[j, i] = tempRoom;
+                GameManager.instance.grid[j, i] = tempRoom; // Add the map tile to the grid saved in GameManager
             }
         }
-        CreateSpawnList();
-        CreateWaypointList();
+        CreateSpawnList(); // Creates a list of all spawn points
+        CreateWaypointList(); // Creates a list of all enemy waypoints
     }
+
+    // Generates a random tile
     public GameObject RandomTile()
     {
         return mapTiles[UnityEngine.Random.Range(0, mapTiles.Length)];
     }
+    // Used for random mapSeed
     public int DateToInt(DateTime dateTime)
     {
         return dateTime.Year + dateTime.Month + dateTime.Day + dateTime.Hour + dateTime.Minute + dateTime.Second + dateTime.Millisecond;
     }
+    // Creates a list of enemy waypoints
     public void CreateWaypointList()
     {
         GameObject[] tempEnemyWaypoints = GameObject.FindGameObjectsWithTag("EnemyWaypoint");
+
+        // Loop through and add all enemyWaypoints ot the enemyWaypointList in GameManager
         for (int i = 0; i < tempEnemyWaypoints.Length; i++)
         {
             GameManager.instance.enemyWaypointsList.Add(tempEnemyWaypoints[i].GetComponent<Transform>());
         }
     }
+    // Creates a list of all spawnpoints including enemy, player and pickups
     public void CreateSpawnList()
     {
         GameObject[] tempPlayerSpawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
+
+        // Loop through and add all player spawns to the playerSpawnsList in GameManager
         for (int i = 0; i < tempPlayerSpawns.Length; i++)
         {
             GameManager.instance.playerSpawnsList.Add(tempPlayerSpawns[i].GetComponent<Transform>());
         }
+
         GameObject[] tempEnemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn"); 
+
+        // Loop through and add all enemy spawns in the enemySpawnsList in GameManager
         for (int i = 0; i < tempEnemySpawns.Length; i++)
         {
             GameManager.instance.enemySpawnsList.Add(tempEnemySpawns[i].GetComponent<Transform>());
         }
 
         GameObject[] tempPickupSpawns = GameObject.FindGameObjectsWithTag("PickupSpawn");
+
+        // Loop through and add all pickup spawns in the pickupSpawnsList in GameManager
         for (int i = 0; i < tempPickupSpawns.Length; i++)
         {
             GameManager.instance.pickupSpawnsList.Add(tempPickupSpawns[i].GetComponent<Transform>());

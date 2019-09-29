@@ -407,7 +407,6 @@ MonoBehaviour:
   characterController: {fileID: 0}
   cannonSource: {fileID: 215966559274695101}
   enemyData: {fileID: 0}
-  ptf: {fileID: 0}
   aiVision: {fileID: 0}
   aiHearing: {fileID: 0}
   atWaypoint: 0
@@ -458,7 +457,7 @@ MonoBehaviour:
   projectileDuration: 0.5
   cannonDelay: 3
   shellForce: 50
-  shellDamage: 20
+  shellDamage: 150
   criticalHealth: 60
   currentAmmo: 0
   maxAmmo: 10
@@ -467,6 +466,9 @@ MonoBehaviour:
   isInfiniteAmmo: 0
   isInvisible: 0
   translucency: 0.3
+  tankIndex: 0
+  score: 0
+  pointValue: 100
   fieldOfView: 55
   maxViewDistance: 7
   maxAttackRange: 5
@@ -480,8 +482,9 @@ MonoBehaviour:
   rotationHigh: 2
   rotationLow: 1
   randomRotation: 0
-  pointValue: 100
-  playerData: {fileID: 0}
+  lastSoundLocation: {x: 0, y: 0, z: 0}
+  canHear: 0
+  lastPlayerLocation: {x: 0, y: 0, z: 0}
   enemyWaypoints: []
   currentWaypoint: 0
   patrolType: 0
@@ -654,7 +657,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiData: {fileID: 0}
   targetDistance: 0
-  lastPlayerLocation: {x: 0, y: 0, z: 0}
 --- !u!1 &1987494877814504729
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,5 +819,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiData: {fileID: 0}
-  canHear: 0
-  lastSoundLocation: {x: 0, y: 0, z: 0}

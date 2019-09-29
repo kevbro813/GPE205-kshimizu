@@ -4,12 +4,17 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 // Start Screen component, used to pick map and AI settings
-public class StartScreen : MonoBehaviour
+public class StartGame : MonoBehaviour
 {
     public Dropdown mapDropdown;
     public Slider enemyCountSlider;
     public Toggle randomEnemies;
     public Text enemyCount;
+    public Slider columnSlider;
+    public Slider rowSlider;
+    public Text columnCount;
+    public Text rowCount;
+    public Toggle multiplayer;
     [HideInInspector] public int selectedMap;
     [HideInInspector] public int enemyQuantity;
     private List<string> mapTypes = new List<string>() { "Map of the Day", "Random", "Preset Seed" };
@@ -17,6 +22,8 @@ public class StartScreen : MonoBehaviour
     private void Update()
     {
         enemyCount.text = enemyCountSlider.value.ToString(); // Display the enemy count
+        columnCount.text = columnSlider.value.ToString(); // Display column value
+        rowCount.text = rowSlider.value.ToString(); // Display row value
     }
     // Set the type of map to be generated
     public void SetMapType()
@@ -64,15 +71,32 @@ public class StartScreen : MonoBehaviour
         }
     }
     // Start game function when start button is pressed
-    public void StartGame()
+    public void BeginGame()
     {
         SetMapType();
+        SetMapSize();
         SetAIQuantity();
         ToggleRandomEnemies();
-        GameManager.instance.CreateNewGame();
+        ToggleMultiplayer();
         this.gameObject.SetActive(false);
+        GameManager.instance.CreateNewGame();
     }
-
+    public void SetMapSize()
+    {
+        GameManager.instance.mapGenerator.tileColumns = (int)columnSlider.value;
+        GameManager.instance.mapGenerator.tileRows = (int)rowSlider.value;
+    }
+    public void ToggleMultiplayer()
+    {
+        if (multiplayer.isOn == true)
+        {
+            GameManager.instance.isMultiplayer = true;
+        }
+        else
+        {
+            GameManager.instance.isMultiplayer = false;
+        }
+    }
     // Quit game function when quit button is pressed
     public void QuitGame()
     {

@@ -129,6 +129,7 @@ public class MapGenerator : MonoBehaviour
         for (int i = 0; i < tempPlayerSpawns.Length; i++)
         {
             GameManager.instance.playerSpawnsList.Add(tempPlayerSpawns[i].GetComponent<Transform>());
+            GameManager.instance.activePlayerSpawnsList.Add(tempPlayerSpawns[i].GetComponent<Transform>());
         }
 
         GameObject[] tempEnemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn"); 

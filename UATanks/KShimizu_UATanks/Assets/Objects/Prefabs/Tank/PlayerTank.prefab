@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: -2887111991502180917}
   - component: {fileID: -3190469483590712858}
   - component: {fileID: 5026310254686490260}
+  - component: {fileID: 9011513894162142304}
   m_Layer: 11
   m_Name: PlayerTank
   m_TagString: Player
@@ -447,9 +448,14 @@ MonoBehaviour:
   isInfiniteAmmo: 0
   isInvisible: 0
   translucency: 0.4
-  playerScore: 0
+  tankIndex: 0
+  score: 0
+  pointValue: 1000
   playerLives: 3
   tf: {fileID: 0}
+  playerIndex: 0
+  respawnDelay: 3
+  activeSpawnsList: []
 --- !u!114 &-3190469483590712858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,6 +487,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickups: []
   tankData: {fileID: 0}
+--- !u!114 &9011513894162142304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1b06092da73f44c8fc4cd963a2f6ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPawn: {fileID: 0}
+  playerData: {fileID: 0}
+  mousePosition: {x: 0, y: 0, z: 0}
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0

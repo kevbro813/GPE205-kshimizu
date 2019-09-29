@@ -6,16 +6,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    [HideInInspector] public GameObject playerTank;
+
     public GameObject tankPrototype; // Set in inspector
-    [HideInInspector] public PlayerController playerController;
-    [HideInInspector] public Camera mainCamera;
-    [HideInInspector] public PlayerData playerData;
-    [HideInInspector] public HUD hud;
     [HideInInspector] public MapGenerator mapGenerator; // Map Generator component
     [HideInInspector] public Room[,] grid; // Grid used to store procedurally generated map
-    [HideInInspector] public PlayerPawn playerPawn;
-    [HideInInspector] public List<Transform> playerSpawnsList; // List of all player spawns
+    public List<Transform> playerSpawnsList; // List of all player spawns
     public List<GameObject> enemyTankList; // List of enemy tanks, will be used for spawning enemies
     public List<Transform> enemySpawnsList; // List of all spawn points for enemies
     public List<Transform> enemyWaypointsList; // List of all enemy waypoints to use for patrolling
@@ -37,6 +32,24 @@ public class GameManager : MonoBehaviour
     public bool isAlerted = false; // If the player is seen by a guard or captain, this will be set to true, calling other enemy tanks to go to last known player location
     public bool isRandomEnemy = false; // Generate a random assortment of enemies or one based on a preset seed (Map of Day or Preset Seed)
 
+    public bool isMultiplayer = false;
+    public int playerCount = 0;
+    public PlayerController playerController;
+    public GameObject[] cameraObjects;
+    public List<Camera> cameraComponents;
+    public List<PlayerData> playerData;
+    public List<GameObject> playerObjectsList;
+    public GameObject[] hudObjects;
+    public List<HUD> hudComponents;
+    public List<GameObject> tankObjects;
+    public List<TankData> tankDataList;
+    public Transform playerTankShell;
+    public Transform enemyTankShell;
+    public Transform pickupShell;
+    public float killMultiplier;
+    public List<Transform> activePlayerSpawnsList;
+    public float playerRespawnDelay = 1;
+
     private void Awake()
     {
         // Singleton pattern
@@ -53,9 +66,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerController = GetComponent<PlayerController>();
-        mainCamera = Camera.main;
         mapGenerator = GetComponent<MapGenerator>();
-        hud = GameObject.FindWithTag("HUD").GetComponent<HUD>();
     }
     void Update()
     {
@@ -64,32 +75,63 @@ public class GameManager : MonoBehaviour
     public void CreateNewGame()
     {
         GetComponent<MapGenerator>().GenerateMap(); // Generates a new map
+        if (isMultiplayer == true)
+        {
+            SpawnPlayerTank(); // Instantiate a new player 
+            SpawnPlayerTank(); // Instantiate a new player 
+            TwoPlayerCamera();
+            TwoPlayerHud();
+        }
+        else
+        {
+            SpawnPlayerTank(); // Instantiate a new player 
+            SinglePlayerCamera();
+            SinglePlayerHUD();
+        }
         SetRandomEnemies(); // Sets enemies to random or preset
         StartCoroutine(SpawnEnemyEvent()); // Begin coroutine for SpawnEnemyEvent
-        SpawnPlayerTank(); // Instantiate a new player 
         StartCoroutine(SpawnPickupEvent()); // Begin coroutine to spawn pickups
+        ResetPlayerSpawnsList();
     }
     public void SpawnPlayerTank()
     {
-        Transform spawnPoint = playerSpawnsList[Random.Range(0, playerSpawnsList.Count)]; // Random spawnPoint from list
-        enemySpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
+        Transform spawnPoint = activePlayerSpawnsList[Random.Range(0, playerSpawnsList.Count)]; // Random spawnPoint from list
+        activePlayerSpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
         // Instantiate a player tank prefab
-        playerTank = Instantiate(tankPrototype, spawnPoint.position, spawnPoint.rotation) as GameObject;
-        UpdatePlayerComponents();
-    }
+        GameObject playerClone = Instantiate(tankPrototype, spawnPoint.position, spawnPoint.rotation, playerTankShell);
+        PlayerData tempPlayerData = playerClone.GetComponent<PlayerData>();
+        playerObjectsList.Add(playerClone);
+        playerData.Add(tempPlayerData);
+        tankObjects.Add(playerClone);
+        tankDataList.Add(playerClone.GetComponent<TankData>());
+        // Set index number
+        tempPlayerData.playerIndex = playerObjectsList.Count - 1;
+        int currentIndex = playerData[playerCount].playerIndex;
 
-    // Add all variables that need to be updated when a new player instance is created
-    public void UpdatePlayerComponents()
-    {
-        playerPawn = playerTank.GetComponent<PlayerPawn>();
-        mainCamera.GetComponent<CameraFollow>().playerTank = playerTank;
-        playerData = playerTank.GetComponent<PlayerData>();
-        playerController.playerPawn = playerPawn;
-        playerController.playerData = playerData;
-        playerPawn.playerController = playerController;
-        playerPawn.characterController = playerTank.GetComponent<CharacterController>();
-        hud.playerData = playerData;
-        playerPawn.tf = playerPawn.GetComponent<Transform>();
+        tempPlayerData.tankIndex = tankObjects.Count - 1;
+
+        // Link camera to playerClone
+        cameraObjects[currentIndex].GetComponent<CameraFollow>().playerTank = playerClone;
+
+        // Link hud elements to current playerClone
+        if (isMultiplayer == true)
+        {
+            if (currentIndex == 0)
+            {
+                hudComponents[1].playerData = playerData[currentIndex];
+            }
+            if (currentIndex == 1)
+            {
+                hudComponents[2].playerData = playerData[currentIndex];
+            }
+        }
+        else
+        {
+            hudComponents[currentIndex].playerData = playerData[currentIndex];
+        }
+
+        // Increase playerCount
+        playerCount++;
     }
     private IEnumerator SpawnEnemyEvent()
     {
@@ -104,14 +146,16 @@ public class GameManager : MonoBehaviour
                 enemySpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
                 enemyTankList.Remove(randomEnemy); // Remove spawn point from list when used
                 // Create enemyClone instance
-                GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation) as GameObject;
+                GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation, enemyTankShell) as GameObject;
 
                 activeEnemiesList.Add(enemyClone); // Adds spawned enemy to a list of active enemies
                 EnemyData tempEnemyData = enemyClone.GetComponent<EnemyData>(); // Get EnemyData component
                 enemyDataList.Add(tempEnemyData); // Adds the EnemyData component to an active list
-
+                tankObjects.Add(enemyClone);
+                tankDataList.Add(tempEnemyData.GetComponent<TankData>());
                 // Assigns the spawned enemy an index number, used to remove from the two lists above when the enemy tank is destroyed
-                tempEnemyData.enemyListIndex = activeEnemiesList.Count - 1; 
+                tempEnemyData.enemyListIndex = activeEnemiesList.Count - 1;
+                tempEnemyData.tankIndex = tankObjects.Count - 1;
 
                 enemiesSpawned++; // Increase enemyCount by one           
             }
@@ -130,7 +174,7 @@ public class GameManager : MonoBehaviour
                 pickupSpawnsList.Remove(spawnPoint); // Remove spawnpoint from list of pickup spawns, prevents multiple instantiations at the same location
 
                 // Instantiate pickup object
-                GameObject pickupClone = Instantiate(randomPickup, spawnPoint.position, spawnPoint.rotation) as GameObject;
+                GameObject pickupClone = Instantiate(randomPickup, spawnPoint.position, spawnPoint.rotation, pickupShell) as GameObject;
 
                 activePickupList.Add(pickupClone); // Add pickup to a list of active pickups
                 PickupObject tempPickupObjects = pickupClone.GetComponent<PickupObject>(); // Get PickupObject component for spawned pickup
@@ -154,6 +198,36 @@ public class GameManager : MonoBehaviour
         {
             Random.InitState(mapGenerator.mapSeed); // Randomization based on the seed used to generate the map
         }
+    }
+    public void SinglePlayerCamera()
+    {
+        cameraObjects[0].SetActive(true);
+        cameraObjects[1].SetActive(false);
+        cameraComponents[0].rect = new Rect(0f, 0f, 1f, 1f);
+    }
+    public void TwoPlayerCamera()
+    {
+        cameraObjects[0].SetActive(true);
+        cameraObjects[1].SetActive(true);
+        cameraComponents[0].rect = new Rect(0f, 0.5f, 1f, 0.5f);
+        cameraComponents[1].rect = new Rect(0f, 0f, 1f, 0.5f);
+    }
+    public void SinglePlayerHUD()
+    {
+        hudObjects[0].SetActive(true);
+        hudObjects[1].SetActive(false);
+        hudObjects[2].SetActive(false);
+    }
+    public void TwoPlayerHud()
+    {
+        hudObjects[0].SetActive(false);
+        hudObjects[1].SetActive(true);
+        hudObjects[2].SetActive(true);
+    }
+    public void ResetPlayerSpawnsList() // TODO: Make Coroutine? to prevent players spawning on top of each other when they die.
+    {
+        activePlayerSpawnsList.Clear();
+        activePlayerSpawnsList = playerSpawnsList;
     }
     // TODO: Game state methods
 }

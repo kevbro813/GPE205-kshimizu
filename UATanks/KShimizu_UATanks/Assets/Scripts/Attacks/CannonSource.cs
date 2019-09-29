@@ -41,6 +41,8 @@ public class CannonSource : MonoBehaviour
                 // Create a projectile instance
                 GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
 
+                projectileClone.GetComponent<CannonShell>().originTankIndex = tankData.tankIndex;
+
                 // Destroy the projectileClone after a set duration
                 if (projectile != null)
                 {

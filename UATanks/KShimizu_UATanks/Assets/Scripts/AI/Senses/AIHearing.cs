@@ -5,19 +5,16 @@ using UnityEngine;
 // Component that simulates AI hearing. Uses a sphere collider to detect nearby players
 public class AIHearing : MonoBehaviour
 {
-    private GameObject playerTank; // player game object
     private Transform tf; // transform component
     private Transform ttf; // target (player) transform component
     private SphereCollider col; // Sphere collider
     public AIData aiData;
-    [HideInInspector] public bool canHear; // Used to activate the sound raycast
-    [HideInInspector] public Vector3 lastSoundLocation; // lastSoundLocation vector set by raycast.point
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-        playerTank = GameManager.instance.playerTank;
-        ttf = playerTank.GetComponent<Transform>(); // Get player transform component
         tf = GetComponent<Transform>();
         aiData = GetComponentInParent<AIData>();
         col = GetComponent<SphereCollider>();
@@ -27,7 +24,8 @@ public class AIHearing : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Sound")) // If game object is tagged with sound, return true
         {
-            canHear = true;
+            ttf = other.GetComponent<Transform>(); // Get player transform component
+            aiData.canHear = true;
         }
     }
 
@@ -35,28 +33,33 @@ public class AIHearing : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Sound")) // If game object is tagged with sound, return false
         {
-            canHear = false;
+            aiData.canHear = false;
         }
     }
     void Update()
     {
-        if (canHear == true)
+        if (aiData.canHear == true)
         {
-            // Find the vector from current object to target
-            Vector3 vectorToSound = ttf.position - tf.position;
-           
-            RaycastHit hit; // Used to find location of hit
-
-            //RaycastHit from AI to target
-            if (Physics.Raycast(tf.position, vectorToSound, out hit, col.radius))
+            if (ttf != null) // Check that the target transform component is not null. Needed to prevent error when player is killed
             {
-                if (hit.collider.CompareTag("Sound")) // If hit is player then...
+                // Find the vector from current object to target
+                Vector3 vectorToSound = ttf.position - tf.position;
+
+                RaycastHit hit; // Used to find location of hit
+
+                //RaycastHit from AI to target
+                if (Physics.Raycast(tf.position, vectorToSound, out hit, col.radius))
                 {
-                    //Debug.DrawRay(tf.position, vectorToSound, Color.blue, col.radius); // Draw rays
-                    lastSoundLocation = hit.point; // Save ray hit point as lastSoundLocation
-                    //Debug.Log(lastSoundLocation);
-                    GameManager.instance.lastSoundLocation = lastSoundLocation; // Set lastSoundLocation in GameManager
+                    if (hit.collider.CompareTag("Sound")) // If hit is player then...
+                    {
+                        aiData.lastSoundLocation = hit.point; // Save ray hit point as lastSoundLocation
+                        GameManager.instance.lastSoundLocation = aiData.lastSoundLocation; // Set lastSoundLocation in GameManager
+                    }
                 }
+            }
+            else
+            {
+                aiData.canHear = false; // If ttf is null then the player was killed. This returns the AI back to patrol
             }
         }
     }

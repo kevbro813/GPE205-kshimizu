@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyPawn : AIPawn
 {
     public EnemyData enemyData;
-    public Transform ptf; // Player transform component
+    //public Transform ptf; // Player transform component
     public AIVision aiVision; // Vision component
     public AIHearing aiHearing; // Hearing component
     public bool atWaypoint = false; // Indicates whether the AI is currently at a waypoint while patrolling
@@ -28,7 +28,7 @@ public class EnemyPawn : AIPawn
         base.Start();
         characterController = GetComponent<CharacterController>();
         enemyData = GetComponent<EnemyData>();
-        ptf = GameManager.instance.playerTank.GetComponent<Transform>();
+        //ptf = GameManager.instance.playerTank.GetComponent<Transform>();
         aiVision = GetComponentInChildren<AIVision>();
         aiHearing = GetComponentInChildren<AIHearing>();
 
@@ -38,7 +38,15 @@ public class EnemyPawn : AIPawn
         waitTime = enemyData.waitDuration;
         alertTime = enemyData.alertDuration;
     }
-
+    // Function to destroy the enemy tank and increase the player's score
+    public override void TankDestroyed()
+    {
+        GameManager.instance.activeEnemiesList.Remove(this.gameObject); // Remove tank from active enemies list
+        GameManager.instance.tankObjects.Remove(this.gameObject); // Remove tank from active enemies list
+        GameManager.instance.tankDataList.Remove(this.gameObject.GetComponent<EnemyData>()); // Remove tank from active enemies list
+        GameManager.instance.enemyDataList.Remove(this.gameObject.GetComponent<EnemyData>()); // Remove tankData from list
+        base.TankDestroyed(); // Destroys tank
+    }
     // Check if the tank is facing the target and return a bool
     public bool FacingTarget(Vector3 target)
     {
@@ -119,12 +127,12 @@ public class EnemyPawn : AIPawn
     public void Flee()
     {
         // Rotate away from the target
-        if (BackToTarget(ptf.position) == false && isTurned == false)
+        if (BackToTarget(enemyData.lastPlayerLocation) == false && isTurned == false)
         {
-            RotateAway(ptf.position, enemyData.rotationSpeed);
+            RotateAway(enemyData.lastPlayerLocation, enemyData.rotationSpeed);
         }
         // Once facing away from target, set isTurned to true
-        if (BackToTarget(ptf.position) == true)
+        if (BackToTarget(enemyData.lastPlayerLocation) == true)
         {
             isTurned = true;
         }
@@ -186,7 +194,6 @@ public class EnemyPawn : AIPawn
             }
         }
     }
-
     public void Alerted()
     {
         if (isAlertActive == true)
@@ -230,13 +237,13 @@ public class EnemyPawn : AIPawn
     public void Attack()
     {
         // Rotate towards player
-        if (FacingTarget(ptf.position) == false)
+        if (FacingTarget(enemyData.lastPlayerLocation) == false)
         {
             // Rotate towards target
-            RotateTowards(ptf.position, enemyData.rotationSpeed);
+            RotateTowards(enemyData.lastPlayerLocation, enemyData.rotationSpeed);
         }
         // Stop when aimed at player
-        if (FacingTarget(ptf.position) == true)
+        if (FacingTarget(enemyData.lastPlayerLocation) == true)
         {
             // Fire projectile
             SingleCannonFire();
@@ -247,13 +254,13 @@ public class EnemyPawn : AIPawn
     public void Pursue()
     {
         // Chase after player
-        if (FacingTarget(ptf.position) == false)
+        if (FacingTarget(enemyData.lastPlayerLocation) == false)
         {
             // Rotate towards target
-            RotateTowards(ptf.position, enemyData.rotationSpeed);
+            RotateTowards(enemyData.lastPlayerLocation, enemyData.rotationSpeed);
         }
         // Stop when facing player
-        if (FacingTarget(ptf.position) == true)
+        if (FacingTarget(enemyData.lastPlayerLocation) == true)
         {
             // Move towards player
             MoveTank(enemyData.forwardSpeed);
@@ -266,19 +273,19 @@ public class EnemyPawn : AIPawn
         if (isSearching == true)
         {
             // Search for player at last known location
-            if (FacingTarget(aiVision.lastPlayerLocation) == false && atSearchLocation == false)
+            if (FacingTarget(enemyData.lastPlayerLocation) == false && atSearchLocation == false)
             {
                 // Rotate towards target
-                RotateTowards(aiVision.lastPlayerLocation, enemyData.rotationSpeed);
+                RotateTowards(enemyData.lastPlayerLocation, enemyData.rotationSpeed);
             }
             // Stop when facing player
-            if (FacingTarget(aiVision.lastPlayerLocation) == true && atSearchLocation == false)
+            if (FacingTarget(enemyData.lastPlayerLocation) == true && atSearchLocation == false)
             {
                 // Move towards player
                 MoveTank(enemyData.forwardSpeed);
             }
             // If the tank is within range of the last known location of the player...
-            if (Vector3.SqrMagnitude(tf.position - aiVision.lastPlayerLocation) < (enemyData.waypointRange * enemyData.waypointRange))
+            if (Vector3.SqrMagnitude(tf.position - enemyData.lastPlayerLocation) < (enemyData.waypointRange * enemyData.waypointRange))
             {
                 atSearchLocation = true; // AI tank is now at the location
                 if (atSearchLocation == true)
@@ -307,13 +314,13 @@ public class EnemyPawn : AIPawn
         if (isInvestigating == true)
         {
             // If not facing the direction of the sound origin
-            if (FacingTarget(aiHearing.lastSoundLocation) == false)
+            if (FacingTarget(enemyData.lastSoundLocation) == false)
             {
                 // Rotate towards sound origin
-                RotateTowards(aiHearing.lastSoundLocation, enemyData.rotationSpeed);
+                RotateTowards(enemyData.lastSoundLocation, enemyData.rotationSpeed);
             }
             // If the AI is facing the sound location...
-            if (FacingTarget(aiHearing.lastSoundLocation) == true)
+            if (FacingTarget(enemyData.lastSoundLocation) == true)
             {
                 atInvestigateLocation = true; // Indicates the AI is currently facing the sound location
                 if (atInvestigateLocation == true)

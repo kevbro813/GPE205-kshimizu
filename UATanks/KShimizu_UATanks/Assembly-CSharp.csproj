@@ -94,8 +94,8 @@
     <Compile Include="Assets\Scripts\Tank Parents\TankData.cs" />
     <Compile Include="Assets\Scripts\Tank Parents\TankPawn.cs" />
     <Compile Include="Assets\Scripts\UI\HUD.cs" />
+    <Compile Include="Assets\Scripts\UI\StartGame.cs" />
     <Compile Include="Assets\Scripts\UI\StartMenu.cs" />
-    <Compile Include="Assets\Scripts\UI\StartScreen.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Unity Projects/GPE205/GPE205-kshimizu/UATanks/KShimizu_UATanks/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

@@ -200,6 +200,7 @@ public void DoIdle()
     }
     public void DoAlerted()
     {
+        Debug.Log("Alerted");
         enemyPawn.Alerted();
     }
     // TRANSITION FUNCTIONS (Transitions AI to the various states)
@@ -219,7 +220,7 @@ public void DoIdle()
     public void TransitionPatrol()
     {
         // If the player is not seen or heard...
-        if (aiVision.CanSee(GameManager.instance.playerTank) == false && aiHearing.canHear == false)
+        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == false && enemyData.canHear == false)
         {
             // Reset boolean variables in case they are still true after a state change
             enemyPawn.isInvestigating = false;
@@ -232,7 +233,7 @@ public void DoIdle()
     public void TransitionAttack()
     {
         // If the player is seen...
-        if (aiVision.CanSee(GameManager.instance.playerTank) == true)
+        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == true)
         {
             // If the player is in attack range...
             if (aiVision.AttackRange(aiVision.targetDistance) == true)
@@ -265,7 +266,7 @@ public void DoIdle()
     public void TransitionSearch()
     {
         // If the player is no longer seen...
-        if (aiVision.CanSee(GameManager.instance.playerTank) == false)
+        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == false)
         {
             // isSearching must be true to run Search method, set once during transition
             enemyPawn.isSearching = true;
@@ -281,7 +282,7 @@ public void DoIdle()
     public void TransitionInvestigate()
     {
         // If the player is not seen, but heard...
-        if (aiVision.CanSee(GameManager.instance.playerTank) == false && aiHearing.canHear == true)
+        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == false && enemyData.canHear == true)
         {
             // isInvestigating must be true to run Investigate function, set once during transition
             enemyPawn.isInvestigating = true;
@@ -297,7 +298,7 @@ public void DoIdle()
     public void TransitionPursue()
     {
         // If the player is seen...
-        if (aiVision.CanSee(GameManager.instance.playerTank) == true)
+        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == true)
         {
             // If the player is not in attack range...
             if (aiVision.AttackRange(aiVision.targetDistance) == false)

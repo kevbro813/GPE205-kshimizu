@@ -7,14 +7,13 @@ public class CannonShell : MonoBehaviour
 {
     private Rigidbody rb;
     private TankData tankData;
-    private PlayerData playerData;
+    public int originTankIndex;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         tankData = GetComponentInParent<TankData>();
-        playerData = GameManager.instance.playerData;
     }
 
     // Update is called once per frame
@@ -34,6 +33,15 @@ public class CannonShell : MonoBehaviour
             {
                 // Deal damage to enemy tank
                 enemyData.tankHealth -= tankData.shellDamage; // Deal damage
+                if (enemyData.tankHealth > 0)
+                {
+                    tankData.score += enemyData.pointValue;
+                }
+                else if (enemyData.tankHealth <= 0)
+                {
+                    tankData.score += (int)(enemyData.pointValue * GameManager.instance.killMultiplier);
+                    col.gameObject.GetComponent<EnemyPawn>().TankDestroyed();
+                }
             }
             else
             {
@@ -48,6 +56,16 @@ public class CannonShell : MonoBehaviour
             {
                 // Deal damage to player tank
                 playerData.tankHealth -= tankData.shellDamage;
+                
+                if (playerData.tankHealth > 0)
+                {
+                    tankData.score += playerData.pointValue;
+                }
+                else if (playerData.tankHealth <= 0)
+                {
+                    tankData.score += (int)(playerData.pointValue * GameManager.instance.killMultiplier);
+                    col.gameObject.GetComponent<PlayerPawn>().TankDestroyed();
+                }
             }
             else
             {

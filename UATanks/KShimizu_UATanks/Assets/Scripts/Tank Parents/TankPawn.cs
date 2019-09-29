@@ -16,6 +16,11 @@ public abstract class TankPawn : MonoBehaviour
         tf = GetComponent<Transform>();
         cannonSource = GetComponentInChildren<CannonSource>();
     }
+    // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
+    public virtual void TankDestroyed()
+    {
+        Destroy(this.gameObject);
+    }
     // Tank forward and reverse movement method
     public void MoveTank(float moveSpeed)
     {

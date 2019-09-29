@@ -18,4 +18,7 @@ public abstract class AIData : TankData
     public float rotationHigh = 3; // High value used in Random.Range function to create a random length of time the AI will rotate
     public float rotationLow = 1; // Low value used in Random.Range function to create a random length of time the AI will rotate
     public float randomRotation; // Random value used to determine how long an AI will rotate while avoiding obstacles. This creates less predictable movement and patrol patterns
+    [HideInInspector] public Vector3 lastSoundLocation; // lastSoundLocation vector set by raycast.point
+    [HideInInspector] public bool canHear; // Used to activate the sound raycast
+    [HideInInspector] public Vector3 lastPlayerLocation; // lastPlayerLocation vector set by raycast.point
 }

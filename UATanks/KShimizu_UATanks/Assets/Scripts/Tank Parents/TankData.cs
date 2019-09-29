@@ -23,19 +23,14 @@ public abstract class TankData : MonoBehaviour
     public bool isInfiniteAmmo; // If true the tank has infinite ammo
     public bool isInvisible; // If true, the player tank can only be heard by AI, AI tanks will be translucent
     public float translucency; // Set level of translucency 0 to 1
-    
+    public int tankIndex;
+    public int score = 0; // Integer that tracks the player's score
+    public int pointValue; // Number of points granted to the player when the enemy tank is destroyed
+
     public virtual void Start()
     {
         // Set health and ammo to max at start
         tankHealth = maxTankHealth;
         currentAmmo = maxAmmo;
-    }
-    // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
-    public virtual void TankDestroyed()
-    {
-        if (tankHealth <= 0)
-        {
-            Destroy(this.gameObject);
-        }
     }
 }

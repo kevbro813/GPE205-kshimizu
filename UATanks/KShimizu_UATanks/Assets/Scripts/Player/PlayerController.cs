@@ -12,40 +12,81 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed; // Float variable that is passed into MoveTank method
     private float rotateSpeed; // Float variable that is passed into RotateTank method
     public Vector3 mousePosition; // Stores the mouse cursor position, will be used for turret rotation
-    
+
+    private void Start()
+    {
+        playerPawn = GetComponent<PlayerPawn>();
+        playerData = GetComponent<PlayerData>();
+    }
     void Update()
     {
-        // Set variable for vertical and horizontal inputs
-        inputVertical = Input.GetAxis("Vertical");
-        inputHorizontal = Input.GetAxis("Horizontal");
         if (playerData != null)
         {
-            // Set moveSpeed based on whether inputVertical is a negative or positive value
-            if (inputVertical > 0)
+            if (playerData.playerIndex == 0)
             {
-                moveSpeed = inputVertical * playerData.forwardSpeed; // If positive, use forwardSpeed
+                // Set variable for vertical and horizontal inputs
+                inputVertical = Input.GetAxis("Vertical");
+                inputHorizontal = Input.GetAxis("Horizontal");
+                // Set moveSpeed based on whether inputVertical is a negative or positive value
+                if (inputVertical > 0)
+                {
+                    moveSpeed = inputVertical * playerData.forwardSpeed; // If positive, use forwardSpeed
+                }
+                else if (inputVertical < 0)
+                {
+                    moveSpeed = inputVertical * playerData.reverseSpeed; // If negative, use reverseSpeed
+                }
+
+                // If inputVertical = 0 then set moveSpeed to 0, this fixes the tank sliding without player input
+                else if (inputVertical == 0)
+                {
+                    moveSpeed = 0;
+                }
+                rotateSpeed = inputHorizontal * playerData.rotationSpeed; // Set rotateSpeed
+
+                playerPawn.MoveTank(moveSpeed); // Use moveSpeed as the parameter
+                playerPawn.RotateTank(rotateSpeed); // Use rotateSpeed as the parameter
+
+                // Fire a single tank round when the "Fire1" button is pressed (default is mouse0)
+                if (Input.GetButton("FireOne"))
+                {
+                    playerPawn.SingleCannonFire();
+                }
             }
-            else if (inputVertical < 0)
+            else if (playerData.playerIndex == 1)
             {
-                moveSpeed = inputVertical * playerData.reverseSpeed; // If negative, use reverseSpeed
+                // Set variable for vertical and horizontal inputs
+                inputVertical = Input.GetAxis("VerticalTwo");
+                inputHorizontal = Input.GetAxis("HorizontalTwo");
+                if (playerData != null)
+                {
+                    // Set moveSpeed based on whether inputVertical is a negative or positive value
+                    if (inputVertical > 0)
+                    {
+                        moveSpeed = inputVertical * playerData.forwardSpeed; // If positive, use forwardSpeed
+                    }
+                    else if (inputVertical < 0)
+                    {
+                        moveSpeed = inputVertical * playerData.reverseSpeed; // If negative, use reverseSpeed
+                    }
+
+                    // If inputVertical = 0 then set moveSpeed to 0, this fixes the tank sliding without player input
+                    else if (inputVertical == 0)
+                    {
+                        moveSpeed = 0;
+                    }
+                    rotateSpeed = inputHorizontal * playerData.rotationSpeed; // Set rotateSpeed
+
+                    playerPawn.MoveTank(moveSpeed); // Use moveSpeed as the parameter
+                    playerPawn.RotateTank(rotateSpeed); // Use rotateSpeed as the parameter
+
+                    // Fire a single tank round when the "Fire1" button is pressed (default is mouse0)
+                    if (Input.GetButton("FireTwo"))
+                    {
+                        playerPawn.SingleCannonFire();
+                    }
+                }
             }
-
-            // If inputVertical = 0 then set moveSpeed to 0, this fixes the tank sliding without player input
-            else if (inputVertical == 0)
-            {
-                moveSpeed = 0;
-            }
-            rotateSpeed = inputHorizontal * playerData.rotationSpeed; // Set rotateSpeed
-
-            playerPawn.MoveTank(moveSpeed); // Use moveSpeed as the parameter
-            playerPawn.RotateTank(rotateSpeed); // Use rotateSpeed as the parameter
-
-            // Fire a single tank round when the "Fire1" button is pressed (default is mouse0)
-            if (Input.GetButton("Fire1"))
-            {
-                playerPawn.SingleCannonFire();
-            }
-
             // Set player to invisible or visible
             if (playerData.isInvisible == true)
             {
@@ -55,8 +96,7 @@ public class PlayerController : MonoBehaviour
             {
                 playerPawn.SetVisible();
             }
-            //mousePosition = Input.mousePosition;
-            //playerPawn.RotateTowardsMouse();
+
         }
     }
 }

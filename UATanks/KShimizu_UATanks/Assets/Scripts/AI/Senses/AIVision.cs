@@ -9,50 +9,50 @@ public class AIVision : MonoBehaviour
     private Transform tf;
     public AIData aiData;
     public float targetDistance; // Distance from the AI to the target
-    [HideInInspector] public Vector3 lastPlayerLocation; // lastPlayerLocation vector set by raycast.point
 
     void Start()
     {
         aiData = GetComponentInParent<AIData>();
         tf = GetComponent<Transform>();
     }
-    public bool CanSee(GameObject target)
+    public bool CanSee(List<GameObject> target)
     {
-        ttf = target.GetComponent<Transform>(); // Get target transform component
-
-        // Find the vector from current object to target
-
-        Vector3 vectorToTarget = ttf.position - tf.position;
-
-        // Find the distance between the two vectors in float to compare with maxViewDistance
-        targetDistance = Vector3.Distance(ttf.position, tf.position);
-
-        // Find the angle between the direction our agent is facing (forward in local space) and the vector to the target.
-        float angleToTarget = Vector3.Angle(vectorToTarget, tf.forward);
-
-        
-
-        // If that angle is less than our field of view return true, else return false
-        if (angleToTarget < aiData.fieldOfView && targetDistance < aiData.maxViewDistance)
+        foreach (GameObject player in target)
         {
-            int environmentLayer = LayerMask.NameToLayer("Environment"); // Add Walls layer to variable
-            int playerLayer = LayerMask.NameToLayer("PlayerObject"); // Add Player layer to variable
-            int layerMask = (1 << playerLayer) | (1 << environmentLayer); // Create layermask
+            ttf = player.GetComponent<Transform>(); // Get target transform component
 
-            RaycastHit hit;
+            // Find the vector from current object to target
 
-            // RaycastHit from object to target, maxview distance, and only affects objects in layermask
-            if (Physics.Raycast(tf.position, vectorToTarget, out hit, aiData.maxViewDistance, layerMask))
+            Vector3 vectorToTarget = ttf.position - tf.position;
+
+            // Find the distance between the two vectors in float to compare with maxViewDistance
+            targetDistance = Vector3.Distance(ttf.position, tf.position);
+
+            // Find the angle between the direction our agent is facing (forward in local space) and the vector to the target.
+            float angleToTarget = Vector3.Angle(vectorToTarget, tf.forward);
+
+            // If that angle is less than our field of view return true, else return false
+            if (angleToTarget < aiData.fieldOfView && targetDistance < aiData.maxViewDistance)
             {
-                if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == false) // If hit is player then...
+                int environmentLayer = LayerMask.NameToLayer("Environment"); // Add Walls layer to variable
+                int playerLayer = LayerMask.NameToLayer("PlayerObject"); // Add Player layer to variable
+                int layerMask = (1 << playerLayer) | (1 << environmentLayer); // Create layermask
+
+                RaycastHit hit;
+
+                // RaycastHit from object to target, maxview distance, and only affects objects in layermask
+                if (Physics.Raycast(tf.position, vectorToTarget, out hit, aiData.maxViewDistance, layerMask))
                 {
-                    lastPlayerLocation = hit.point; // Set lastPlayerLocation to raycast hit point
-                    GameManager.instance.lastPlayerLocation = lastPlayerLocation; // Set lastPlayerLocation in GameManager
-                    return true; // Returns true if the collider hit is the player
-                }
-                else if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == true)
-                {
-                    Debug.Log("Player is invisible");
+                    if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == false) // If hit is player then...
+                    {
+                        aiData.lastPlayerLocation = hit.point; // Set lastPlayerLocation to raycast hit point
+                        GameManager.instance.lastPlayerLocation = aiData.lastPlayerLocation; // Set lastPlayerLocation in GameManager
+                        return true; // Returns true if the collider hit is the player
+                    }
+                    else if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == true)
+                    {
+                        Debug.Log("Player is invisible");
+                    }
                 }
             }
         }

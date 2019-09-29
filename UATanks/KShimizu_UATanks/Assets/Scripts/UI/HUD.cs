@@ -20,7 +20,7 @@ public class HUD : MonoBehaviour
     {
         if (playerData != null)
         {
-            scoreValue.text = playerData.playerScore.ToString(); // Display the score on the HUD
+            scoreValue.text = playerData.score.ToString(); // Display the score on the HUD
         }
     }
 }

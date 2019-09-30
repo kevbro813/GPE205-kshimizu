@@ -8,8 +8,8 @@ public class CannonSource : MonoBehaviour
     public GameObject projectile; // Set the projectile in the inspector
     public TankData tankData;
     private Transform tf;
-    private float lastCannonFire; // Variable that stores the last time the cannon was fired
-    private bool cannonLoaded = true; // Bool is true when the timer expires, allowing the cannon can be fired again
+    public float lastCannonFire; // Variable that stores the last time the cannon was fired
+    public bool cannonLoaded = true; // Bool is true when the timer expires, allowing the cannon can be fired again
 
     void Start()
     {
@@ -40,7 +40,7 @@ public class CannonSource : MonoBehaviour
                 }
                 // Create a projectile instance
                 GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
-
+                GameManager.instance.soundManager.SoundFireCannon();
                 projectileClone.GetComponent<CannonShell>().originTankIndex = tankData.tankIndex;
 
                 // Destroy the projectileClone after a set duration

@@ -451,10 +451,12 @@ MonoBehaviour:
   tankIndex: 0
   score: 0
   pointValue: 1000
+  healthPercent: 0
+  reloadTimer: 0
   playerLives: 3
   tf: {fileID: 0}
   playerIndex: 0
-  respawnDelay: 3
+  playerName: Kevbro
   activeSpawnsList: []
 --- !u!114 &-3190469483590712858
 MonoBehaviour:
@@ -473,6 +475,7 @@ MonoBehaviour:
   characterController: {fileID: 0}
   cannonSource: {fileID: 0}
   playerController: {fileID: 0}
+  playerData: {fileID: 0}
 --- !u!114 &5026310254686490260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,6 +673,8 @@ MonoBehaviour:
   projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
     type: 3}
   tankData: {fileID: 0}
+  lastCannonFire: 0
+  cannonLoaded: 1
 --- !u!1 &8966785205101932312
 GameObject:
   m_ObjectHideFlags: 0

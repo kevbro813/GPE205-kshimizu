@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Game Manager singleton
 public class GameManager : MonoBehaviour
@@ -49,6 +50,13 @@ public class GameManager : MonoBehaviour
     public float killMultiplier;
     public List<Transform> activePlayerSpawnsList;
     public float playerRespawnDelay = 1;
+    public string gameState = "pregame";
+    public GameObject StartGameMenu;
+    public GameObject pauseMenu;
+    public SoundManager soundManager;
+    public AudioSource asMusic;
+    public AudioSource asSFX;
+    public bool isPreviousGame = false;
 
     private void Awake()
     {
@@ -56,7 +64,7 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // TODO: Allow Game to persist
         }
         else
         {
@@ -67,13 +75,93 @@ public class GameManager : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         mapGenerator = GetComponent<MapGenerator>();
+        soundManager = GetComponentInChildren<SoundManager>();
+        asMusic = GameObject.FindWithTag("MusicSource").GetComponent<AudioSource>();
+        asSFX = GameObject.FindWithTag("SFXSource").GetComponent<AudioSource>();
+        isPreviousGame = false;
     }
     void Update()
     {
         // TODO: Game State Machine
+        if (gameState == "pregame")
+        {
+            DoPregame();
+        }
+        if (gameState == "resumegame")
+        {
+            DoResumeGame();
+        }
+        if (gameState == "active")
+        {
+            DoActive();
+            if (Input.GetButton("Cancel"))
+            {
+                gameState = "pause";
+            }
+        }
+        if (gameState == "pause")
+        {
+            DoPause();
+        }
+        if (gameState == "menu")
+        {
+            DoMenu();
+            gameState = "idle";
+        }
+        if (gameState == "quit")
+        {
+            DoQuitGame();
+        }
+        if (gameState == "idle")
+        {
+            // Do Nothing.
+        }
+    }
+    public void DoResumeGame()
+    {
+        Debug.Log("ResumeGame");
+        StartGameMenu.SetActive(true);
+        pauseMenu.SetActive(false);
+    }
+    public void DoPregame()
+    {
+        StartGameMenu.SetActive(true);
+        hudObjects[0].SetActive(false);
+        hudObjects[1].SetActive(false);
+        hudObjects[2].SetActive(false);
+        pauseMenu.SetActive(false);
+    }
+    public void DoActive()
+    {
+        pauseMenu.SetActive(false);
+        StartGameMenu.SetActive(false);
+
+        // Enable all AI movement
+        Time.timeScale = 1;
+
+        // Enable player controller
+        playerController.GetComponent<PlayerController>().enabled = true;
+    }
+    public void DoPause()
+    {
+        pauseMenu.SetActive(true);
+        // Enable all AI movement
+        Time.timeScale = 0;
+
+        // Enable player controller
+        playerController.GetComponent<PlayerController>().enabled = false;
+    }
+    public void DoMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+    public void DoQuitGame()
+    {
+        Application.Quit();
     }
     public void CreateNewGame()
     {
+        isPreviousGame = true;
         GetComponent<MapGenerator>().GenerateMap(); // Generates a new map
         if (isMultiplayer == true)
         {
@@ -229,5 +317,4 @@ public class GameManager : MonoBehaviour
         activePlayerSpawnsList.Clear();
         activePlayerSpawnsList = playerSpawnsList;
     }
-    // TODO: Game state methods
 }

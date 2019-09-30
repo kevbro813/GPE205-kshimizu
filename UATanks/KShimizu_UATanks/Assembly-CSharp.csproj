@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Attacks\CannonSource.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Map\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\Map\Room.cs" />
     <Compile Include="Assets\Scripts\Pickups\PickupController.cs" />
@@ -94,8 +95,10 @@
     <Compile Include="Assets\Scripts\Tank Parents\TankData.cs" />
     <Compile Include="Assets\Scripts\Tank Parents\TankPawn.cs" />
     <Compile Include="Assets\Scripts\UI\HUD.cs" />
-    <Compile Include="Assets\Scripts\UI\StartGame.cs" />
+    <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\UI\ScoreScreen.cs" />
     <Compile Include="Assets\Scripts\UI\StartMenu.cs" />
+    <Compile Include="Assets\Scripts\UI\TitleMenu.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Unity Projects/GPE205/GPE205-kshimizu/UATanks/KShimizu_UATanks/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

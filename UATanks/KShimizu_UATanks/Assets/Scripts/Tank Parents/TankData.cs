@@ -26,11 +26,29 @@ public abstract class TankData : MonoBehaviour
     public int tankIndex;
     public int score = 0; // Integer that tracks the player's score
     public int pointValue; // Number of points granted to the player when the enemy tank is destroyed
+    public float healthPercent;
+    public float reloadTimer;
+    private CannonSource cannonSource;
 
     public virtual void Start()
     {
         // Set health and ammo to max at start
         tankHealth = maxTankHealth;
         currentAmmo = maxAmmo;
+        cannonSource = GetComponentInChildren<CannonSource>();
+    }
+    public virtual void Update()
+    {
+        healthPercent = tankHealth / maxTankHealth;
+        float timeRemaining = (cannonSource.lastCannonFire + cannonDelay) - Time.time;
+        
+        if (timeRemaining > 0)
+        {
+            reloadTimer = (cannonDelay - timeRemaining) / cannonDelay;
+        }
+         else
+        {
+            reloadTimer = 1.0f;
+        }       
     }
 }

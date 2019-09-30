@@ -19,6 +19,7 @@ public abstract class TankPawn : MonoBehaviour
     // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
     public virtual void TankDestroyed()
     {
+        GameManager.instance.soundManager.SoundTankDestroyed();
         Destroy(this.gameObject);
     }
     // Tank forward and reverse movement method

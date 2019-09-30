@@ -31,4 +31,8 @@ public class EnemyData : AIData
             currentWaypoint = Random.Range(0, enemyWaypoints.Count);
         }
     }
+    public override void Update()
+    {
+        base.Update();
+    }
 }

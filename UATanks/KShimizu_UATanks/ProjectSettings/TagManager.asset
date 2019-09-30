@@ -16,6 +16,9 @@ TagManager:
   - Sound
   - PickupSpawn
   - StartScreen
+  - OptionsMenu
+  - MusicSource
+  - SFXSource
   layers:
   - Default
   - TransparentFX

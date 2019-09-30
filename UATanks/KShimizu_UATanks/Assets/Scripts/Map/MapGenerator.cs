@@ -22,6 +22,7 @@ public class MapGenerator : MonoBehaviour
     
     public void GenerateMap()
     {
+        //Array.Clear(GameManager.instance.grid, 0, GameManager.instance.grid.Length);
         // If set to Map of the Day, use date to determine seed
         if (mapType == MapType.MapOfTheDay)
         {

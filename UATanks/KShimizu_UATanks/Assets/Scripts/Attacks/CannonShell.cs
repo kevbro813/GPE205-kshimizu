@@ -35,6 +35,7 @@ public class CannonShell : MonoBehaviour
                 enemyData.tankHealth -= tankData.shellDamage; // Deal damage
                 if (enemyData.tankHealth > 0)
                 {
+                    GameManager.instance.soundManager.SoundTankHit();
                     tankData.score += enemyData.pointValue;
                 }
                 else if (enemyData.tankHealth <= 0)
@@ -59,6 +60,7 @@ public class CannonShell : MonoBehaviour
                 
                 if (playerData.tankHealth > 0)
                 {
+                    GameManager.instance.soundManager.SoundTankHit();
                     tankData.score += playerData.pointValue;
                 }
                 else if (playerData.tankHealth <= 0)

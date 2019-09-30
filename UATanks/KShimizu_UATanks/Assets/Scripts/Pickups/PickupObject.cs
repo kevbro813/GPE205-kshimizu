@@ -21,6 +21,7 @@ public class PickupObject : MonoBehaviour
         PickupController pickupController = other.GetComponent<PickupController>();
         if (pickupController != null) // Check that the object has a PickupController
         {
+            GameManager.instance.soundManager.SoundPowerup();
             pickupController.Add(pickupData);
 
             // Rather than destroying the pickup, I decided to disable the sphere collider and mesh renderer

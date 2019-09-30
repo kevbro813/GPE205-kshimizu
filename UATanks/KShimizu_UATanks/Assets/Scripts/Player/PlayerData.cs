@@ -8,10 +8,15 @@ public class PlayerData : TankData
     public int playerLives = 3;
     public Transform tf;
     public int playerIndex;
+    public string playerName;
     public List<Transform> activeSpawnsList;
     public override void Start()
     {
         tf = GetComponent<Transform>();
         base.Start();
+    }
+    public override void Update()
+    {
+        base.Update();
     }
 }

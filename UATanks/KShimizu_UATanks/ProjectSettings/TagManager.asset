@@ -19,6 +19,8 @@ TagManager:
   - OptionsMenu
   - MusicSource
   - SFXSource
+  - ScoreWindow
+  - GameOver
   layers:
   - Default
   - TransparentFX

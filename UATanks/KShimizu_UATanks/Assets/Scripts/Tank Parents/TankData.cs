@@ -24,7 +24,7 @@ public abstract class TankData : MonoBehaviour
     public bool isInvisible; // If true, the player tank can only be heard by AI, AI tanks will be translucent
     public float translucency; // Set level of translucency 0 to 1
     public int tankIndex;
-    public int score = 0; // Integer that tracks the player's score
+    public float score = 0; // Integer that tracks the player's score
     public int pointValue; // Number of points granted to the player when the enemy tank is destroyed
     public float healthPercent;
     public float reloadTimer;

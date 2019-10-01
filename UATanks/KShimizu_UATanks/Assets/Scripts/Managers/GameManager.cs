@@ -57,6 +57,16 @@ public class GameManager : MonoBehaviour
     public AudioSource asMusic;
     public AudioSource asSFX;
     public bool isPreviousGame = false;
+    public bool isPlayerOneDead = false;
+    public bool isPlayerTwoDead = false;
+    public GameObject scoreWindow;
+    public GameObject endGame;
+
+    public List<ScoreManager> highScores;
+    public List<ScoreManager> currentScores;
+    public int maxScores = 10;
+    public ScoreManager scoreManager;
+    public GameObject adminMenu;
 
     private void Awake()
     {
@@ -79,6 +89,82 @@ public class GameManager : MonoBehaviour
         asMusic = GameObject.FindWithTag("MusicSource").GetComponent<AudioSource>();
         asSFX = GameObject.FindWithTag("SFXSource").GetComponent<AudioSource>();
         isPreviousGame = false;
+        highScores = new List<ScoreManager>();
+        InitializeValues();
+        LoadPlayerScores();
+    }
+    public void InitializeValues()
+    {
+        scoreManager = new ScoreManager();
+    }
+    public void OnSave()
+    {
+        SetScores();
+        CheckScores();
+        SavePlayerScores();
+    }
+    public void CheckScores()
+    {
+        highScores.Sort();
+        highScores.Reverse();
+
+        int numScores = Mathf.Min(maxScores, highScores.Count);
+        highScores = highScores.GetRange(0, numScores);
+    }
+    public void SetScores()
+    {
+        for (int i = 0; i < playerData.Count; i++)
+        {
+            ScoreManager sm = new ScoreManager();
+            currentScores.Add(sm);
+            currentScores[i].savedScore = playerData[i].score;
+            currentScores[i].savedPlayerName = playerData[i].playerName;
+        }
+        for (int j = 0; j < currentScores.Count; j++)
+        {
+            ScoreManager sm = new ScoreManager();
+            highScores.Add(sm);
+            highScores[highScores.Count - 1].savedScore = currentScores[j].savedScore;
+            highScores[highScores.Count - 1].savedPlayerName = currentScores[j].savedPlayerName;
+        }
+    }
+    public void SavePlayerScores()
+    {
+        for (int i = 0; i < highScores.Count; i++)
+        {
+            ScoreManager sm = highScores[i];
+            PlayerPrefs.SetFloat("Score" + i.ToString(), sm.savedScore);
+            PlayerPrefs.SetString("PlayerName" + i.ToString(), sm.savedPlayerName);
+        }
+        PlayerPrefs.Save();
+    }
+    public void LoadPlayerScores()
+    {
+        string key;
+        for (int i = 0; i < maxScores; i++)
+        {
+            Debug.Log("Loading Player Scores");
+            ScoreManager sm = new ScoreManager();
+            key = "Score" + i.ToString();
+            if (PlayerPrefs.HasKey(key))
+            {
+                sm.savedScore = PlayerPrefs.GetFloat(key);
+            }
+            else
+            {
+                break;
+            }
+            key = "PlayerName" + i.ToString();
+            if (PlayerPrefs.HasKey(key))
+            {
+                sm.savedPlayerName = PlayerPrefs.GetString(key);
+            }
+            else
+            {
+                break;
+            }
+            highScores.Add(sm);
+        }
     }
     void Update()
     {
@@ -98,6 +184,30 @@ public class GameManager : MonoBehaviour
             {
                 gameState = "pause";
             }
+            if (isMultiplayer == true)
+            {
+                if (isPlayerOneDead == true && isPlayerTwoDead == true)
+                {
+                    OnSave();
+                    gameState = "endgame";
+                }
+            }
+            else if (isMultiplayer == false)
+            {
+                if (isPlayerOneDead == true)
+                {
+                    OnSave();
+                    gameState = "endgame";
+                }
+            }
+            if (Input.GetButton("Tab"))
+            {
+                gameState = "score";
+            }
+            if (Input.GetButton("Admin"))
+            {
+                gameState = "admin";
+            }
         }
         if (gameState == "pause")
         {
@@ -116,12 +226,52 @@ public class GameManager : MonoBehaviour
         {
             // Do Nothing.
         }
+        if (gameState == "endgame")
+        {
+            DoEndGame();
+        }
+        if (gameState == "score")
+        {
+            DoScoreWindow();
+        }
+        if (gameState == "admin")
+        {
+            DoAdminMenu();
+        }
+    }
+    public void DoAdminMenu()
+    {
+        adminMenu.SetActive(true);
+        pauseMenu.SetActive(false);
+        StartGameMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+    }
+    public void DoScoreWindow()
+    {
+        pauseMenu.SetActive(false);
+        StartGameMenu.SetActive(false);
+        scoreWindow.SetActive(true);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
+    }
+    public void DoEndGame()
+    {
+        isPlayerOneDead = false;
+        isPlayerTwoDead = false;
+        pauseMenu.SetActive(false);
+        StartGameMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(true);
+        adminMenu.SetActive(false);
     }
     public void DoResumeGame()
     {
-        Debug.Log("ResumeGame");
         StartGameMenu.SetActive(true);
         pauseMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
     }
     public void DoPregame()
     {
@@ -130,11 +280,17 @@ public class GameManager : MonoBehaviour
         hudObjects[1].SetActive(false);
         hudObjects[2].SetActive(false);
         pauseMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
     }
     public void DoActive()
     {
         pauseMenu.SetActive(false);
         StartGameMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
 
         // Enable all AI movement
         Time.timeScale = 1;
@@ -145,6 +301,10 @@ public class GameManager : MonoBehaviour
     public void DoPause()
     {
         pauseMenu.SetActive(true);
+        StartGameMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
         // Enable all AI movement
         Time.timeScale = 0;
 

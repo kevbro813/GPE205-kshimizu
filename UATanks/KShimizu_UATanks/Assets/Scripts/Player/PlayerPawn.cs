@@ -32,6 +32,14 @@ public class PlayerPawn : TankPawn
             GameManager.instance.tankDataList.Remove(this.gameObject.GetComponent<PlayerData>()); // Remove tank from active enemies list
             GameManager.instance.playerObjectsList.Remove(this.gameObject); // Remove tank from active enemies list
             GameManager.instance.playerData.Remove(this.gameObject.GetComponent<PlayerData>()); // Remove tank from active enemies list
+            if (playerData.playerIndex == 0)
+            {
+                GameManager.instance.isPlayerOneDead = true;
+            }
+            else if (playerData.playerIndex == 1)
+            {
+                GameManager.instance.isPlayerTwoDead = true;
+            }
             Destroy(this.gameObject);
             // TODO: Once game states has been completed, this should send the player to the "Lose" screen
         }

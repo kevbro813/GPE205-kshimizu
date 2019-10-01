@@ -12,7 +12,6 @@ public class PauseMenu : MonoBehaviour
 
     public void MusicSlider()
     {
-        Debug.Log(musicSlider.value);
         GameManager.instance.soundManager.SetMusicVolume(musicSlider.value);
     }
     public void SFXSlider()
@@ -34,11 +33,13 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         GameManager.instance.soundManager.SoundMenuButton();
+        Save();
         GameManager.instance.gameState = "active";
     }
     public void Menu()
     {
         GameManager.instance.soundManager.SoundMenuButton();
+        Save();
         GameManager.instance.gameState = "menu";
     }
     public void Quit()

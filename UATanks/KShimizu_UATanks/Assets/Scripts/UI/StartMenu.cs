@@ -110,7 +110,7 @@ public class StartMenu : MonoBehaviour
         }
         else
         {
-            if (playerOneName != null)
+            if (playerOneName.text != "")
             {
                 GameManager.instance.playerData[0].playerName = playerOneName.text;
             }

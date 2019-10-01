@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Attacks\CannonSource.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Map\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\Map\Room.cs" />
@@ -94,9 +95,11 @@
     <Compile Include="Assets\Scripts\Player\PlayerPawn.cs" />
     <Compile Include="Assets\Scripts\Tank Parents\TankData.cs" />
     <Compile Include="Assets\Scripts\Tank Parents\TankPawn.cs" />
+    <Compile Include="Assets\Scripts\UI\AdminMenu.cs" />
+    <Compile Include="Assets\Scripts\UI\EndGame.cs" />
     <Compile Include="Assets\Scripts\UI\HUD.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
-    <Compile Include="Assets\Scripts\UI\ScoreScreen.cs" />
+    <Compile Include="Assets\Scripts\UI\ScoreWindow.cs" />
     <Compile Include="Assets\Scripts\UI\StartMenu.cs" />
     <Compile Include="Assets\Scripts\UI\TitleMenu.cs" />
     <Reference Include="Unity.Timeline.Editor">

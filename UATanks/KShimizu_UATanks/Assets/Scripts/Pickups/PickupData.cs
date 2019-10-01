@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-// Class that holds all pickup data
+﻿// Class that holds all pickup data
 [System.Serializable]
 public class PickupData
 {

@@ -41,8 +41,9 @@ public class CannonShell : MonoBehaviour
                 else if (enemyData.tankHealth <= 0)
                 {
                     tankData.score += (int)(enemyData.pointValue * GameManager.instance.killMultiplier);
-                    col.gameObject.GetComponent<EnemyPawn>().TankDestroyed();
-                }
+                    // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
+                    col.gameObject.GetComponent<EnemyPawn>().TankDestroyed(); 
+                }   
             }
             else
             {
@@ -66,6 +67,7 @@ public class CannonShell : MonoBehaviour
                 else if (playerData.tankHealth <= 0)
                 {
                     tankData.score += (int)(playerData.pointValue * GameManager.instance.killMultiplier);
+                    // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
                     col.gameObject.GetComponent<PlayerPawn>().TankDestroyed();
                 }
             }

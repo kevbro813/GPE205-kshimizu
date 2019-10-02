@@ -59,7 +59,8 @@ public class GameManager : MonoBehaviour
 
     // Player variables
     public float playerRespawnDelay = 1; // Duration for player respawning after death
-    public int playerCount = 0; // Tracks the number of players in the game
+    public int playersCreated = 0; // Tracks the number of players in the game
+    public int playersAlive = 0;
 
     // Enemy variables
     [HideInInspector] public float enemiesSpawned = 0; // Tracks the number of enemies spawned into the world
@@ -78,9 +79,9 @@ public class GameManager : MonoBehaviour
     public AudioSource asSFX; // SFX audio source component
 
     // Scoring
-    public ScoreManager scoreManager; // Score Manager component
-    public List<ScoreManager> highScores; // List of current high scores
-    public List<ScoreManager> currentScores; // List of scores of players currently playing
+    public ScoreManager scoreManager; // Score Manager Component
+    public List<ScoreData> highScores; // List of current high scores
+    public List<ScoreData> currentScores; // List of scores of players currently playing
     public int maxScores = 10; // Maximum number of scores that are posted
     public float killMultiplier; // Multiplies score when the player kills a tank
 
@@ -121,103 +122,13 @@ public class GameManager : MonoBehaviour
         asMusic = GameObject.FindWithTag("MusicSource").GetComponent<AudioSource>();
         asSFX = GameObject.FindWithTag("SFXSource").GetComponent<AudioSource>();
         isPreviousGame = false; // Set to begin new game when game first starts
-        highScores = new List<ScoreManager>(); // Reset highScores
-        InitializeValues(); 
-        LoadPlayerScores();
-        FillEmptyScores(); 
+        highScores = new List<ScoreData>(); // Reset highScores
+        scoreManager = GetComponent<ScoreManager>();
+        scoreManager.InitializeValues();
+        scoreManager.LoadPlayerScores();
+        scoreManager.FillEmptyScores(); 
     }
-    // Initialize ScoreManager
-    public void InitializeValues()
-    {
-        scoreManager = new ScoreManager();
-    }
-    // Fill any empty scores (prevents "index out of range" error)
-    public void FillEmptyScores()
-    {
-        // Loops through until highScores.Count = maxScores
-        for (int i = highScores.Count; i < maxScores; i++)
-        {
-            // Adds a placeholder score
-            ScoreManager sm = new ScoreManager();
-            highScores.Add(sm);
-        }
-    }
-    // Run functions to save scores
-    public void OnSave()
-    {
-        SetScores();
-        CheckScores();
-        SavePlayerScores();
-    }
-    // Sort high scores, reverse order and limit quantity of scores to maxScores
-    public void CheckScores()
-    {
-        highScores.Sort();
-        highScores.Reverse();
-
-        int numScores = Mathf.Min(maxScores, highScores.Count);
-        highScores = highScores.GetRange(0, numScores);
-    }
-    // Adds new scores to highScores
-    public void SetScores()
-    {
-        // Loop through active playerData and add playerName and scores to currentScores (needed to use scoreManager)
-        for (int i = 0; i < playerData.Count; i++)
-        {
-            ScoreManager sm = new ScoreManager();
-            currentScores.Add(sm);
-            currentScores[i].savedScore = playerData[i].score;
-            currentScores[i].savedPlayerName = playerData[i].playerName;
-        }
-        // Loop through currentScores and add them to the list of high scores
-        for (int j = 0; j < currentScores.Count; j++)
-        {
-            ScoreManager sm = new ScoreManager();
-            highScores.Add(sm);
-            highScores[highScores.Count - 1].savedScore = currentScores[j].savedScore;
-            highScores[highScores.Count - 1].savedPlayerName = currentScores[j].savedPlayerName;
-        }
-    }
-    // Saves player scores to PlayerPrefs
-    public void SavePlayerScores()
-    {
-        for (int i = 0; i < highScores.Count; i++)
-        {
-            ScoreManager sm = highScores[i];
-            PlayerPrefs.SetFloat("Score" + i.ToString(), sm.savedScore);
-            PlayerPrefs.SetString("PlayerName" + i.ToString(), sm.savedPlayerName);
-        }
-        PlayerPrefs.Save();
-    }
-    // Load score data from PlayerPrefs
-    public void LoadPlayerScores()
-    {
-        string key;
-        for (int i = 0; i < maxScores; i++)
-        {
-            Debug.Log("Loading Player Scores");
-            ScoreManager sm = new ScoreManager();
-            key = "Score" + i.ToString();
-            if (PlayerPrefs.HasKey(key))
-            {
-                sm.savedScore = PlayerPrefs.GetFloat(key);
-            }
-            else
-            {
-                break;
-            }
-            key = "PlayerName" + i.ToString();
-            if (PlayerPrefs.HasKey(key))
-            {
-                sm.savedPlayerName = PlayerPrefs.GetString(key);
-            }
-            else
-            {
-                break;
-            }
-            highScores.Add(sm);
-        }
-    }
+   
     void Update()
     {
         // Game Finite State Machine
@@ -239,10 +150,10 @@ public class GameManager : MonoBehaviour
             }
             if (isGameReady == true && isMultiplayer == true) // Check if game is multiplayer
             {
-                // If player one and two are dead or one player is alive and all enemy AI are dead...
-                if ((isPlayerOneDead == true && isPlayerTwoDead == true) || (playerObjectsList.Count == 1 && activeEnemiesList.Count == 0))
+                // If both players are dead or one player is alive and all enemy AI are dead...
+                if ((isPlayerOneDead == true && isPlayerTwoDead == true) || (playersAlive == 1 && activeEnemiesList.Count == 0))
                 {
-                    OnSave();
+                    scoreManager.OnSave();
                     gameState = "endgame"; // Transition to endgame
                 }
             }
@@ -251,7 +162,7 @@ public class GameManager : MonoBehaviour
                 // If player one is dead or all enemy AI are dead and player one is still alive...
                 if (isPlayerOneDead == true || (isPlayerOneDead == false && activeEnemiesList.Count == 0))
                 {
-                    OnSave();
+                    scoreManager.OnSave();
                     gameState = "endgame"; // Transition to endgame
                 }
             }
@@ -338,6 +249,14 @@ public class GameManager : MonoBehaviour
     // Open End Game window
     public void DoEndGame()
     {
+        // Disable all AI movement
+        Time.timeScale = 0;
+
+        // Disable player controller to prevent tank firing when leaving score window
+        foreach (GameObject player in playerObjectsList)
+        {
+            player.GetComponent<PlayerController>().enabled = false;
+        }
         isPlayerOneDead = false;
         isPlayerTwoDead = false;
         isGameReady = false;
@@ -452,7 +371,7 @@ public class GameManager : MonoBehaviour
 
         // Set index numbers for both player and tank (used to remove objects and components from lists on death/removal)
         tempPlayerData.playerIndex = playerObjectsList.Count - 1;
-        int currentIndex = playerData[playerCount].playerIndex;
+        int currentIndex = playerData[playersCreated].playerIndex;
         tempPlayerData.tankIndex = tankObjects.Count - 1;
 
         // Link camera to playerClone
@@ -477,7 +396,8 @@ public class GameManager : MonoBehaviour
             hudComponents[currentIndex].playerData = playerData[currentIndex];
         }
         // Increase playerCount
-        playerCount++;
+        playersCreated++;
+        playersAlive++; // Update players alive to use in game state transitions
     }
     private IEnumerator SpawnEnemyEvent()
     {

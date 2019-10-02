@@ -12685,6 +12685,7 @@ GameObject:
   - component: {fileID: 8257454608668441255}
   - component: {fileID: 1326208305}
   - component: {fileID: 1326208306}
+  - component: {fileID: 1326208307}
   m_Layer: 0
   m_Name: Game
   m_TagString: GameManager
@@ -12748,6 +12749,21 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326208303}
   m_Enabled: 1
+--- !u!114 &1326208307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326208303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9e736018491814ead4f394d2711aa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreData:
+    savedScore: 0
+    savedPlayerName: Player
 --- !u!1 &1330013672
 GameObject:
   m_ObjectHideFlags: 0
@@ -13510,13 +13526,7 @@ MonoBehaviour:
   playerTwoName: {fileID: 2036553258}
   playerOneScore: {fileID: 997761556}
   playerTwoScore: {fileID: 1145096436}
-  scoreManager:
-    savedScore: 0
-    savedPlayerName: Default Player
-  highScoreText: {fileID: 0}
-  highPlayerText: {fileID: 0}
-  highScores: []
-  highScoreNames: []
+  scoreManager: {fileID: 0}
   highScoreOneName: {fileID: 943878251}
   highScoreTwoName: {fileID: 1874969182}
   highScoreThreeName: {fileID: 1984594221}
@@ -22054,9 +22064,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322c5d52d7d08d340a6a156bb93e9bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameState: pregame
   tankPrototype: {fileID: 100012, guid: 7bff14172e3c246448afda44561e8575, type: 3}
-  mapGenerator: {fileID: 0}
-  playerSpawnsList: []
   enemyTankList:
   - {fileID: 100012, guid: b9e6db1de2d8d6046a05ae561ed1d3f2, type: 3}
   - {fileID: 100012, guid: b9e6db1de2d8d6046a05ae561ed1d3f2, type: 3}
@@ -22078,10 +22087,6 @@ MonoBehaviour:
   - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
   - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
   - {fileID: 100012, guid: 96f57ec65f6c6834b8115aa409d05d86, type: 3}
-  enemySpawnsList: []
-  enemyWaypointsList: []
-  activeEnemiesList: []
-  enemyDataList: []
   pickupList:
   - {fileID: 5884815421746873254, guid: 3c394ba092694ac44be0661ac4fd01d2, type: 3}
   - {fileID: 5884815421746873254, guid: 3c394ba092694ac44be0661ac4fd01d2, type: 3}
@@ -22100,31 +22105,31 @@ MonoBehaviour:
   - {fileID: 5884815421746873254, guid: 3ad861a8e1fdc99409c0227c9a0d2035, type: 3}
   - {fileID: 5884815421746873254, guid: 2fa741343ad826d40ac46f674e806912, type: 3}
   - {fileID: 5884815421746873254, guid: 2fa741343ad826d40ac46f674e806912, type: 3}
+  playerSpawnsList: []
+  enemySpawnsList: []
   pickupSpawnsList: []
+  enemyWaypointsList: []
+  playerObjectsList: []
+  activeEnemiesList: []
   activePickupList: []
+  playerData: []
+  enemyDataList: []
   pickupObjectList: []
-  enemiesSpawned: 0
-  spawnDelay: 0
-  maxEnemies: 6
-  maxPickups: 16
-  pickupRespawnDelay: 5
-  currentPickupQuantity: 0
-  pickupSpawnDelay: 0
-  lastPlayerLocation: {x: 0, y: 0, z: 0}
-  lastSoundLocation: {x: 0, y: 0, z: 0}
-  isAlerted: 0
+  tankObjects: []
+  tankDataList: []
+  mapGenerator: {fileID: 0}
   isRandomEnemy: 1
-  isMultiplayer: 0
-  playerCount: 0
-  playerController: {fileID: 0}
+  StartGameMenu: {fileID: 3652425878545644776}
+  pauseMenu: {fileID: 1998287555}
+  scoreWindow: {fileID: 1423402032}
+  endGame: {fileID: 1291584371}
+  adminMenu: {fileID: 978037681}
   cameraObjects:
   - {fileID: 963194225}
   - {fileID: 142327612}
   cameraComponents:
   - {fileID: 963194227}
   - {fileID: 142327614}
-  playerData: []
-  playerObjectsList: []
   hudObjects:
   - {fileID: 1998110524}
   - {fileID: 424384358}
@@ -22133,24 +22138,20 @@ MonoBehaviour:
   - {fileID: 1998110526}
   - {fileID: 424384360}
   - {fileID: 1047272717}
-  tankObjects: []
-  tankDataList: []
-  playerTankShell: {fileID: 396389110}
-  enemyTankShell: {fileID: 1049745493}
-  pickupShell: {fileID: 1551509411}
-  killMultiplier: 2
   playerRespawnDelay: 3
-  gameState: pregame
-  StartGameMenu: {fileID: 3652425878545644776}
-  pauseMenu: {fileID: 1998287555}
+  playersCreated: 0
+  playersAlive: 0
+  enemiesSpawned: 0
+  spawnDelay: 0
+  maxEnemies: 6
+  maxPickups: 16
+  pickupRespawnDelay: 5
+  currentPickupQuantity: 0
+  pickupSpawnDelay: 0
   soundManager: {fileID: 0}
   asMusic: {fileID: 0}
   asSFX: {fileID: 0}
-  isPreviousGame: 0
-  isPlayerOneDead: 0
-  isPlayerTwoDead: 0
-  scoreWindow: {fileID: 1423402032}
-  endGame: {fileID: 1291584371}
+  scoreManager: {fileID: 0}
   highScores:
   - savedScore: 0
     savedPlayerName: Default Player
@@ -22174,7 +22175,15 @@ MonoBehaviour:
     savedPlayerName: Default Player
   currentScores: []
   maxScores: 10
-  scoreManager:
-    savedScore: 0
-    savedPlayerName: Default Player
-  adminMenu: {fileID: 978037681}
+  killMultiplier: 2
+  lastPlayerLocation: {x: 0, y: 0, z: 0}
+  lastSoundLocation: {x: 0, y: 0, z: 0}
+  isAlerted: 0
+  isMultiplayer: 0
+  isPreviousGame: 0
+  isPlayerOneDead: 0
+  isPlayerTwoDead: 0
+  isGameReady: 0
+  playerTankShell: {fileID: 396389110}
+  enemyTankShell: {fileID: 1049745493}
+  pickupShell: {fileID: 1551509411}

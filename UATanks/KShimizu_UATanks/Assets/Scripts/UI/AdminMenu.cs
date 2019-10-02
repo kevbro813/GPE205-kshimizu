@@ -15,7 +15,7 @@ public class AdminMenu : MonoBehaviour
     {
         ResetScores();
         ResetPlayerPrefs();
-        GameManager.instance.InitializeValues();
+        GameManager.instance.scoreManager.InitializeValues();
     }
     // Reset PlayerPrefs
     public void ResetPlayerPrefs()

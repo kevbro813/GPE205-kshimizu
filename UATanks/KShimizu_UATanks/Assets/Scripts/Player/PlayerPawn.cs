@@ -39,10 +39,7 @@ public class PlayerPawn : TankPawn
         // If the player is out of lives, destroy the player object
         else
         {
-            GameManager.instance.tankObjects.Remove(this.gameObject); // Remove tank from active enemies list
-            GameManager.instance.tankDataList.Remove(this.gameObject.GetComponent<PlayerData>()); // Remove tank from active enemies list
-            GameManager.instance.playerObjectsList.Remove(this.gameObject); // Remove tank from active enemies list
-            GameManager.instance.playerData.Remove(this.gameObject.GetComponent<PlayerData>()); // Remove tank from active enemies list
+            GameManager.instance.playersAlive--; // Reduce playersAlive to use in game state transitions
             // Set isPlayerDead boolean based on which player tank is destroyed
             if (playerData.playerIndex == 0)
             {
@@ -60,7 +57,7 @@ public class PlayerPawn : TankPawn
         yield return new WaitForSeconds(GameManager.instance.playerRespawnDelay);
         if (tf != null)
         {
-            // Reset all powerups
+            // Reset all powerups, health and ammo
             playerData.isInvisible = false;
             playerData.isInfiniteAmmo = false;
             playerData.isInvulnerable = false;

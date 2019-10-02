@@ -226,6 +226,7 @@ public void DoIdle()
             enemyPawn.isInvestigating = false;
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
+            enemyPawn.atAlertLocation = false;
             ChangeState(AIState.Patrol); // Change to Patrol state
         }
     }
@@ -235,15 +236,17 @@ public void DoIdle()
         // If the player is seen...
         if (aiVision.CanSee(GameManager.instance.playerObjectsList) == true)
         {
+            // Set alert variables to make AI tanks stop when they see the player, rather than continuing to run into the player
+            enemyPawn.atAlertLocation = true;
+            enemyPawn.isAlertActive = false;
             // If the player is in attack range...
             if (aiVision.AttackRange(aiVision.targetDistance) == true)
             {
+                ChangeState(AIState.Attack); // Change to Attack State
                 // Reset boolean variables in case they are still true after a state change
                 enemyPawn.isInvestigating = false;
                 enemyPawn.isSearching = false;
                 enemyPawn.atWaypoint = false;
-                enemyPawn.isAlertActive = false;
-                ChangeState(AIState.Attack); // Change to Attack State
             }
         }
     }
@@ -259,6 +262,7 @@ public void DoIdle()
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
             enemyPawn.isAlertActive = false;
+            enemyPawn.atAlertLocation = false;
             ChangeState(AIState.Flee); // Change to Flee State
         }
     }
@@ -275,6 +279,7 @@ public void DoIdle()
             enemyPawn.atWaypoint = false;
             enemyPawn.atSearchLocation = false;
             enemyPawn.isAlertActive = false;
+            enemyPawn.atAlertLocation = false;
             ChangeState(AIState.Search); // Change to Search State
         }
     }
@@ -291,6 +296,7 @@ public void DoIdle()
             enemyPawn.atWaypoint = false;
             enemyPawn.atInvestigateLocation = false;
             enemyPawn.isAlertActive = false;
+            enemyPawn.atAlertLocation = false;
             ChangeState(AIState.Investigate); // Change to Investigate State
         }
     }
@@ -308,6 +314,7 @@ public void DoIdle()
                 enemyPawn.isSearching = false;
                 enemyPawn.atWaypoint = false;
                 enemyPawn.isAlertActive = false;
+                enemyPawn.atAlertLocation = false;
                 ChangeState(AIState.Pursue); // Change to Pursue State
             }
         }
@@ -320,6 +327,7 @@ public void DoIdle()
         enemyPawn.isSearching = false;
         enemyPawn.atWaypoint = false;
         enemyPawn.isAlertActive = false;
+        enemyPawn.atAlertLocation = false;
         // Do nothing for now
     }
     public void TransitionAlerted()

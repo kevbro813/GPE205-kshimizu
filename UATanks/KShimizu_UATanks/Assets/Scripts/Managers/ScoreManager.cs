@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// Manages player scoring using IComparable
 [System.Serializable]
 public class ScoreManager : IComparable<ScoreManager>
 {
     public float savedScore;
     public string savedPlayerName;
+
+    // Default ScoreManager
     public ScoreManager()
     {
         savedScore = 0;
         savedPlayerName = "Player";
     }
+    // Compare score to other scores
     public int CompareTo(ScoreManager other)
     {
         if (other == null)
@@ -29,6 +33,7 @@ public class ScoreManager : IComparable<ScoreManager>
         }
         return 0;
     }
+    // Copy score to component
     public void CopyFrom(ScoreManager sm)
     {
         savedScore = sm.savedScore;

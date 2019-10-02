@@ -35,12 +35,12 @@ public class CannonShell : MonoBehaviour
                 enemyData.tankHealth -= tankData.shellDamage; // Deal damage
                 if (enemyData.tankHealth > 0)
                 {
-                    GameManager.instance.soundManager.SoundTankHit();
+                    GameManager.instance.soundManager.SoundTankHit(); // Play sound when tank is hit
                     tankData.score += enemyData.pointValue;
                 }
                 else if (enemyData.tankHealth <= 0)
                 {
-                    tankData.score += (int)(enemyData.pointValue * GameManager.instance.killMultiplier);
+                    tankData.score += (int)(enemyData.pointValue * GameManager.instance.killMultiplier); // Add score multiplier for destroying tank
                     // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
                     col.gameObject.GetComponent<EnemyPawn>().TankDestroyed(); 
                 }   
@@ -61,12 +61,12 @@ public class CannonShell : MonoBehaviour
                 
                 if (playerData.tankHealth > 0)
                 {
-                    GameManager.instance.soundManager.SoundTankHit();
+                    GameManager.instance.soundManager.SoundTankHit(); // Play sound when tank is hit
                     tankData.score += playerData.pointValue;
                 }
                 else if (playerData.tankHealth <= 0)
                 {
-                    tankData.score += (int)(playerData.pointValue * GameManager.instance.killMultiplier);
+                    tankData.score += (int)(playerData.pointValue * GameManager.instance.killMultiplier); // Add score multiplier for destroying tank
                     // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
                     col.gameObject.GetComponent<PlayerPawn>().TankDestroyed();
                 }

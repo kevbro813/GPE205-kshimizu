@@ -20,8 +20,9 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        if (playerData != null)
+        if (playerData != null) // Check that playerData List does not return null
         {
+            // Player one controls
             if (playerData.playerIndex == 0)
             {
                 // Set variable for vertical and horizontal inputs
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
                     playerPawn.SingleCannonFire();
                 }
             }
+            // Player two controls
             else if (playerData.playerIndex == 1)
             {
                 // Set variable for vertical and horizontal inputs

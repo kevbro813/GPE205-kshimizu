@@ -8,7 +8,6 @@ public class TitleMenu : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene(1);
-        GameManager.instance.gameState = "resumegame";
     }
     public void QuitGame()
     {

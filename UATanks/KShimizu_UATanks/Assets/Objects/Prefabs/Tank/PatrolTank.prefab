@@ -406,6 +406,7 @@ MonoBehaviour:
   tankData: {fileID: 0}
   characterController: {fileID: 0}
   cannonSource: {fileID: 215966559274695101}
+  meshRenderer: []
   enemyData: {fileID: 0}
   aiVision: {fileID: 0}
   aiHearing: {fileID: 0}
@@ -448,10 +449,12 @@ MonoBehaviour:
   tankIndex: 0
   score: 0
   pointValue: 100
+  healthPercent: 0
+  reloadTimer: 0
   fieldOfView: 60
   maxViewDistance: 7
   maxAttackRange: 5
-  hearingRadius: 5
+  hearingRadius: 4
   waitDuration: 1
   waypointRange: 1
   searchDuration: 5
@@ -761,6 +764,8 @@ MonoBehaviour:
   projectile: {fileID: 3947461257369364715, guid: 385333c185401f448ae46af2bd73d42d,
     type: 3}
   tankData: {fileID: 0}
+  lastCannonFire: 0
+  cannonLoaded: 1
 --- !u!1 &7323303834225097402
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,24 +14,36 @@ public class PlayerPawn : TankPawn
         characterController = GetComponent<CharacterController>();
         playerData = GetComponent<PlayerData>();
         tf = GetComponent<Transform>();
+        meshRenderer = GetComponentsInChildren<MeshRenderer>();
+        tankCollider = GetComponent<SphereCollider>();
     }
     public override void TankDestroyed()
     {
-        StartCoroutine(RespawnPlayer());
         // Reset player tank
-        playerData.tankHealth = playerData.maxTankHealth;
-        playerData.currentAmmo = playerData.maxAmmo;
-        playerData.isInvisible = false;
-        playerData.isInvulnerable = true;
-        playerData.isInfiniteAmmo = false;
-        playerData.playerLives--; // Deduct one life
+        playerData.isInvulnerable = true; // Player tank cannot take damage
+        playerData.isInvisible = true; // Make player tank invisible to AI
+
+        // Make player tank invisible by disabling the mesh renderer
+        foreach (MeshRenderer mesh in meshRenderer)
+        {
+            mesh.enabled = false;
+        }
+        playerController.enabled = false; // Disable the playerController
+
+        // If the player still has lives remaining...
+        if (playerData.playerLives > 0)
+        {
+            StartCoroutine(RespawnPlayer()); // Respawn player
+            playerData.playerLives--; // Deduct one life
+        }
         // If the player is out of lives, destroy the player object
-        if (playerData.playerLives < 0)
+        else
         {
             GameManager.instance.tankObjects.Remove(this.gameObject); // Remove tank from active enemies list
             GameManager.instance.tankDataList.Remove(this.gameObject.GetComponent<PlayerData>()); // Remove tank from active enemies list
             GameManager.instance.playerObjectsList.Remove(this.gameObject); // Remove tank from active enemies list
             GameManager.instance.playerData.Remove(this.gameObject.GetComponent<PlayerData>()); // Remove tank from active enemies list
+            // Set isPlayerDead boolean based on which player tank is destroyed
             if (playerData.playerIndex == 0)
             {
                 GameManager.instance.isPlayerOneDead = true;
@@ -40,21 +52,34 @@ public class PlayerPawn : TankPawn
             {
                 GameManager.instance.isPlayerTwoDead = true;
             }
-            Destroy(this.gameObject);
-            // TODO: Once game states has been completed, this should send the player to the "Lose" screen
         }
     }
+    // Coroutine to respawn player after a set duration (playerRespawnDelay)
     public IEnumerator RespawnPlayer()
     {
         yield return new WaitForSeconds(GameManager.instance.playerRespawnDelay);
         if (tf != null)
         {
+            // Reset all powerups
+            playerData.isInvisible = false;
+            playerData.isInfiniteAmmo = false;
+            playerData.isInvulnerable = false;
+            playerData.tankHealth = playerData.maxTankHealth;
+            playerData.currentAmmo = playerData.maxAmmo;
+
+            // Make the tank visible
+            foreach (MeshRenderer mesh in meshRenderer)
+            {
+                mesh.enabled = true;
+            }
+            playerController.enabled = true; // Activate the playerController to allow inputs
+
             // Generate random spawnpoint from list
             Transform spawnPoint = GameManager.instance.playerSpawnsList[Random.Range(0, GameManager.instance.playerSpawnsList.Count)];
             // Spawn player in new spawnpoint
             tf.position = spawnPoint.position;
-            playerData.isInvulnerable = false;
-            GameManager.instance.activePlayerSpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
+
+            GameManager.instance.playerSpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
         }
     }
     // TODO: Rotate tank turret using mouse

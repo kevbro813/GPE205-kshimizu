@@ -5,11 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
+// Pause menu that allows players to adjust volume, save and load settings
 public class PauseMenu : MonoBehaviour
 {
     public Slider musicSlider;
     public Slider sfxSlider;
 
+    // Sliders that will adjust music and sound effects volume, respectively
     public void MusicSlider()
     {
         GameManager.instance.soundManager.SetMusicVolume(musicSlider.value);
@@ -18,6 +20,8 @@ public class PauseMenu : MonoBehaviour
     {
         GameManager.instance.soundManager.SetSFXVolume(sfxSlider.value);
     }
+
+    // Save and Load volume settings
     public void Save()
     {
         GameManager.instance.soundManager.SoundMenuButton();
@@ -30,6 +34,8 @@ public class PauseMenu : MonoBehaviour
         musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
     }
+
+    // Menu buttons
     public void Resume()
     {
         GameManager.instance.soundManager.SoundMenuButton();
@@ -40,7 +46,7 @@ public class PauseMenu : MonoBehaviour
     {
         GameManager.instance.soundManager.SoundMenuButton();
         Save();
-        GameManager.instance.gameState = "menu";
+        GameManager.instance.gameState = "title";
     }
     public void Quit()
     {
@@ -49,6 +55,6 @@ public class PauseMenu : MonoBehaviour
     }
     public void OnApplicationQuit()
     {
-        Save();
+        Save(); // Save settings if the player quits the game
     }
 }

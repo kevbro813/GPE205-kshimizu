@@ -39,11 +39,12 @@ public class HUD : MonoBehaviour
     {
         if (playerData != null)
         {
-            playerName.text = playerData.playerName;
-            healthBar.fillAmount = playerData.healthPercent;
-            scoreValue.text = playerData.score.ToString(); // Display the score on the HUD
-            coinAmount.text = playerData.coins.ToString(); // Display the coin on the HUD
-            reloadTimer.fillAmount = playerData.reloadTimer;
+            playerName.text = playerData.playerName; // Display player name
+            healthBar.fillAmount = playerData.healthPercent; // Update health bar
+            scoreValue.text = playerData.score.ToString(); // Update the score on the HUD
+            coinAmount.text = playerData.coins.ToString(); // Update the coin on the HUD
+            reloadTimer.fillAmount = playerData.reloadTimer; // Update reload timer
+
             // Set Invisibility Icon visibility
             if (playerData.isInvisible == true)
             {
@@ -53,6 +54,7 @@ public class HUD : MonoBehaviour
             {
                 SetIconTranslucent(invisibilityIcon);
             }
+
             // Set Invulnerability Icon visibility
             if (playerData.isInvulnerable == true)
             {
@@ -62,6 +64,7 @@ public class HUD : MonoBehaviour
             {
                 SetIconTranslucent(invulnerabilityIcon);
             }
+
             // Set Infinite Ammo Icon visibility
             if (playerData.isInfiniteAmmo == true)
             {
@@ -71,6 +74,7 @@ public class HUD : MonoBehaviour
             {
                 SetIconTranslucent(infiniteAmmoIcon);
             }
+
             // Tracks Ammo count visually
             if (playerData.currentAmmo == 5)
             {
@@ -120,6 +124,7 @@ public class HUD : MonoBehaviour
                 SetIconTranslucent(tankRoundFour);
                 SetIconTranslucent(tankRoundFive);
             }
+
             // Player lives updates visually
             if (playerData.playerLives == 3)
             {
@@ -147,6 +152,8 @@ public class HUD : MonoBehaviour
             }
         }
     }
+
+    // Set icons to opaque or translucent (indicates whether powerups are active)
     private void SetIconVisible(Image image)
     {
         Color color = image.color;

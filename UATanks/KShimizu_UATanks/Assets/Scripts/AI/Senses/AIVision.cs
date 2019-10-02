@@ -17,7 +17,7 @@ public class AIVision : MonoBehaviour
     }
     public bool CanSee(List<GameObject> target)
     {
-        foreach (GameObject player in target)
+        foreach (GameObject player in target) // Loops through and checks for all player game objects
         {
             ttf = player.GetComponent<Transform>(); // Get target transform component
 
@@ -51,7 +51,7 @@ public class AIVision : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Player") && hit.collider.gameObject.GetComponent<PlayerData>().isInvisible == true)
                     {
-                        Debug.Log("Player is invisible");
+                        // TODO: Indication that player is invisible
                     }
                 }
             }

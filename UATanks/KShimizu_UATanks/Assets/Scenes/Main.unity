@@ -12682,7 +12682,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1326208304}
-  - component: {fileID: 8257454608668441254}
   - component: {fileID: 8257454608668441255}
   - component: {fileID: 1326208305}
   - component: {fileID: 1326208306}
@@ -22043,21 +22042,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8257454608668441254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1326208303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f1b06092da73f44c8fc4cd963a2f6ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPawn: {fileID: 0}
-  playerData: {fileID: 0}
-  mousePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &8257454608668441255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22122,7 +22106,7 @@ MonoBehaviour:
   enemiesSpawned: 0
   spawnDelay: 0
   maxEnemies: 6
-  maxPickups: 17
+  maxPickups: 16
   pickupRespawnDelay: 5
   currentPickupQuantity: 0
   pickupSpawnDelay: 0
@@ -22155,8 +22139,7 @@ MonoBehaviour:
   enemyTankShell: {fileID: 1049745493}
   pickupShell: {fileID: 1551509411}
   killMultiplier: 2
-  activePlayerSpawnsList: []
-  playerRespawnDelay: 1
+  playerRespawnDelay: 3
   gameState: pregame
   StartGameMenu: {fileID: 3652425878545644776}
   pauseMenu: {fileID: 1998287555}

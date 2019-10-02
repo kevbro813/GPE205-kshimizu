@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// End game screen, shows high scores and indicates which player won the game
 public class EndGame : MonoBehaviour
 {
+    // Current player name and scores
     public Text playerOneName;
     public Text playerTwoName;
     public Text playerOneScore;
     public Text playerTwoScore;
 
+    // Text variables for names and high scores
     public Text highScoreOneName;
     public Text highScoreTwoName;
     public Text highScoreThreeName;
@@ -31,18 +34,20 @@ public class EndGame : MonoBehaviour
     public Text highScoreNineScore;
     public Text highScoreTenScore;
 
-    public Text Winner;
+    public Text Winner; // Text that displays the winner
 
     private void Update()
     {
-        if (GameManager.instance.isMultiplayer == true)
+        if (GameManager.instance.isMultiplayer == true) // Check multiplayer
         {
+            // Display current players' scores and names
             playerOneName.text = GameManager.instance.playerData[0].playerName;
             playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
             playerTwoName.text = GameManager.instance.playerData[1].playerName;
             playerTwoScore.text = GameManager.instance.playerData[1].score.ToString();
 
-            if (GameManager.instance.activeEnemiesList.Count == 0)
+            // Logic to display winners and losers (Checks player scores against each other)
+            if (GameManager.instance.activeEnemiesList.Count == 0) // Check if all enemy AI are dead
             {
                 if (GameManager.instance.playerData[0].score > GameManager.instance.playerData[1].score)
                 {
@@ -62,14 +67,15 @@ public class EndGame : MonoBehaviour
                 Winner.text = "Both Players Lose...";
             }
         }
-        else
+        else // Singleplayer
         {
+            // Display current players' scores and names
             playerOneName.text = GameManager.instance.playerData[0].playerName;
             playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
             playerTwoName.text = "";
             playerTwoScore.text = "";
-
-            if (GameManager.instance.activeEnemiesList.Count == 0)
+            // Win logic
+            if (GameManager.instance.activeEnemiesList.Count == 0) // If all enemies are dead...
             {
                 Winner.text = GameManager.instance.playerData[0].playerName + " Wins!";
             }
@@ -79,6 +85,7 @@ public class EndGame : MonoBehaviour
             }
         }
 
+        // HighScores names and scores
         highScoreOneName.text = GameManager.instance.highScores[0].savedPlayerName;
         highScoreOneScore.text = GameManager.instance.highScores[0].savedScore.ToString();
         highScoreTwoName.text = GameManager.instance.highScores[1].savedPlayerName;
@@ -100,10 +107,12 @@ public class EndGame : MonoBehaviour
         highScoreTenName.text = GameManager.instance.highScores[9].savedPlayerName;
         highScoreTenScore.text = GameManager.instance.highScores[9].savedScore.ToString();
     }
+
+    // Buttons functions
     public void Menu()
     {
         GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "menu";
+        GameManager.instance.gameState = "title";
     }
     public void Quit()
     {

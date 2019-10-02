@@ -474,6 +474,7 @@ MonoBehaviour:
   tankData: {fileID: 0}
   characterController: {fileID: 0}
   cannonSource: {fileID: 0}
+  meshRenderer: []
   playerController: {fileID: 0}
   playerData: {fileID: 0}
 --- !u!114 &5026310254686490260

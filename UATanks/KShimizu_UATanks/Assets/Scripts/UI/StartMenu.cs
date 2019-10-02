@@ -71,11 +71,13 @@ public class StartMenu : MonoBehaviour
             GameManager.instance.isRandomEnemy = false;
         }
     }
+    // Set the size of the map
     public void SetMapSize()
     {
         GameManager.instance.mapGenerator.tileColumns = (int)columnSlider.value;
         GameManager.instance.mapGenerator.tileRows = (int)rowSlider.value;
     }
+    // Determine if the game is multiplayer
     public void ToggleMultiplayer()
     {
         if (multiplayer.isOn == true)
@@ -87,6 +89,7 @@ public class StartMenu : MonoBehaviour
             GameManager.instance.isMultiplayer = false;
         }
     }
+    // Set player names to the names entered into the input field
     public void SetPlayerNames()
     {
         if (multiplayer.isOn == true)
@@ -124,7 +127,7 @@ public class StartMenu : MonoBehaviour
     public void BeginGame()
     {
         GameManager.instance.soundManager.SoundMenuButton();
-        if (GameManager.instance.isPreviousGame == false)
+        if (GameManager.instance.isPreviousGame == false) // Check if there is an active game, if not then...
         {
             this.gameObject.SetActive(false);
             SetMapType();
@@ -137,7 +140,7 @@ public class StartMenu : MonoBehaviour
             GameManager.instance.gameState = "active";
             SetPlayerNames();
         }
-        else
+        else // If there is an active game...
         {
             this.gameObject.SetActive(false);
             GameManager.instance.soundManager.PlayMusic();

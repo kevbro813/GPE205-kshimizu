@@ -9,12 +9,15 @@ public abstract class TankPawn : MonoBehaviour
     public TankData tankData;
     public CharacterController characterController;
     public CannonSource cannonSource; // Component on child object that will instantiate the projectile
+    public MeshRenderer[] meshRenderer;
+    public SphereCollider tankCollider;
 
     public virtual void Start()
     {
         tankData = GetComponent<TankData>();
         tf = GetComponent<Transform>();
         cannonSource = GetComponentInChildren<CannonSource>();
+        meshRenderer = GetComponentsInChildren<MeshRenderer>();
     }
     // Method to check if tank is out of health and destroys the tank if tankHealth <= 0
     public virtual void TankDestroyed()
@@ -52,7 +55,6 @@ public abstract class TankPawn : MonoBehaviour
     // Set tank to translucent on screen
     public void SetInvisible()
     {
-        MeshRenderer[] meshRenderer = GetComponentsInChildren<MeshRenderer>();
         // Loop through all MeshRenderer components in children to make translucent
         foreach (MeshRenderer mesh in meshRenderer)
         {
@@ -64,7 +66,6 @@ public abstract class TankPawn : MonoBehaviour
     // Set tank to opaque on screen
     public void SetVisible()
     {
-        MeshRenderer[] meshRenderer = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer mesh in meshRenderer)
         {
             Color color = mesh.material.color;

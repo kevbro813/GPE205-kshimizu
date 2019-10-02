@@ -41,7 +41,9 @@ public class CannonSource : MonoBehaviour
                 // Create a projectile instance
                 GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
                 GameManager.instance.soundManager.SoundFireCannon();
-                projectileClone.GetComponent<CannonShell>().originTankIndex = tankData.tankIndex;
+
+                // CAN BE USED IN THE FUTURE TO TRACK WHO SHOT PROJECTILE
+                // projectileClone.GetComponent<CannonShell>().originTankIndex = tankData.tankIndex; 
 
                 // Destroy the projectileClone after a set duration
                 if (projectile != null)

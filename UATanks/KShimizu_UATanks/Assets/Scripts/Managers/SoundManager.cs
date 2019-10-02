@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Sound manager manages all SFX and music
 public class SoundManager : MonoBehaviour
 {
     public GameObject sfxOrigin;
     public GameObject musicOrigin;
-    public AudioSource asSFX;
-    public AudioSource asMusic;
 
+    // Using two audio sources to play music and sound effects simultaneously
+    public AudioSource asSFX; // SFX audio source
+    public AudioSource asMusic; // Music audio source
+
+    // List of audio clips (Set in inspector)
     public AudioClip inGameMusic;
     public AudioClip fireCannon;
     public AudioClip tankDestroyed;
@@ -24,6 +28,7 @@ public class SoundManager : MonoBehaviour
         asSFX = GameManager.instance.asSFX;
         asMusic = GameManager.instance.asMusic;
     }
+    // Functions to set Music and SFX volume
     public void SetMusicVolume(float volume)
     {
         asMusic.volume = volume;
@@ -32,6 +37,8 @@ public class SoundManager : MonoBehaviour
     {
         asSFX.volume = volume;
     }
+
+    // Play and pause game music functions
     public void PlayMusic()
     {
         asMusic.clip = inGameMusic;
@@ -41,6 +48,8 @@ public class SoundManager : MonoBehaviour
     {
         asMusic.Pause();
     }
+
+    // Play SFX
     public void SoundFireCannon()
     {
         asSFX.clip = fireCannon;

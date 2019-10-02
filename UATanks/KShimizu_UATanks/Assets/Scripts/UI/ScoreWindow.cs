@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Manages the score window
 public class ScoreWindow : MonoBehaviour
 {
+    // Current player name and scores
     public Text playerOneName;
     public Text playerTwoName;
     public Text playerOneScore;
     public Text playerTwoScore;
 
-    public ScoreManager scoreManager;
-    public Text highScoreText;
-    public Text highPlayerText;
-    public Text[] highScores;
-    public Text[] highScoreNames;
+    public ScoreManager scoreManager; // Score Manager component
 
+    // Text variables for names and high scores
     public Text highScoreOneName;
     public Text highScoreTwoName;
     public Text highScoreThreeName;
@@ -39,21 +38,26 @@ public class ScoreWindow : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.isMultiplayer == true)
+        
+        if (GameManager.instance.isMultiplayer == true) // If multiplayer...
         {
+            // Display current players' scores
             playerOneName.text = GameManager.instance.playerData[0].playerName;
             playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
             playerTwoName.text = GameManager.instance.playerData[1].playerName;
             playerTwoScore.text = GameManager.instance.playerData[1].score.ToString();
         }
-        else
+        else // If singleplayer...
         {
+            // Display current player score
             playerOneName.text = GameManager.instance.playerData[0].playerName;
             playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
+            // Do not show player two score
             playerTwoName.text = "";
             playerTwoScore.text = "";
         }
 
+        // HighScores names and scores
         highScoreOneName.text = GameManager.instance.highScores[0].savedPlayerName;
         highScoreOneScore.text = GameManager.instance.highScores[0].savedScore.ToString();
         highScoreTwoName.text = GameManager.instance.highScores[1].savedPlayerName;
@@ -75,19 +79,20 @@ public class ScoreWindow : MonoBehaviour
         highScoreTenName.text = GameManager.instance.highScores[9].savedPlayerName;
         highScoreTenScore.text = GameManager.instance.highScores[9].savedScore.ToString();
     }
+    // Buttons functions
     public void Resume()
     {
-        GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "active";
+        GameManager.instance.soundManager.SoundMenuButton(); // Play sound when button is selected
+        GameManager.instance.gameState = "active"; // Set to active state
     }
     public void Menu()
     {
         GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "menu";
+        GameManager.instance.gameState = "title"; // Open title screen
     }
     public void Quit()
     {
         GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "quit";
+        GameManager.instance.gameState = "quit"; // Quit game
     }
 }

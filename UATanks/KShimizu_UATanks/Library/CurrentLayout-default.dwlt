@@ -432,7 +432,7 @@ MonoBehaviour:
     m_ControlHash: 1412526313
     m_PrefName: Preview_InspectorPreview
   m_PreviewWindow: {fileID: 0}
-  m_LastInspectedObjectInstanceID: 27478
+  m_LastInspectedObjectInstanceID: 13418
   m_LastVerticalScrollValue: 0
 --- !u!114 &18
 MonoBehaviour:
@@ -551,9 +551,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 670.25, y: 382.4675, z: 25}
+    m_Target: {x: 683, y: 384.51752, z: 0}
     speed: 2
-    m_Value: {x: 670.25, y: 382.4675, z: 25}
+    m_Value: {x: 683, y: 384.51752, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -582,13 +582,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.35193706, y: -0.22335273, z: 0.08702481, w: -0.9053166}
+    m_Target: {x: -0.19265525, y: 0.018727066, z: -0.0035224287, w: -0.9815492}
     speed: 2
-    m_Value: {x: -0.35193703, y: -0.22335273, z: 0.0870248, w: -0.9053166}
+    m_Value: {x: -0.19265525, y: 0.018727066, z: -0.0035224287, w: -0.98154926}
   m_Size:
-    m_Target: 2633.4473
+    m_Target: 2588.1611
     speed: 2
-    m_Value: 2633.4473
+    m_Value: 2588.1611
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 38280000
+      m_SelectedIDs: 
       m_LastClickedID: 0
       m_ExpandedIDs: 6efbffff
       m_RenameOverlay:
@@ -776,7 +776,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000782b0000705100007e340000343501003c350100382e0000662b0200b23900006634000074e50000864300009a2e00006444000024690000a29b0000a09f00005ed10000864c0000b2660000685600005a4d00000a7b000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -932,7 +932,7 @@ MonoBehaviour:
     m_PrefName: Preview_InspectorPreview
   m_PreviewWindow: {fileID: 0}
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 0
+  m_LastVerticalScrollValue: 133
 --- !u!114 &25
 MonoBehaviour:
   m_ObjectHideFlags: 52

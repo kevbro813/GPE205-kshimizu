@@ -41,12 +41,12 @@ public class ScoreManager : MonoBehaviour
     public void SetScores()
     {
         // Loop through active playerData and add playerName and scores to currentScores (needed to use scoreManager)
-        for (int i = 0; i < GameManager.instance.playerData.Count; i++)
+        for (int i = 0; i < GameManager.instance.playerDataList.Count; i++)
         {
             ScoreData sd = new ScoreData();
             GameManager.instance.currentScores.Add(sd);
-            GameManager.instance.currentScores[i].savedScore = GameManager.instance.playerData[i].score;
-            GameManager.instance.currentScores[i].savedPlayerName = GameManager.instance.playerData[i].playerName;
+            GameManager.instance.currentScores[i].savedScore = GameManager.instance.playerDataList[i].score;
+            GameManager.instance.currentScores[i].savedPlayerName = GameManager.instance.playerDataList[i].playerName;
         }
         // Loop through currentScores and add them to the list of high scores
         for (int j = 0; j < GameManager.instance.currentScores.Count; j++)
@@ -74,7 +74,6 @@ public class ScoreManager : MonoBehaviour
         string key;
         for (int i = 0; i < GameManager.instance.maxScores; i++)
         {
-            Debug.Log("Loading Player Scores");
             ScoreData sd = new ScoreData();
             key = "Score" + i.ToString();
             if (PlayerPrefs.HasKey(key))

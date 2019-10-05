@@ -31,6 +31,7 @@ public class GuardController : EnemyController
             }
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
+            AlertAllies();
         }
         // ATTACK STATE
         if (aiState == AIState.Attack)
@@ -38,7 +39,7 @@ public class GuardController : EnemyController
             DoAttack();
 
             // Alert other enemy tanks with the player's location
-            GameManager.instance.isAlerted = true;
+            AlertAllies();
 
             // If nothing is found return to "patrol"
             TransitionPatrol();
@@ -55,6 +56,7 @@ public class GuardController : EnemyController
             }
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
+            AlertAllies();
         }
         // OBSTACLE AVOIDANCE STATE
         if (aiState == AIState.Avoidance)

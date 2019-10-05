@@ -164,6 +164,10 @@ public class EnemyController : AIController
         {
             enemyPawn.SetVisible();
         }
+        if (enemyData.tankHealth < enemyData.criticalHealth)
+        {
+            enemyPawn.TankSmoking();
+        }
     }
 // CALLS ENEMY PAWN FUNCTIONS
 public void DoIdle()
@@ -196,6 +200,7 @@ public void DoIdle()
     }
     public void DoObstacleAvoidance()
     {
+        Debug.Log("Obstacle Avoidance");
         enemyPawn.ObstacleAvoidance(enemyPawn.obstacleHit);
     }
     public void DoAlerted()
@@ -220,13 +225,15 @@ public void DoIdle()
     public void TransitionPatrol()
     {
         // If the player is not seen or heard...
-        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == false && enemyData.canHear == false)
+        if (aiVision.CanSee(GameManager.instance.activePlayersList) == false && enemyData.canHear == false)
         {
+            GameManager.instance.isAlerted = false;
             // Reset boolean variables in case they are still true after a state change
             enemyPawn.isInvestigating = false;
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
             enemyPawn.atAlertLocation = false;
+            enemyPawn.atSearchLocation = false;
             ChangeState(AIState.Patrol); // Change to Patrol state
         }
     }
@@ -234,7 +241,7 @@ public void DoIdle()
     public void TransitionAttack()
     {
         // If the player is seen...
-        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == true)
+        if (aiVision.CanSee(GameManager.instance.activePlayersList) == true)
         {
             // Set alert variables to make AI tanks stop when they see the player, rather than continuing to run into the player
             enemyPawn.atAlertLocation = true;
@@ -247,6 +254,8 @@ public void DoIdle()
                 enemyPawn.isInvestigating = false;
                 enemyPawn.isSearching = false;
                 enemyPawn.atWaypoint = false;
+                enemyPawn.atAlertLocation = false;
+                enemyPawn.atSearchLocation = false;
             }
         }
     }
@@ -263,6 +272,7 @@ public void DoIdle()
             enemyPawn.atWaypoint = false;
             enemyPawn.isAlertActive = false;
             enemyPawn.atAlertLocation = false;
+            enemyPawn.atSearchLocation = false;
             ChangeState(AIState.Flee); // Change to Flee State
         }
     }
@@ -270,16 +280,16 @@ public void DoIdle()
     public void TransitionSearch()
     {
         // If the player is no longer seen...
-        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == false)
+        if (aiVision.CanSee(GameManager.instance.activePlayersList) == false)
         {
             // isSearching must be true to run Search method, set once during transition
             enemyPawn.isSearching = true;
             // Reset boolean variables in case they are still true after a state change
             enemyPawn.isInvestigating = false;
-            enemyPawn.atWaypoint = false;
-            enemyPawn.atSearchLocation = false;
             enemyPawn.isAlertActive = false;
             enemyPawn.atAlertLocation = false;
+            enemyPawn.atWaypoint = false;
+            enemyPawn.atSearchLocation = false;
             ChangeState(AIState.Search); // Change to Search State
         }
     }
@@ -287,7 +297,7 @@ public void DoIdle()
     public void TransitionInvestigate()
     {
         // If the player is not seen, but heard...
-        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == false && enemyData.canHear == true)
+        if (aiVision.CanSee(GameManager.instance.activePlayersList) == false && enemyData.canHear == true)
         {
             // isInvestigating must be true to run Investigate function, set once during transition
             enemyPawn.isInvestigating = true;
@@ -297,6 +307,7 @@ public void DoIdle()
             enemyPawn.atInvestigateLocation = false;
             enemyPawn.isAlertActive = false;
             enemyPawn.atAlertLocation = false;
+            enemyPawn.atSearchLocation = false;
             ChangeState(AIState.Investigate); // Change to Investigate State
         }
     }
@@ -304,7 +315,7 @@ public void DoIdle()
     public void TransitionPursue()
     {
         // If the player is seen...
-        if (aiVision.CanSee(GameManager.instance.playerObjectsList) == true)
+        if (aiVision.CanSee(GameManager.instance.activePlayersList) == true)
         {
             // If the player is not in attack range...
             if (aiVision.AttackRange(aiVision.targetDistance) == false)
@@ -315,6 +326,7 @@ public void DoIdle()
                 enemyPawn.atWaypoint = false;
                 enemyPawn.isAlertActive = false;
                 enemyPawn.atAlertLocation = false;
+                enemyPawn.atSearchLocation = false;
                 ChangeState(AIState.Pursue); // Change to Pursue State
             }
         }
@@ -328,6 +340,7 @@ public void DoIdle()
         enemyPawn.atWaypoint = false;
         enemyPawn.isAlertActive = false;
         enemyPawn.atAlertLocation = false;
+        enemyPawn.atSearchLocation = false;
         // Do nothing for now
     }
     public void TransitionAlerted()
@@ -337,6 +350,7 @@ public void DoIdle()
         {
             // isAlertActive must be true to run Alerted function, set once during transition
             enemyPawn.isAlertActive = true;
+            enemyPawn.atAlertLocation = false;
 
             tempState = aiState; // Save the current state
 
@@ -344,14 +358,16 @@ public void DoIdle()
             enemyPawn.isInvestigating = false;
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
+            enemyPawn.atSearchLocation = false;
             ChangeState(AIState.Alerted); // Change to Pursue State
         }
-        if (GameManager.instance.isAlerted == false && enemyPawn.isAlertActive == true)
+        if (GameManager.instance.isAlerted == false && aiState == AIState.Alerted)
         {
             enemyPawn.isAlertActive = false;
             enemyPawn.isInvestigating = false;
             enemyPawn.isSearching = false;
             enemyPawn.atWaypoint = false;
+            enemyPawn.atSearchLocation = false;
             ChangeState(AIState.Patrol); // Return AI to patrol
         }
     }
@@ -360,5 +376,12 @@ public void DoIdle()
     {
         aiState = newState; // Set aiState to the new state
         stateEnterTime = Time.time; // Log the time the state change occurred
+    }
+    public void AlertAllies()
+    {
+        if (aiVision.CanSee(GameManager.instance.activePlayersList))
+        {
+            enemyPawn.AlertAllies();
+        }
     }
 }

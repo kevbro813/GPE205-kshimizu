@@ -26,11 +26,12 @@ public class CaptainController : EnemyController
             // Check if player is in senseRange (AI is blind and deaf while patrolling, unless the player is within "sensory range." This is done to manage resources
             if (sensoryRange.inSenseRange == true)
             {
-                // If the player is heard while searching, transition to investigate (go to sound origin)
+                // If the player is heard while searching, transition to investigate (turn towards sound origin)
                 TransitionInvestigate();
             }
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
+            AlertAllies();
         }
         // INVESTIGATE STATE
         if (aiState == AIState.Investigate)
@@ -44,6 +45,7 @@ public class CaptainController : EnemyController
             }
             // If the player is seen and in firing range, transition to attack
             TransitionAttack();
+            AlertAllies();
         }
         // ATTACK STATE
         if (aiState == AIState.Attack)
@@ -51,7 +53,7 @@ public class CaptainController : EnemyController
             DoAttack();
 
             // Alert other enemy tanks with the player's location
-            GameManager.instance.isAlerted = true;
+            AlertAllies();
 
             // If nothing is found return to "patrol"
             TransitionPatrol();
@@ -78,7 +80,6 @@ public class CaptainController : EnemyController
                 enemyData.randomRotation -= Time.deltaTime; // Decrement time
             }
         }
-
         // Run transition to flee function during all states
         TransitionFlee();
 

@@ -42,6 +42,8 @@ public class MapGenerator : MonoBehaviour
         UnityEngine.Random.InitState(mapSeed); // Set randomization state to mapSeed
 
         GameManager.instance.grid = new Room[tileColumns, tileRows]; // Create a new grid
+        GameManager.instance.tileRows = tileRows;
+        GameManager.instance.tileColumns = tileColumns;
         
         // The following loops through rows and columns to generate the map
         for (int i = 0; i < tileRows; i++)
@@ -96,7 +98,9 @@ public class MapGenerator : MonoBehaviour
                 GameManager.instance.grid[j, i] = tempRoom; // Add the map tile to the grid saved in GameManager
             }
         }
-        CreateSpawnList(); // Creates a list of all spawn points
+        CreatePlayerSpawnList(); // Creates a list of all spawn points
+        CreateEnemySpawnList();
+        CreatePickupSpawnList();
         CreateWaypointList(); // Creates a list of all enemy waypoints
     }
 
@@ -122,7 +126,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
     // Creates a list of all spawnpoints including enemy, player and pickups
-    public void CreateSpawnList()
+    public void CreatePlayerSpawnList()
     {
         GameObject[] tempPlayerSpawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
 
@@ -131,15 +135,19 @@ public class MapGenerator : MonoBehaviour
         {
             GameManager.instance.playerSpawnsList.Add(tempPlayerSpawns[i].GetComponent<Transform>());
         }
-
-        GameObject[] tempEnemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn"); 
+    }
+    public void CreateEnemySpawnList()
+    {
+        GameObject[] tempEnemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
 
         // Loop through and add all enemy spawns in the enemySpawnsList in GameManager
         for (int i = 0; i < tempEnemySpawns.Length; i++)
         {
             GameManager.instance.enemySpawnsList.Add(tempEnemySpawns[i].GetComponent<Transform>());
         }
-
+    }
+    public void CreatePickupSpawnList()
+    {
         GameObject[] tempPickupSpawns = GameObject.FindGameObjectsWithTag("PickupSpawn");
 
         // Loop through and add all pickup spawns in the pickupSpawnsList in GameManager

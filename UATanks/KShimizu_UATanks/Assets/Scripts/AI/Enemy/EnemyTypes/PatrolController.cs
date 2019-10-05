@@ -84,7 +84,7 @@ public class PatrolController : EnemyController
             if (enemyPawn.isInvestigating == false)
             {
                 // If nothing is found return to "patrol"
-                TransitionPatrol();
+                //TransitionPatrol();
             }
             // If the player is seen "pursue"
             TransitionPursue();

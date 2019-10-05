@@ -93,6 +93,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9bb26f853024ee4ca9593453a4be132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originTankIndex: 0
+  explosionHit: {fileID: 4468099010983617314, guid: 6501462fa4792aa408748a231533cd5e,
+    type: 3}
+  explosionHitDuration: 0.3
+  explosionDestroy: {fileID: 7463650770922479498, guid: 6b67c2c0a5503864f8393b2901133655,
+    type: 3}
+  explosionDestroyDuration: 2
 --- !u!136 &8850562567356680093
 CapsuleCollider:
   m_ObjectHideFlags: 0

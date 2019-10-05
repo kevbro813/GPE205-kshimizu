@@ -15,21 +15,19 @@ public class PlayerPawn : TankPawn
         playerData = GetComponent<PlayerData>();
         tf = GetComponent<Transform>();
         meshRenderer = GetComponentsInChildren<MeshRenderer>();
-        tankCollider = GetComponent<SphereCollider>();
     }
     public override void TankDestroyed()
     {
         // Reset player tank
         playerData.isInvulnerable = true; // Player tank cannot take damage
         playerData.isInvisible = true; // Make player tank invisible to AI
+        playerController.enabled = false; // Disable the playerController
 
         // Make player tank invisible by disabling the mesh renderer
         foreach (MeshRenderer mesh in meshRenderer)
         {
             mesh.enabled = false;
         }
-        playerController.enabled = false; // Disable the playerController
-
         // If the player still has lives remaining...
         if (playerData.playerLives > 0)
         {

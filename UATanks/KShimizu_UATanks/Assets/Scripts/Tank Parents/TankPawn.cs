@@ -10,7 +10,7 @@ public abstract class TankPawn : MonoBehaviour
     public CharacterController characterController;
     public CannonSource cannonSource; // Component on child object that will instantiate the projectile
     public MeshRenderer[] meshRenderer;
-    public SphereCollider tankCollider;
+    public GameObject smokeEffect;
 
     public virtual void Start()
     {
@@ -24,6 +24,11 @@ public abstract class TankPawn : MonoBehaviour
     {
         GameManager.instance.soundManager.SoundTankDestroyed();
         Destroy(this.gameObject);
+    }
+    public void TankSmoking()
+    {
+        GameObject smokeEffectClone = Instantiate(smokeEffect, tf.position + tf.up - (tf.forward * .5f), tf.rotation, transform.parent);
+        Destroy(smokeEffectClone, 0.1f);
     }
     // Tank forward and reverse movement method
     public void MoveTank(float moveSpeed)

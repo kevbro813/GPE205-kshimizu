@@ -88,6 +88,7 @@
     <Compile Include="Assets\Scripts\Managers\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Map\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\Map\Room.cs" />
+    <Compile Include="Assets\Scripts\Map\SpawnProximity.cs" />
     <Compile Include="Assets\Scripts\Pickups\PickupController.cs" />
     <Compile Include="Assets\Scripts\Pickups\PickupData.cs" />
     <Compile Include="Assets\Scripts\Pickups\PickupObject.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Scripts\UI\ScoreWindow.cs" />
     <Compile Include="Assets\Scripts\UI\StartMenu.cs" />
     <Compile Include="Assets\Scripts\UI\TitleMenu.cs" />
+    <None Include="Assets\Objects\Prefabs\FX\Materials\UnlitVertexColour_Alpha.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Unity Projects/GPE205/GPE205-kshimizu/UATanks/KShimizu_UATanks/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

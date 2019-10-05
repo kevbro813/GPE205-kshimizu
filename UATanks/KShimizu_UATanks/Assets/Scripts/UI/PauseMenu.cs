@@ -40,13 +40,13 @@ public class PauseMenu : MonoBehaviour
     {
         GameManager.instance.soundManager.SoundMenuButton();
         Save();
-        GameManager.instance.gameState = "active";
+        GameManager.instance.gameState = "resume";
     }
-    public void Menu()
+    public void Pregame()
     {
         GameManager.instance.soundManager.SoundMenuButton();
         Save();
-        GameManager.instance.gameState = "title";
+        GameManager.instance.gameState = "pregame";
     }
     public void Quit()
     {

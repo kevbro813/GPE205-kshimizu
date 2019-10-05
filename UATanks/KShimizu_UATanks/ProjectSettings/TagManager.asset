@@ -21,6 +21,8 @@ TagManager:
   - SFXSource
   - ScoreWindow
   - GameOver
+  - SoundManager
+  - Pickup
   layers:
   - Default
   - TransparentFX

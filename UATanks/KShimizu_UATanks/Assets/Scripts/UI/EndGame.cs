@@ -41,23 +41,23 @@ public class EndGame : MonoBehaviour
         if (GameManager.instance.isMultiplayer == true) // Check multiplayer
         {
             // Display current players' scores and names
-            playerOneName.text = GameManager.instance.playerData[0].playerName;
-            playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
-            playerTwoName.text = GameManager.instance.playerData[1].playerName;
-            playerTwoScore.text = GameManager.instance.playerData[1].score.ToString();
+            playerOneName.text = GameManager.instance.playerDataList[0].playerName;
+            playerOneScore.text = GameManager.instance.playerDataList[0].score.ToString();
+            playerTwoName.text = GameManager.instance.playerDataList[1].playerName;
+            playerTwoScore.text = GameManager.instance.playerDataList[1].score.ToString();
 
             // Logic to display winners and losers (Checks player scores against each other)
             if (GameManager.instance.activeEnemiesList.Count == 0) // Check if all enemy AI are dead
             {
-                if (GameManager.instance.playerData[0].score > GameManager.instance.playerData[1].score)
+                if (GameManager.instance.playerDataList[0].score > GameManager.instance.playerDataList[1].score)
                 {
-                    Winner.text = GameManager.instance.playerData[0].playerName + " is the Winner!";
+                    Winner.text = GameManager.instance.playerDataList[0].playerName + " is the Winner!";
                 }
-                else if (GameManager.instance.playerData[0].score < GameManager.instance.playerData[1].score)
+                else if (GameManager.instance.playerDataList[0].score < GameManager.instance.playerDataList[1].score)
                 {
-                    Winner.text = GameManager.instance.playerData[1].playerName + " is the Winner!";
+                    Winner.text = GameManager.instance.playerDataList[1].playerName + " is the Winner!";
                 }
-                else if (GameManager.instance.playerData[0].score == GameManager.instance.playerData[1].score)
+                else if (GameManager.instance.playerDataList[0].score == GameManager.instance.playerDataList[1].score)
                 {
                     Winner.text = "We have a tie!";
                 }
@@ -70,18 +70,18 @@ public class EndGame : MonoBehaviour
         else // Singleplayer
         {
             // Display current players' scores and names
-            playerOneName.text = GameManager.instance.playerData[0].playerName;
-            playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
+            playerOneName.text = GameManager.instance.playerDataList[0].playerName;
+            playerOneScore.text = GameManager.instance.playerDataList[0].score.ToString();
             playerTwoName.text = "";
             playerTwoScore.text = "";
             // Win logic
             if (GameManager.instance.activeEnemiesList.Count == 0) // If all enemies are dead...
             {
-                Winner.text = GameManager.instance.playerData[0].playerName + " Wins!";
+                Winner.text = GameManager.instance.playerDataList[0].playerName + " Wins!";
             }
             else
             {
-                Winner.text = GameManager.instance.playerData[0].playerName + " Loses!";
+                Winner.text = GameManager.instance.playerDataList[0].playerName + " Loses!";
             }
         }
 
@@ -109,10 +109,10 @@ public class EndGame : MonoBehaviour
     }
 
     // Buttons functions
-    public void Menu()
+    public void Pregame()
     {
         GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "title";
+        GameManager.instance.gameState = "pregame";
     }
     public void Quit()
     {

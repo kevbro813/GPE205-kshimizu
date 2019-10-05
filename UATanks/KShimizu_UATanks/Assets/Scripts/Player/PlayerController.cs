@@ -53,6 +53,19 @@ public class PlayerController : MonoBehaviour
                 {
                     playerPawn.SingleCannonFire();
                 }
+                // The following are inputs to open the various menus, These only need to be added to player one's controller
+                if (Input.GetButtonDown("Cancel"))
+                {
+                    GameManager.instance.gameState = "pause";
+                }
+                if (Input.GetButtonDown("Tab"))
+                {
+                    GameManager.instance.gameState = "score";
+                }
+                if (Input.GetButtonDown("Admin"))
+                {
+                    GameManager.instance.gameState = "admin";
+                }   
             }
             // Player two controls
             else if (playerData.playerIndex == 1)
@@ -98,7 +111,10 @@ public class PlayerController : MonoBehaviour
             {
                 playerPawn.SetVisible();
             }
-
+            if (playerData.tankHealth < playerData.criticalHealth)
+            {
+                playerPawn.TankSmoking();
+            }
         }
     }
 }

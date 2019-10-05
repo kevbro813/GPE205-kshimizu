@@ -8,10 +8,16 @@ public class CannonShell : MonoBehaviour
     private Rigidbody rb;
     private TankData tankData;
     public int originTankIndex;
+    public GameObject explosionHit;
+    private Transform tf;
+    public float explosionHitDuration = 1.2f;
+    public GameObject explosionDestroy;
+    public float explosionDestroyDuration = 1.2f;
 
     // Start is called before the first frame update
     void Start()
     {
+        tf = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         tankData = GetComponentInParent<TankData>();
     }
@@ -37,19 +43,23 @@ public class CannonShell : MonoBehaviour
                 {
                     GameManager.instance.soundManager.SoundTankHit(); // Play sound when tank is hit
                     tankData.score += enemyData.pointValue;
+                    GameObject explosionHitClone = Instantiate(explosionHit, tf.position, tf.rotation);
+                    Destroy(explosionHitClone, explosionHitDuration);
                 }
                 else if (enemyData.tankHealth <= 0)
                 {
                     tankData.score += (int)(enemyData.pointValue * GameManager.instance.killMultiplier); // Add score multiplier for destroying tank
                     // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
-                    col.gameObject.GetComponent<EnemyPawn>().TankDestroyed(); 
+                    col.gameObject.GetComponent<EnemyPawn>().TankDestroyed();
+                    GameObject explosionDestroyClone = Instantiate(explosionDestroy, tf.position, tf.rotation);
+                    Destroy(explosionDestroyClone, explosionDestroyDuration);
                 }   
             }
             else
             {
                 Debug.Log("Enemy is invulnerable"); // TODO: When message system is up, add enemy invulnerable notification
             }
-            Destroy(gameObject); // Destroy the cannon shell if it hits an enemy tank
+            Destroy(this.gameObject); // Destroy the cannon shell if it hits an enemy tank
         }
         else if (col.gameObject.CompareTag("Player")) // Check if the collider hit has the "Player" tag
         {
@@ -63,23 +73,31 @@ public class CannonShell : MonoBehaviour
                 {
                     GameManager.instance.soundManager.SoundTankHit(); // Play sound when tank is hit
                     tankData.score += playerData.pointValue;
+                    GameObject explosionHitClone = Instantiate(explosionHit, tf.position, tf.rotation);
+                    Destroy(explosionHitClone, explosionHitDuration);
                 }
                 else if (playerData.tankHealth <= 0)
                 {
                     tankData.score += (int)(playerData.pointValue * GameManager.instance.killMultiplier); // Add score multiplier for destroying tank
                     // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
                     col.gameObject.GetComponent<PlayerPawn>().TankDestroyed();
+                    GameObject explosionDestroyClone = Instantiate(explosionDestroy, tf.position, tf.rotation);
+                    Destroy(explosionDestroyClone, explosionDestroyDuration);
                 }
             }
             else
             {
                 Debug.Log("Player is invulnerable"); // TODO: When message system is up, add player invulnerable notification
             }
-            Destroy(gameObject); // Destroy the cannon shell if it hits an enemy tank
+
+            Destroy(this.gameObject); // Destroy the cannon shell if it hits an enemy tank
+
         }
         else if (col.gameObject.CompareTag("Arena"))
         {
-            Destroy(gameObject); // Destroy the cannon shell if it hits any other collider
+            GameObject explosionHitClone = Instantiate(explosionHit, tf.position, tf.rotation);
+            Destroy(explosionHitClone, explosionHitDuration);
+            Destroy(this.gameObject); // Destroy the cannon shell if it hits any other collider
         }
     }
 }

@@ -31,11 +31,17 @@ public class SoundManager : MonoBehaviour
     // Functions to set Music and SFX volume
     public void SetMusicVolume(float volume)
     {
-        asMusic.volume = volume;
+        if (asMusic != null)
+        {
+            asMusic.volume = volume;
+        }
     }
     public void SetSFXVolume(float volume)
     {
-        asSFX.volume = volume;
+        if (asSFX != null)
+        {
+            asSFX.volume = volume;
+        }
     }
 
     // Play and pause game music functions

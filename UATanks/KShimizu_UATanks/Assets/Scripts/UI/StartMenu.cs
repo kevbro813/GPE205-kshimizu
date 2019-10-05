@@ -19,6 +19,8 @@ public class StartMenu : MonoBehaviour
     public InputField playerTwoName;
     [HideInInspector] public int selectedMap;
     [HideInInspector] public int enemyQuantity;
+    public Image continueImage;
+    public Button continueButton;
     private List<string> mapTypes = new List<string>() { "Map of the Day", "Random", "Preset Seed" };
     private void Start()
     {
@@ -29,6 +31,24 @@ public class StartMenu : MonoBehaviour
         enemyCount.text = enemyCountSlider.value.ToString(); // Display the enemy count
         columnCount.text = columnSlider.value.ToString(); // Display column value
         rowCount.text = rowSlider.value.ToString(); // Display row value
+        if (GameManager.instance.isPreviousGame == true)
+        {
+            Color color = continueImage.color;
+            color.a = 1.0f;
+            continueImage.color = color;
+            continueButton.enabled = true;
+        }
+        else
+        {
+            Color color = continueImage.color;
+            color.a = 0.5f;
+            continueImage.color = color;
+            continueButton.enabled = false;
+        }
+    }
+    void PopulateList()
+    {
+        mapDropdown.AddOptions(mapTypes);
     }
     // Set the type of map to be generated
     public void SetMapType()
@@ -55,12 +75,9 @@ public class StartMenu : MonoBehaviour
     }
 
     // Populate the dropdown menu with map type options
-    void PopulateList()
-    {
-        mapDropdown.AddOptions(mapTypes);
-    }
+
     // Toggle whether to spawn random enemies or enemies based on a preset seed
-    void ToggleRandomEnemies()
+    void SetRandomEnemies()
     {
         if (randomEnemies.isOn == true)
         {
@@ -78,7 +95,7 @@ public class StartMenu : MonoBehaviour
         GameManager.instance.mapGenerator.tileRows = (int)rowSlider.value;
     }
     // Determine if the game is multiplayer
-    public void ToggleMultiplayer()
+    public void SetMultiplayer()
     {
         if (multiplayer.isOn == true)
         {
@@ -96,56 +113,51 @@ public class StartMenu : MonoBehaviour
         {
             if (playerOneName.text != "")
             {
-                GameManager.instance.playerData[0].playerName = playerOneName.text;
+                GameManager.instance.playerOneName = playerOneName.text;
             }
             else
             {
-                GameManager.instance.playerData[0].playerName = "Player One";
+                GameManager.instance.playerOneName = "Player One";
             }
             if (playerTwoName.text != "")
             {
-                GameManager.instance.playerData[1].playerName = playerTwoName.text;
+                GameManager.instance.playerTwoName = playerTwoName.text;
             }
             else
             {
-                GameManager.instance.playerData[1].playerName = "Player Two";
+                GameManager.instance.playerTwoName = "Player Two";
             }
         }
         else
         {
             if (playerOneName.text != "")
             {
-                GameManager.instance.playerData[0].playerName = playerOneName.text;
+                GameManager.instance.playerOneName = playerOneName.text;
             }
             else
             {
-                GameManager.instance.playerData[0].playerName = "Player One";
+                GameManager.instance.playerOneName = "Player One";
             }
         }
     }
     // Start game function when start button is pressed
-    public void BeginGame()
+    public void NewGame()
     {
         GameManager.instance.soundManager.SoundMenuButton();
-        if (GameManager.instance.isPreviousGame == false) // Check if there is an active game, if not then...
-        {
-            this.gameObject.SetActive(false);
-            SetMapType();
-            SetMapSize();
-            SetAIQuantity();
-            ToggleRandomEnemies();
-            ToggleMultiplayer();
-            GameManager.instance.CreateNewGame();
-            GameManager.instance.soundManager.PlayMusic();
-            GameManager.instance.gameState = "active";
-            SetPlayerNames();
-        }
-        else // If there is an active game...
-        {
-            this.gameObject.SetActive(false);
-            GameManager.instance.soundManager.PlayMusic();
-            GameManager.instance.gameState = "active";
-        }
+        SetMapType();
+        SetMapSize();
+        SetAIQuantity();
+        SetRandomEnemies();
+        SetMultiplayer();
+        SetPlayerNames();
+        GameManager.instance.gameState = "newgame";
+        this.gameObject.SetActive(false);
+    }
+    public void ContinueGame()
+    {
+        GameManager.instance.soundManager.SoundMenuButton();
+        GameManager.instance.gameState = "resume";
+        this.gameObject.SetActive(false);
     }
     // Quit game function when quit button is pressed
     public void QuitGame()

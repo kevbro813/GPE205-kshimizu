@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> pickupList; // List of available pickups, set in inspector
 
     // Lists of generated spawn points
-    public List<Transform> playerSpawnsList; // List of all player spawns
+    public List<Transform> playerSpawnsList = new List<Transform>(); // List of all player spawns
     public List<Transform> enemySpawnsList; // List of all spawn points for enemies
     public List<Transform> pickupSpawnsList; // List of all pickup spawns, set automatically when map is generated
 
@@ -24,23 +24,26 @@ public class GameManager : MonoBehaviour
     public List<Transform> enemyWaypointsList;
 
     // Lists of all active player, enemy and pickup game objects
-    public List<GameObject> playerObjectsList; // List of active player objects
+    public List<GameObject> activePlayersList; // List of active player objects
     public List<GameObject> activeEnemiesList; // List of all current enemy objects
-    public List<GameObject> activePickupList; // List of all active pickups
+    public List<GameObject> activePickupsList; // List of all active pickups
 
     // Lists of all active player, enemy and pickup data components
-    public List<PlayerData> playerData; // List of active playerData components
+    public List<PlayerData> playerDataList; // List of active playerData components
     public List<EnemyData> enemyDataList; // List of all EnemyData components
+
     public List<PickupObject> pickupObjectList; // List of all active pickup objects
 
     // Lists of all active tank game objects and tankData components
-    public List<GameObject> tankObjects; // List of all AI and player tank objects
+    public List<GameObject> tankObjectList; // List of all AI and player tank objects
     public List<TankData> tankDataList; // List of all AI and player tankData components
 
     // Map specific variables
     [HideInInspector] public MapGenerator mapGenerator; // Map Generator component
     [HideInInspector] public Room[,] grid; // Grid used to store procedurally generated map
     public bool isRandomEnemy = false; // Generate a random assortment of enemies or one based on a preset seed (Map of Day or Preset Seed)
+    public int tileRows;
+    public int tileColumns;
 
     // Canvas game objects (used to activate/deactivate)
     public GameObject StartGameMenu; // Start Game menu
@@ -90,12 +93,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Vector3 lastSoundLocation; // Last known sound detected, visible to all AI
     public bool isAlerted = false; // If the player is seen by a guard or captain, this will be set to true, calling other enemy tanks to go to last known player location
     
-    // Game Mode variables
+    // Game variables
     public bool isMultiplayer = false; // Set by selecting the multiplayer option in game. Used by several functions to determine multiplayer
-    public bool isPreviousGame = false; // Check if a game is already active, used to resume game
     public bool isPlayerOneDead = false; // Boolean that indicates whether player one is dead
     public bool isPlayerTwoDead = false; // Boolean that indicates whether player two is dead 
     public bool isGameReady = false; // Checks if game is ready to prevent win conditions from being instantly satisfied
+    public string playerOneName;
+    public string playerTwoName;
+    public bool isPreviousGame = false;
 
     // Organization
     public Transform playerTankShell; // Empty parent component that houses all player tank objects
@@ -121,12 +126,12 @@ public class GameManager : MonoBehaviour
         soundManager = GetComponentInChildren<SoundManager>();
         asMusic = GameObject.FindWithTag("MusicSource").GetComponent<AudioSource>();
         asSFX = GameObject.FindWithTag("SFXSource").GetComponent<AudioSource>();
-        isPreviousGame = false; // Set to begin new game when game first starts
         highScores = new List<ScoreData>(); // Reset highScores
         scoreManager = GetComponent<ScoreManager>();
         scoreManager.InitializeValues();
         scoreManager.LoadPlayerScores();
-        scoreManager.FillEmptyScores(); 
+        scoreManager.FillEmptyScores();
+        LoadSettings();
     }
    
     void Update()
@@ -136,18 +141,14 @@ public class GameManager : MonoBehaviour
         {
             DoPregame();
         }
-        if (gameState == "resumegame")
+        if (gameState == "resume")
         {
             DoResumeGame();
+            gameState = "active";
         }
         if (gameState == "active")
         {
             DoActive();
-            // TODO: Move the following inputs to playerController
-            if (Input.GetButton("Cancel"))
-            {
-                gameState = "pause"; // Pause when escape is pressed
-            }
             if (isGameReady == true && isMultiplayer == true) // Check if game is multiplayer
             {
                 // If both players are dead or one player is alive and all enemy AI are dead...
@@ -165,16 +166,6 @@ public class GameManager : MonoBehaviour
                     scoreManager.OnSave();
                     gameState = "endgame"; // Transition to endgame
                 }
-            }
-            // Open Score Window if "Tab" is pressed
-            if (Input.GetButton("Tab"))
-            {
-                gameState = "score";
-            }
-            // Open Admin Menu if "F1" is pressed
-            if (Input.GetButton("Admin"))
-            {
-                gameState = "admin";
             }
         }
         if (gameState == "pause")
@@ -211,6 +202,150 @@ public class GameManager : MonoBehaviour
             DoAdminMenu();
             // Transitions in UI components
         }
+        if (gameState == "newgame")
+        {
+            DoNewGame();
+            gameState = "active";
+        }
+        if (gameState == "continue")
+        {
+            DoContinueGame();
+            gameState = "active";
+        }
+    }
+    public void DoContinueGame()
+    {
+        StartGameMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
+
+        soundManager.PlayMusic();
+
+        // Enable all AI movement
+        Time.timeScale = 1;
+
+        // Enable player controller to allow player tank to accept inputs
+        foreach (GameObject player in activePlayersList)
+        {
+            player.GetComponent<PlayerController>().enabled = true;
+        }
+    }
+    public void ResetGame()
+    {
+        for (int i = 0; i < tileRows; i++)
+        {
+            for (int j = 0; j < tileColumns; j++)
+            {
+                Destroy(GameManager.instance.grid[j, i].gameObject);
+            }
+        }
+        for (int i = 0; i < activePlayersList.Count; i++)
+        {
+            Destroy(activePlayersList[i]);
+        }
+        for (int i = 0; i < activeEnemiesList.Count; i++)
+        {
+            Destroy(activeEnemiesList[i]);
+        }
+        for (int i = 0; i < activePickupsList.Count; i++)
+        {
+            Destroy(activePickupsList[i]);
+        }
+        for (int i = 0; i < tankObjectList.Count; i++)
+        {
+            Destroy(tankObjectList[i]);
+        }
+        for (int i = 0; i < playerDataList.Count; i++)
+        {
+            Destroy(playerDataList[i]);
+        }
+        for (int i = 0; i < enemyDataList.Count; i++)
+        {
+            Destroy(enemyDataList[i]);
+        }
+        for (int i = 0; i < tankDataList.Count; i++)
+        {
+            Destroy(tankDataList[i]);
+        }
+        for (int i = 0; i < pickupObjectList.Count; i++)
+        {
+            Destroy(pickupObjectList[i]);
+        }
+        for (int i = 0; i < playerSpawnsList.Count; i++)
+        {
+            Destroy(playerSpawnsList[i]);
+        }
+        for (int i = 0; i < enemySpawnsList.Count; i++)
+        {
+            Destroy(enemySpawnsList[i]);
+        }
+        for (int i = 0; i < pickupSpawnsList.Count; i++)
+        {
+            Destroy(pickupSpawnsList[i]);
+        }
+        for (int i = 0; i < enemyWaypointsList.Count; i++)
+        {
+            Destroy(enemyWaypointsList[i]);
+        }
+        activePlayersList.Clear();
+        activeEnemiesList.Clear();
+        activePickupsList.Clear();
+        tankObjectList.Clear();
+        playerDataList.Clear();
+        enemyDataList.Clear();
+        tankDataList.Clear();
+        pickupObjectList.Clear();
+        playerSpawnsList.Clear();
+        enemySpawnsList.Clear();
+        pickupSpawnsList.Clear();
+        enemyWaypointsList.Clear();
+        playersCreated = 0;
+        playersAlive = 0;
+        enemiesSpawned = 0;
+        currentPickupQuantity = 0;
+        isAlerted = false;
+        isPlayerOneDead = false;
+        isPlayerTwoDead = false;
+        isGameReady = false;
+    }
+    public void DoNewGame()
+    {
+        ResetGame();
+        StartCoroutine(CreateGameEvent()); // Allows game to reset fully before creating a new game
+        isPreviousGame = true;
+        soundManager.PlayMusic();
+    }
+    public IEnumerator CreateGameEvent()
+    {
+        yield return new WaitForSeconds(0.2f);
+        CreateNewGame();
+    }
+    public void CreateNewGame()
+    {
+        GetComponent<MapGenerator>().GenerateMap(); // Generates a new map
+        if (isMultiplayer == true) // Check if multiplayer
+        {
+            SpawnPlayerTank(); // Instantiate first player
+            SpawnPlayerTank(); // Instantiate second player
+            TwoPlayerCamera(); // Sets cameras for two players
+            TwoPlayerHud(); // Sets HUDs for two players
+            playerDataList[0].playerName = playerOneName;
+            playerDataList[1].playerName = playerTwoName;
+        }
+        else
+        {
+            SpawnPlayerTank(); // Instantiate a new player 
+            SinglePlayerCamera(); // Sets camera for one player
+            SinglePlayerHUD(); // Sets HUD for one player
+            playerDataList[0].playerName = playerOneName;
+        }
+        RandomEnemies(); // Sets enemies to random or preset
+        StartCoroutine(SpawnEnemyEvent()); // Begin coroutine for SpawnEnemyEvent
+        StartCoroutine(SpawnPickupEvent()); // Begin coroutine to spawn pickups
+        // Creates a small time window to allow AI tanks to be spawned before the game is allowed to change states, prevents game from ending prematurely
+        StartCoroutine(GameReadyEvent());
     }
     // Open admin menu
     public void DoAdminMenu()
@@ -220,11 +355,14 @@ public class GameManager : MonoBehaviour
         StartGameMenu.SetActive(false);
         scoreWindow.SetActive(false);
         endGame.SetActive(false);
+
+        soundManager.PauseMusic();
+
         // Disable all AI movement
         Time.timeScale = 0;
 
         // Disable player controller to prevent tank firing when leaving admin menu
-        foreach (GameObject player in playerObjectsList)
+        foreach (GameObject player in activePlayersList)
         {
             player.GetComponent<PlayerController>().enabled = false;
         }
@@ -237,11 +375,14 @@ public class GameManager : MonoBehaviour
         scoreWindow.SetActive(true);
         endGame.SetActive(false);
         adminMenu.SetActive(false);
+
+        soundManager.PauseMusic();
+
         // Disable all AI movement
         Time.timeScale = 0;
 
         // Disable player controller to prevent tank firing when leaving score window
-        foreach (GameObject player in playerObjectsList)
+        foreach (GameObject player in activePlayersList)
         {
             player.GetComponent<PlayerController>().enabled = false;
         }
@@ -249,39 +390,51 @@ public class GameManager : MonoBehaviour
     // Open End Game window
     public void DoEndGame()
     {
+        pauseMenu.SetActive(false);
+        StartGameMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(true);
+        adminMenu.SetActive(false);
+
+        soundManager.PauseMusic();
+
         // Disable all AI movement
         Time.timeScale = 0;
 
         // Disable player controller to prevent tank firing when leaving score window
-        foreach (GameObject player in playerObjectsList)
+        foreach (GameObject player in activePlayersList)
         {
             player.GetComponent<PlayerController>().enabled = false;
         }
         isPlayerOneDead = false;
         isPlayerTwoDead = false;
         isGameReady = false;
-        pauseMenu.SetActive(false);
-        StartGameMenu.SetActive(false);
-        scoreWindow.SetActive(false);
-        endGame.SetActive(true);
-        adminMenu.SetActive(false);
+        isPreviousGame = false;
     }
     // Resume game
     public void DoResumeGame()
     {
-        StartGameMenu.SetActive(true);
+        StartGameMenu.SetActive(false);
         pauseMenu.SetActive(false);
         scoreWindow.SetActive(false);
         endGame.SetActive(false);
         adminMenu.SetActive(false);
+
+        soundManager.PlayMusic();
+
+        // Enable all AI movement
+        Time.timeScale = 1;
+
+        // Enable player controller to allow player tank to accept inputs
+        foreach (GameObject player in activePlayersList)
+        {
+            player.GetComponent<PlayerController>().enabled = true;
+        }
     }
     // Pregame is default state (All canvases but Start Game Menu are inactive)
     public void DoPregame()
     {
         StartGameMenu.SetActive(true);
-        hudObjects[0].SetActive(false);
-        hudObjects[1].SetActive(false);
-        hudObjects[2].SetActive(false);
         pauseMenu.SetActive(false);
         scoreWindow.SetActive(false);
         endGame.SetActive(false);
@@ -296,14 +449,9 @@ public class GameManager : MonoBehaviour
         endGame.SetActive(false);
         adminMenu.SetActive(false);
 
+
         // Enable all AI movement
         Time.timeScale = 1;
-
-        // Enable player controller to allow player tank to accept inputs
-        foreach (GameObject player in playerObjectsList)
-        {
-            player.GetComponent<PlayerController>().enabled = true;
-        }
     }
     // Pauses the game and opens pause menu
     public void DoPause()
@@ -313,11 +461,14 @@ public class GameManager : MonoBehaviour
         scoreWindow.SetActive(false);
         endGame.SetActive(false);
         adminMenu.SetActive(false);
+
+        soundManager.PauseMusic();
+
         // Disable all AI movement
         Time.timeScale = 0;
 
         // Disable player controller to prevent tank firing when unpausing
-        foreach (GameObject player in playerObjectsList)
+        foreach (GameObject player in activePlayersList)
         {
             player.GetComponent<PlayerController>().enabled = false;
         }
@@ -325,35 +476,13 @@ public class GameManager : MonoBehaviour
     // Opens Title Screen
     public void DoTitleScreen()
     {
+        soundManager.PauseMusic();
         SceneManager.LoadScene(0);
     }
     // Exits the game
     public void DoQuitGame()
     {
         Application.Quit();
-    }
-    public void CreateNewGame()
-    {
-        isPreviousGame = true; // Once a new game is created, this boolean is set to true to indicate a game is active (in case player wants to resume game)
-        GetComponent<MapGenerator>().GenerateMap(); // Generates a new map
-        if (isMultiplayer == true) // Check if multiplayer
-        {
-            SpawnPlayerTank(); // Instantiate first player
-            SpawnPlayerTank(); // Instantiate second player
-            TwoPlayerCamera(); // Sets cameras for two players
-            TwoPlayerHud(); // Sets HUDs for two players
-        }
-        else
-        {
-            SpawnPlayerTank(); // Instantiate a new player 
-            SinglePlayerCamera(); // Sets camera for one player
-            SinglePlayerHUD(); // Sets HUD for one player
-        }
-        SetRandomEnemies(); // Sets enemies to random or preset
-        StartCoroutine(SpawnEnemyEvent()); // Begin coroutine for SpawnEnemyEvent
-        StartCoroutine(SpawnPickupEvent()); // Begin coroutine to spawn pickups
-        // Creates a small time window to allow AI tanks to be spawned before the game is allowed to change states, prevents game from ending prematurely
-        StartCoroutine(GameReadyEvent()); 
     }
     public void SpawnPlayerTank()
     {
@@ -364,15 +493,15 @@ public class GameManager : MonoBehaviour
 
         playerSpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
 
-        playerObjectsList.Add(playerClone); // Adds to list of all active player objects
-        playerData.Add(tempPlayerData); // Adds to list of all active playerData components
-        tankObjects.Add(playerClone); // Adds to list of all active player and AI tank objects
+        activePlayersList.Add(playerClone); // Adds to list of all active player objects
+        playerDataList.Add(tempPlayerData); // Adds to list of all active playerData components
+        tankObjectList.Add(playerClone); // Adds to list of all active player and AI tank objects
         tankDataList.Add(playerClone.GetComponent<TankData>()); // Adds to list of all active tankData components
 
         // Set index numbers for both player and tank (used to remove objects and components from lists on death/removal)
-        tempPlayerData.playerIndex = playerObjectsList.Count - 1;
-        int currentIndex = playerData[playersCreated].playerIndex;
-        tempPlayerData.tankIndex = tankObjects.Count - 1;
+        tempPlayerData.playerIndex = activePlayersList.Count - 1;
+        int currentIndex = playerDataList[playersCreated].playerIndex;
+        tempPlayerData.tankIndex = tankObjectList.Count - 1;
 
         // Link camera to playerClone
         cameraObjects[currentIndex].GetComponent<CameraFollow>().playerTank = playerClone;
@@ -383,17 +512,17 @@ public class GameManager : MonoBehaviour
             // Connects HUDs to correct playerData components from list
             if (currentIndex == 0)
             {
-                hudComponents[1].playerData = playerData[currentIndex];
+                hudComponents[1].playerData = playerDataList[currentIndex];
             }
             if (currentIndex == 1)
             {
-                hudComponents[2].playerData = playerData[currentIndex];
+                hudComponents[2].playerData = playerDataList[currentIndex];
             }
         }
         else
         {
             // Singleplayer HUD
-            hudComponents[currentIndex].playerData = playerData[currentIndex];
+            hudComponents[currentIndex].playerData = playerDataList[currentIndex];
         }
         // Increase playerCount
         playersCreated++;
@@ -409,8 +538,6 @@ public class GameManager : MonoBehaviour
             {
                 Transform spawnPoint = enemySpawnsList[Random.Range(0, enemySpawnsList.Count)]; // Random spawnPoint from list
                 GameObject randomEnemy = enemyTankList[Random.Range(0, enemyTankList.Count)]; // Random enemy from list
-                enemySpawnsList.Remove(spawnPoint); // Remove spawn point from list when used
-                enemyTankList.Remove(randomEnemy); // Remove spawn point from list when used
 
                 // Create enemyClone instance
                 GameObject enemyClone = Instantiate(randomEnemy, spawnPoint.position, spawnPoint.rotation, enemyTankShell) as GameObject;
@@ -418,12 +545,12 @@ public class GameManager : MonoBehaviour
                 activeEnemiesList.Add(enemyClone); // Adds spawned enemy to a list of active enemies
                 EnemyData tempEnemyData = enemyClone.GetComponent<EnemyData>(); // Get EnemyData component
                 enemyDataList.Add(tempEnemyData); // Adds the EnemyData component to an active list
-                tankObjects.Add(enemyClone); // Adds to list of all active player and AI tank objects
-                tankDataList.Add(tempEnemyData.GetComponent<TankData>()); // Adds to list of all active tankData components
+                tankObjectList.Add(enemyClone); // Adds to list of all active player and AI tank objects
+                tankDataList.Add(tempEnemyData); // Adds to list of all active tankData components
 
                 // Assigns the spawned enemy an index number, used to remove from the two lists above when the enemy tank is destroyed
                 tempEnemyData.enemyListIndex = activeEnemiesList.Count - 1;
-                tempEnemyData.tankIndex = tankObjects.Count - 1;
+                tempEnemyData.tankIndex = tankObjectList.Count - 1;
 
                 enemiesSpawned++; // Increase enemyCount by one
             }
@@ -439,19 +566,18 @@ public class GameManager : MonoBehaviour
             {
                 Transform spawnPoint = pickupSpawnsList[Random.Range(0, pickupSpawnsList.Count)]; // Set a random spawnpoint
                 GameObject randomPickup = pickupList[Random.Range(0, pickupList.Count)]; // Set a random pickup
-                pickupSpawnsList.Remove(spawnPoint); // Remove spawnpoint from list of pickup spawns, prevents multiple instantiations at the same location
 
                 // Instantiate pickup object
                 GameObject pickupClone = Instantiate(randomPickup, spawnPoint.position, spawnPoint.rotation, pickupShell) as GameObject;
 
-                activePickupList.Add(pickupClone); // Add pickup to a list of active pickups
+                activePickupsList.Add(pickupClone); // Add pickup to a list of active pickups
                 PickupObject tempPickupObjects = pickupClone.GetComponent<PickupObject>(); // Get PickupObject component for spawned pickup
                 pickupObjectList.Add(tempPickupObjects); // Add the PickupObject component to an active list
 
                 // Assigns the spawned pickup an index number, used to remove from the two lists above when the pickup is used
-                tempPickupObjects.pickupListIndex = activePickupList.Count - 1; // Note: I am keeping this for now despite not destroying pickups when used
+                tempPickupObjects.pickupListIndex = activePickupsList.Count - 1; // Note: I am keeping this for now despite not destroying pickups when used
 
-                currentPickupQuantity++; // Increase pickup quantity by one                  
+                currentPickupQuantity++; // Increase pickup quantity by one     
             }
         }
     }
@@ -461,7 +587,7 @@ public class GameManager : MonoBehaviour
         isGameReady = true;
     }
     // Random Enemy option can be set to true on the Start Game Screen
-    public void SetRandomEnemies()
+    public void RandomEnemies()
     {
         if (isRandomEnemy == true)
         {
@@ -500,5 +626,13 @@ public class GameManager : MonoBehaviour
         hudObjects[0].SetActive(false);
         hudObjects[1].SetActive(true);
         hudObjects[2].SetActive(true);
+    }
+    public void LoadSettings()
+    {
+        PauseMenu pauseMenuComponent = pauseMenu.GetComponent<PauseMenu>();
+        pauseMenuComponent.musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        pauseMenuComponent.sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+        soundManager.SetMusicVolume(pauseMenuComponent.musicSlider.value);    
+        soundManager.SetSFXVolume(pauseMenuComponent.sfxSlider.value);
     }
 }

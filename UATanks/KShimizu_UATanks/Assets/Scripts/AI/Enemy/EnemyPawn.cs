@@ -23,6 +23,7 @@ public class EnemyPawn : AIPawn
     private float alertTime; // How long the AI will be alert before returning to patrol
     private bool isTurned = false; // Is the tank turned around (Used in Flee function)
     public RaycastHit obstacleHit; // Raycast hit for obstacles (Includes the arena and other enemy tanks)
+
     public override void Start()
     {
         base.Start();
@@ -42,7 +43,7 @@ public class EnemyPawn : AIPawn
     public override void TankDestroyed()
     {
         GameManager.instance.activeEnemiesList.Remove(this.gameObject); // Remove tank from active enemies list
-        GameManager.instance.tankObjects.Remove(this.gameObject); // Remove tank from active enemies list
+        GameManager.instance.tankObjectList.Remove(this.gameObject); // Remove tank from active enemies list
         GameManager.instance.tankDataList.Remove(this.gameObject.GetComponent<EnemyData>()); // Remove tank from active enemies list
         GameManager.instance.enemyDataList.Remove(this.gameObject.GetComponent<EnemyData>()); // Remove tankData from list
         base.TankDestroyed(); // Destroys tank
@@ -142,7 +143,6 @@ public class EnemyPawn : AIPawn
             MoveTank(enemyData.forwardSpeed);
         }
     }
-
     // Patrol function with alternative patrol types
     public void Patrol()
     { 
@@ -231,6 +231,17 @@ public class EnemyPawn : AIPawn
                     }
                 }
             }
+        }
+    }
+    public void AlertAllies()
+    {
+        GameManager.instance.isAlerted = true;
+
+        // Rotate towards player
+        if (FacingTarget(enemyData.lastPlayerLocation) == false)
+        {
+            // Rotate towards target
+            RotateTowards(enemyData.lastPlayerLocation, enemyData.rotationSpeed);
         }
     }
     // Attack the player tank
@@ -338,7 +349,6 @@ public class EnemyPawn : AIPawn
                         investigateTime -= Time.deltaTime; // Decrement time
                     }
                 }
-                // TODO: Rotate 360 degrees
             }
         }
     }

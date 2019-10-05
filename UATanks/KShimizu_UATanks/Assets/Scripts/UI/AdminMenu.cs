@@ -25,14 +25,6 @@ public class AdminMenu : MonoBehaviour
     // Menu buttons
     public void Resume()
     {
-        GameManager.instance.gameState = "active";
-    }
-    public void Menu()
-    {
-        GameManager.instance.gameState = "title";
-    }
-    public void Quit()
-    {
-        GameManager.instance.gameState = "quit";
+        GameManager.instance.gameState = "resume";
     }
 }

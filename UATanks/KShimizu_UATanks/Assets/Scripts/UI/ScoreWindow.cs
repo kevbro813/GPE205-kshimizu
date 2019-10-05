@@ -42,16 +42,16 @@ public class ScoreWindow : MonoBehaviour
         if (GameManager.instance.isMultiplayer == true) // If multiplayer...
         {
             // Display current players' scores
-            playerOneName.text = GameManager.instance.playerData[0].playerName;
-            playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
-            playerTwoName.text = GameManager.instance.playerData[1].playerName;
-            playerTwoScore.text = GameManager.instance.playerData[1].score.ToString();
+            playerOneName.text = GameManager.instance.playerDataList[0].playerName;
+            playerOneScore.text = GameManager.instance.playerDataList[0].score.ToString();
+            playerTwoName.text = GameManager.instance.playerDataList[1].playerName;
+            playerTwoScore.text = GameManager.instance.playerDataList[1].score.ToString();
         }
         else // If singleplayer...
         {
             // Display current player score
-            playerOneName.text = GameManager.instance.playerData[0].playerName;
-            playerOneScore.text = GameManager.instance.playerData[0].score.ToString();
+            playerOneName.text = GameManager.instance.playerDataList[0].playerName;
+            playerOneScore.text = GameManager.instance.playerDataList[0].score.ToString();
             // Do not show player two score
             playerTwoName.text = "";
             playerTwoScore.text = "";
@@ -83,16 +83,6 @@ public class ScoreWindow : MonoBehaviour
     public void Resume()
     {
         GameManager.instance.soundManager.SoundMenuButton(); // Play sound when button is selected
-        GameManager.instance.gameState = "active"; // Set to active state
-    }
-    public void Menu()
-    {
-        GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "title"; // Open title screen
-    }
-    public void Quit()
-    {
-        GameManager.instance.soundManager.SoundMenuButton();
-        GameManager.instance.gameState = "quit"; // Quit game
+        GameManager.instance.gameState = "resume"; // Set to active state
     }
 }

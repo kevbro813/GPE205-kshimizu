@@ -107,6 +107,10 @@ public class GameManager : MonoBehaviour
     public Transform enemyTankShell; // Empty parent component that houses all enemy tank objects
     public Transform pickupShell; // Empty parent component that houses all pickup objects
 
+    public bool isPaused = false;
+    public bool isScoreDisplayed = false;
+    public bool isAdminMenu = false;
+
     private void Awake()
     {
         // Singleton pattern
@@ -167,10 +171,26 @@ public class GameManager : MonoBehaviour
                     gameState = "endgame"; // Transition to endgame
                 }
             }
+            if (isPaused == true)
+            {
+                gameState = "pause";
+            }
+            if (isScoreDisplayed == true)
+            {
+                gameState = "score";
+            }
+            if (isAdminMenu == true)
+            {
+                gameState = "admin";
+            }
         }
         if (gameState == "pause")
         {
             DoPause();
+            if (isPaused == false)
+            {
+                gameState = "resume";
+            }
             // Transitions in UI components
         }
         if (gameState == "title")
@@ -195,11 +215,19 @@ public class GameManager : MonoBehaviour
         if (gameState == "score")
         {
             DoScoreWindow();
+            if (isScoreDisplayed == false)
+            {
+                gameState = "resume";
+            }
             // Transitions in UI components
         }
         if (gameState == "admin")
         {
             DoAdminMenu();
+            if (isAdminMenu == false)
+            {
+                gameState = "resume";
+            }
             // Transitions in UI components
         }
         if (gameState == "newgame")
@@ -211,25 +239,6 @@ public class GameManager : MonoBehaviour
         {
             DoContinueGame();
             gameState = "active";
-        }
-    }
-    public void DoContinueGame()
-    {
-        StartGameMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        scoreWindow.SetActive(false);
-        endGame.SetActive(false);
-        adminMenu.SetActive(false);
-
-        soundManager.PlayMusic();
-
-        // Enable all AI movement
-        Time.timeScale = 1;
-
-        // Enable player controller to allow player tank to accept inputs
-        foreach (GameObject player in activePlayersList)
-        {
-            player.GetComponent<PlayerController>().enabled = true;
         }
     }
     public void ResetGame()
@@ -310,12 +319,32 @@ public class GameManager : MonoBehaviour
         isPlayerTwoDead = false;
         isGameReady = false;
     }
+        public void DoContinueGame()
+    {
+        StartGameMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        scoreWindow.SetActive(false);
+        endGame.SetActive(false);
+        adminMenu.SetActive(false);
+
+        soundManager.PlayMusic();
+
+        // Enable all AI movement
+        Time.timeScale = 1;
+
+        isPaused = false;
+        isAdminMenu = false;
+        isScoreDisplayed = false;
+    }
     public void DoNewGame()
     {
         ResetGame();
         StartCoroutine(CreateGameEvent()); // Allows game to reset fully before creating a new game
         isPreviousGame = true;
         soundManager.PlayMusic();
+        isPaused = false;
+        isAdminMenu = false;
+        isScoreDisplayed = false;
     }
     public IEnumerator CreateGameEvent()
     {
@@ -361,11 +390,8 @@ public class GameManager : MonoBehaviour
         // Disable all AI movement
         Time.timeScale = 0;
 
-        // Disable player controller to prevent tank firing when leaving admin menu
-        foreach (GameObject player in activePlayersList)
-        {
-            player.GetComponent<PlayerController>().enabled = false;
-        }
+        isPaused = false;
+        isScoreDisplayed = false;
     }
     // Open score window
     public void DoScoreWindow()
@@ -381,11 +407,8 @@ public class GameManager : MonoBehaviour
         // Disable all AI movement
         Time.timeScale = 0;
 
-        // Disable player controller to prevent tank firing when leaving score window
-        foreach (GameObject player in activePlayersList)
-        {
-            player.GetComponent<PlayerController>().enabled = false;
-        }
+        isPaused = false;
+        isAdminMenu = false;
     }
     // Open End Game window
     public void DoEndGame()
@@ -401,11 +424,9 @@ public class GameManager : MonoBehaviour
         // Disable all AI movement
         Time.timeScale = 0;
 
-        // Disable player controller to prevent tank firing when leaving score window
-        foreach (GameObject player in activePlayersList)
-        {
-            player.GetComponent<PlayerController>().enabled = false;
-        }
+        isPaused = false;
+        isAdminMenu = false;
+        isScoreDisplayed = false;
         isPlayerOneDead = false;
         isPlayerTwoDead = false;
         isGameReady = false;
@@ -425,11 +446,9 @@ public class GameManager : MonoBehaviour
         // Enable all AI movement
         Time.timeScale = 1;
 
-        // Enable player controller to allow player tank to accept inputs
-        foreach (GameObject player in activePlayersList)
-        {
-            player.GetComponent<PlayerController>().enabled = true;
-        }
+        isPaused = false;
+        isAdminMenu = false;
+        isScoreDisplayed = false;
     }
     // Pregame is default state (All canvases but Start Game Menu are inactive)
     public void DoPregame()
@@ -449,7 +468,6 @@ public class GameManager : MonoBehaviour
         endGame.SetActive(false);
         adminMenu.SetActive(false);
 
-
         // Enable all AI movement
         Time.timeScale = 1;
     }
@@ -467,11 +485,8 @@ public class GameManager : MonoBehaviour
         // Disable all AI movement
         Time.timeScale = 0;
 
-        // Disable player controller to prevent tank firing when unpausing
-        foreach (GameObject player in activePlayersList)
-        {
-            player.GetComponent<PlayerController>().enabled = false;
-        }
+        isAdminMenu = false;
+        isScoreDisplayed = false;
     }
     // Opens Title Screen
     public void DoTitleScreen()

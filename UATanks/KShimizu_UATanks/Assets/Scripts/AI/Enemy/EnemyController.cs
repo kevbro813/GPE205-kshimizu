@@ -169,8 +169,8 @@ public class EnemyController : AIController
             enemyPawn.TankSmoking();
         }
     }
-// CALLS ENEMY PAWN FUNCTIONS
-public void DoIdle()
+    // CALLS ENEMY PAWN FUNCTIONS
+    public void DoIdle()
     {
         enemyPawn.Idle();
     }

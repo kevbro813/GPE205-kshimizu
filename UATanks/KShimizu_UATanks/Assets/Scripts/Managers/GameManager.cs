@@ -153,7 +153,6 @@ public class GameManager : MonoBehaviour
         scoreManager.InitializeValues();
         scoreManager.LoadPlayerScores();
         scoreManager.FillEmptyScores();
-        LoadSettings(); // Load settings on start
     } 
     void Update()
     {
@@ -273,7 +272,7 @@ public class GameManager : MonoBehaviour
         isAdminMenu = false;
         isScoreDisplayed = false;
     }
-    public void DoNewGame()
+    private void DoNewGame()
     {
         ResetGame();
         StartCoroutine(CreateGameEvent()); // Allows game to reset fully before creating a new game
@@ -284,7 +283,7 @@ public class GameManager : MonoBehaviour
         isScoreDisplayed = false;
     }
     // Open admin menu
-    public void DoAdminMenu()
+    private void DoAdminMenu()
     {
         adminMenu.SetActive(true);
         pauseMenu.SetActive(false);
@@ -301,7 +300,7 @@ public class GameManager : MonoBehaviour
         isScoreDisplayed = false;
     }
     // Open score window
-    public void DoScoreWindow()
+    private void DoScoreWindow()
     {
         pauseMenu.SetActive(false);
         StartGameMenu.SetActive(false);
@@ -318,7 +317,7 @@ public class GameManager : MonoBehaviour
         isAdminMenu = false;
     }
     // Open End Game window
-    public void DoEndGame()
+    private void DoEndGame()
     {
         pauseMenu.SetActive(false);
         StartGameMenu.SetActive(false);
@@ -340,7 +339,7 @@ public class GameManager : MonoBehaviour
         isPreviousGame = false;
     }
     // Resume game
-    public void DoResumeGame()
+    private void DoResumeGame()
     {
         StartGameMenu.SetActive(false);
         pauseMenu.SetActive(false);
@@ -358,16 +357,17 @@ public class GameManager : MonoBehaviour
         isScoreDisplayed = false;
     }
     // Pregame is default state (All canvases but Start Game Menu are inactive)
-    public void DoPregame()
+    private void DoPregame()
     {
         StartGameMenu.SetActive(true);
         pauseMenu.SetActive(false);
         scoreWindow.SetActive(false);
         endGame.SetActive(false);
         adminMenu.SetActive(false);
+        LoadSettings(); // Load settings when start screen is first loaded
     }
     // Set game to active (can be used to unpause game)
-    public void DoActive()
+    private void DoActive()
     {
         pauseMenu.SetActive(false);
         StartGameMenu.SetActive(false);
@@ -379,7 +379,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
     // Pauses the game and opens pause menu
-    public void DoPause()
+    private void DoPause()
     {
         pauseMenu.SetActive(true);
         StartGameMenu.SetActive(false);
@@ -396,13 +396,13 @@ public class GameManager : MonoBehaviour
         isScoreDisplayed = false;
     }
     // Opens Title Screen
-    public void DoTitleScreen()
+    private void DoTitleScreen()
     {
         soundManager.PauseMusic();
         SceneManager.LoadScene(0);
     }
     // Exits the game
-    public void DoQuitGame()
+    private void DoQuitGame()
     {
         Application.Quit();
     }
@@ -411,12 +411,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3);
         isGameReady = true;
     }
-    public IEnumerator CreateGameEvent()
+    private IEnumerator CreateGameEvent()
     {
         yield return new WaitForSeconds(0.2f);
         CreateNewGame();
     }
-    public void CreateNewGame()
+    private void CreateNewGame()
     {
         GetComponent<MapGenerator>().GenerateMap(); // Generates a new map
         if (isMultiplayer == true) // Check if multiplayer
@@ -442,7 +442,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GameReadyEvent());
     }
     // Reset Game Function
-    public void ResetGame()
+    private void ResetGame()
     {
         // Destroy map objects
         for (int i = 0; i < tileRows; i++)
@@ -525,7 +525,7 @@ public class GameManager : MonoBehaviour
         isGameReady = false;
     }
     // Random Enemy option can be set to true on the Start Game Screen
-    public void RandomEnemies()
+    private void RandomEnemies()
     {
         if (isRandomEnemy == true)
         {
@@ -537,7 +537,7 @@ public class GameManager : MonoBehaviour
         }
     }
     // Load settings function
-    public void LoadSettings()
+    private void LoadSettings()
     {
         PauseMenu pauseMenuComponent = pauseMenu.GetComponent<PauseMenu>();
         soundManager.SetMusicVolume(PlayerPrefs.GetFloat("MusicVolume"));

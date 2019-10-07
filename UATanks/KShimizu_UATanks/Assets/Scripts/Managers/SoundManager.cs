@@ -5,14 +5,17 @@ using UnityEngine;
 // Sound manager manages all SFX and music
 public class SoundManager : MonoBehaviour
 {
+    [Header("Game Objects")]
     public GameObject sfxOrigin;
     public GameObject musicOrigin;
-
+    [Space(10)]
     // Using two audio sources to play music and sound effects simultaneously
+    [Header("Audio Sources")]
     public AudioSource asSFX; // SFX audio source
     public AudioSource asMusic; // Music audio source
-
+    [Space(10)]
     // List of audio clips (Set in inspector)
+    [Header("Audio Clips")]
     public AudioClip inGameMusic;
     public AudioClip fireCannon;
     public AudioClip tankDestroyed;

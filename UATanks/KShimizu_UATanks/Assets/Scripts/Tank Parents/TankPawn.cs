@@ -5,11 +5,11 @@ using UnityEngine;
 // Parent component of all AI and player pawns
 public abstract class TankPawn : MonoBehaviour
 {
-    public Transform tf;
-    public TankData tankData;
-    public CharacterController characterController;
-    public CannonSource cannonSource; // Component on child object that will instantiate the projectile
-    public MeshRenderer[] meshRenderer;
+    [HideInInspector] public Transform tf;
+    [HideInInspector] public TankData tankData;
+    [HideInInspector] public CharacterController characterController;
+    [HideInInspector] public CannonSource cannonSource; // Component on child object that will instantiate the projectile
+    [HideInInspector] public MeshRenderer[] meshRenderer;
     public GameObject smokeEffect;
 
     public virtual void Start()

@@ -6,21 +6,34 @@ using UnityEngine.SceneManagement;
 // Start Screen component, used to pick map and AI settings
 public class StartMenu : MonoBehaviour
 {
-    public Dropdown mapDropdown;
+    [Header("Sliders")]
     public Slider enemyCountSlider;
-    public Toggle randomEnemies;
-    public Text enemyCount;
     public Slider columnSlider;
     public Slider rowSlider;
+    [Space(10)]
+    [Header("Text")]
+    public Text enemyCount;
     public Text columnCount;
     public Text rowCount;
+    [Space(10)]
+    [Header("Toggle")]
+    public Toggle randomEnemies;
     public Toggle multiplayer;
+    [Space(10)]
+    [Header("Dropdown")]
+    public Dropdown mapDropdown;
+    [Space(10)]
+    [Header("Input Fields")]
     public InputField playerOneName;
     public InputField playerTwoName;
+    [Space(10)]
+    [Header("Images")]
+    public Image continueImage;
+    [Space(10)]
+    [Header("Buttons")]
+    public Button continueButton;
     [HideInInspector] public int selectedMap;
     [HideInInspector] public int enemyQuantity;
-    public Image continueImage;
-    public Button continueButton;
     private List<string> mapTypes = new List<string>() { "Map of the Day", "Random", "Preset Seed" };
     private void Start()
     {
@@ -73,9 +86,6 @@ public class StartMenu : MonoBehaviour
         enemyQuantity = (int)enemyCountSlider.value;
         GameManager.instance.maxEnemies = enemyQuantity;
     }
-
-    // Populate the dropdown menu with map type options
-
     // Toggle whether to spawn random enemies or enemies based on a preset seed
     void SetRandomEnemies()
     {

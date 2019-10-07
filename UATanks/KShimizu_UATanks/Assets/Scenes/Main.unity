@@ -12468,6 +12468,8 @@ GameObject:
   - component: {fileID: 8257454608668441255}
   - component: {fileID: 1326208305}
   - component: {fileID: 1326208307}
+  - component: {fileID: 1326208306}
+  - component: {fileID: 1326208308}
   m_Layer: 0
   m_Name: Game
   m_TagString: GameManager
@@ -12518,6 +12520,18 @@ MonoBehaviour:
   tileColumns: 2
   mapSeed: 2002
   mapType: 0
+--- !u!114 &1326208306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326208303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cad65fb13f554ec408c44c87404500c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1326208307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12533,6 +12547,18 @@ MonoBehaviour:
   scoreData:
     savedScore: 0
     savedPlayerName: Player
+--- !u!114 &1326208308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326208303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfca64203d4b26e4f994975993ec45a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1330013672
 GameObject:
   m_ObjectHideFlags: 0
@@ -21754,6 +21780,7 @@ MonoBehaviour:
   playerSpawnsList: []
   enemySpawnsList: []
   pickupSpawnsList: []
+  spawnManager: {fileID: 0}
   enemyWaypointsList: []
   activePlayersList: []
   activeEnemiesList: []
@@ -21772,6 +21799,7 @@ MonoBehaviour:
   scoreWindow: {fileID: 1423402032}
   endGame: {fileID: 1291584371}
   adminMenu: {fileID: 978037681}
+  uiManager: {fileID: 0}
   cameraObjects:
   - {fileID: 963194225}
   - {fileID: 142327612}
@@ -21834,6 +21862,9 @@ MonoBehaviour:
   playerOneName: 
   playerTwoName: 
   isPreviousGame: 0
+  isPaused: 0
+  isScoreDisplayed: 0
+  isAdminMenu: 0
   playerTankShell: {fileID: 396389110}
   enemyTankShell: {fileID: 1049745493}
   pickupShell: {fileID: 1551509411}

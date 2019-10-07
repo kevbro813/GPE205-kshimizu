@@ -5,8 +5,8 @@ using UnityEngine;
 // Player Pawn component, this contains functions unique to the player, child of TankPawn
 public class PlayerPawn : TankPawn
 {
-    public PlayerController playerController;
-    public PlayerData playerData;
+    [HideInInspector] public PlayerController playerController;
+    [HideInInspector] public PlayerData playerData;
     public override void Start()
     {
         base.Start();

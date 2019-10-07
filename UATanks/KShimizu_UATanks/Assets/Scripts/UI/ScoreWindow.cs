@@ -6,15 +6,20 @@ using UnityEngine.UI;
 // Manages the score window
 public class ScoreWindow : MonoBehaviour
 {
+    [Header("Score Manager Component")]
+    public ScoreManager scoreManager; // Score Manager component
+    [Space(10)]
     // Current player name and scores
+    [Header("Player Names")]
     public Text playerOneName;
     public Text playerTwoName;
+    [Space(10)]
+    [Header("Player Scores")]
     public Text playerOneScore;
     public Text playerTwoScore;
-
-    public ScoreManager scoreManager; // Score Manager component
-
+    [Space(10)]
     // Text variables for names and high scores
+    [Header("High Score Names")]
     public Text highScoreOneName;
     public Text highScoreTwoName;
     public Text highScoreThreeName;
@@ -25,6 +30,8 @@ public class ScoreWindow : MonoBehaviour
     public Text highScoreEightName;
     public Text highScoreNineName;
     public Text highScoreTenName;
+    [Space(10)]
+    [Header("High Scores")]
     public Text highScoreOneScore;
     public Text highScoreTwoScore;
     public Text highScoreThreeScore;

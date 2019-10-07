@@ -8,9 +8,7 @@ public class AIHearing : MonoBehaviour
     private Transform tf; // transform component
     private Transform ttf; // target (player) transform component
     private SphereCollider col; // Sphere collider
-    public AIData aiData;
-
-
+    [HideInInspector] public AIData aiData;
 
     // Start is called before the first frame update
     void Start()

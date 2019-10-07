@@ -6,9 +6,9 @@ using UnityEngine;
 public abstract class AIController : MonoBehaviour
 {
     // Components used by AI controllers
-    public TankPawn tankPawn;
-    public TankData tankData;
-    public AIVision aiVision;
-    public AIHearing aiHearing;
-    public SensoryRange sensoryRange;
+    [HideInInspector] public TankPawn tankPawn;
+    [HideInInspector] public TankData tankData;
+    [HideInInspector] public AIVision aiVision;
+    [HideInInspector] public AIHearing aiHearing;
+    [HideInInspector] public SensoryRange sensoryRange;
 }

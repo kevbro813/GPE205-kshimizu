@@ -9,20 +9,20 @@ public class EnemyPawn : AIPawn
     //public Transform ptf; // Player transform component
     public AIVision aiVision; // Vision component
     public AIHearing aiHearing; // Hearing component
-    public bool atWaypoint = false; // Indicates whether the AI is currently at a waypoint while patrolling
-    public bool atSearchLocation = false; // Indicates whether the AI is currently at the last known player location while searching
-    public bool atInvestigateLocation = false; // Indicates whether the AI is currently looking in the direction of a sound while investigating
-    public bool atAlertLocation = false; // Indicates whether the AI is currently at the alert location
-    public bool isInvestigating = false; // Switching from true to false allows the AI to transition from investigate state to patrol state
-    public bool isSearching = false; // Switching from true to false allows the AI to transition from search state to patrol state
-    public bool isAlertActive = false; // Switching from true to false allows the AI to transition from alert state to patrol state
+    [HideInInspector] public bool atWaypoint = false; // Indicates whether the AI is currently at a waypoint while patrolling
+    [HideInInspector] public bool atSearchLocation = false; // Indicates whether the AI is currently at the last known player location while searching
+    [HideInInspector] public bool atInvestigateLocation = false; // Indicates whether the AI is currently looking in the direction of a sound while investigating
+    [HideInInspector] public bool atAlertLocation = false; // Indicates whether the AI is currently at the alert location
+    [HideInInspector] public bool isInvestigating = false; // Switching from true to false allows the AI to transition from investigate state to patrol state
+    [HideInInspector] public bool isSearching = false; // Switching from true to false allows the AI to transition from search state to patrol state
+    [HideInInspector] public bool isAlertActive = false; // Switching from true to false allows the AI to transition from alert state to patrol state
     private float waitTime; // Used in timer to determine how long to wait at a waypoint while patrolling
     private bool isPatrolForward = true; // Used in "PingPong" patrol type to loop through the waypoints in reverse order
     private float investigateTime; // How long the AI will investigate before returning to patrol
     private float searchTime; // How long the AI will search before returning to patrol
     private float alertTime; // How long the AI will be alert before returning to patrol
     private bool isTurned = false; // Is the tank turned around (Used in Flee function)
-    public RaycastHit obstacleHit; // Raycast hit for obstacles (Includes the arena and other enemy tanks)
+    [HideInInspector] public RaycastHit obstacleHit; // Raycast hit for obstacles (Includes the arena and other enemy tanks)
 
     public override void Start()
     {

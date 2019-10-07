@@ -5,13 +5,13 @@ using UnityEngine;
 // Player Controller component, accepts all player inputs
 public class PlayerController : MonoBehaviour
 {
-    public PlayerPawn playerPawn;
-    public PlayerData playerData;
+    [HideInInspector] public PlayerPawn playerPawn;
+    [HideInInspector] public PlayerData playerData;
     private float inputVertical; // Variable for player vertical input, used for tank forward/reverse movement
     private float inputHorizontal; // Variable for player horizontal input, used for tank rotation
     private float moveSpeed; // Float variable that is passed into MoveTank method
     private float rotateSpeed; // Float variable that is passed into RotateTank method
-    public Vector3 mousePosition; // Stores the mouse cursor position, will be used for turret rotation
+    [HideInInspector] public Vector3 mousePosition; // Stores the mouse cursor position, will be used for turret rotation
 
     private void Start()
     {

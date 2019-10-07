@@ -6,10 +6,10 @@ using UnityEngine;
 public class CannonSource : MonoBehaviour
 {
     public GameObject projectile; // Set the projectile in the inspector
-    public TankData tankData;
+    [HideInInspector] public TankData tankData;
     private Transform tf;
-    public float lastCannonFire; // Variable that stores the last time the cannon was fired
-    public bool cannonLoaded = true; // Bool is true when the timer expires, allowing the cannon can be fired again
+    [HideInInspector] public float lastCannonFire; // Variable that stores the last time the cannon was fired
+    [HideInInspector] public bool cannonLoaded = true; // Bool is true when the timer expires, allowing the cannon can be fired again
 
     void Start()
     {
@@ -41,9 +41,6 @@ public class CannonSource : MonoBehaviour
                 // Create a projectile instance
                 GameObject projectileClone = Instantiate(projectile, tf.position, tf.rotation, this.transform.parent) as GameObject;
                 GameManager.instance.soundManager.SoundFireCannon();
-
-                // CAN BE USED IN THE FUTURE TO TRACK WHO SHOT PROJECTILE
-                // projectileClone.GetComponent<CannonShell>().originTankIndex = tankData.tankIndex; 
 
                 // Destroy the projectileClone after a set duration
                 if (projectile != null)

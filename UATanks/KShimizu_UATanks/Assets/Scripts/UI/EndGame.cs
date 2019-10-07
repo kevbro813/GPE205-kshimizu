@@ -7,12 +7,16 @@ using UnityEngine.UI;
 public class EndGame : MonoBehaviour
 {
     // Current player name and scores
+    [Header("Player Names")]
     public Text playerOneName;
     public Text playerTwoName;
+    [Space(10)]
+    [Header("Player Scores")]
     public Text playerOneScore;
     public Text playerTwoScore;
-
+    [Space(10)]
     // Text variables for names and high scores
+    [Header("High Score Names")]
     public Text highScoreOneName;
     public Text highScoreTwoName;
     public Text highScoreThreeName;
@@ -23,6 +27,8 @@ public class EndGame : MonoBehaviour
     public Text highScoreEightName;
     public Text highScoreNineName;
     public Text highScoreTenName;
+    [Space(10)]
+    [Header("High Scores")]
     public Text highScoreOneScore;
     public Text highScoreTwoScore;
     public Text highScoreThreeScore;
@@ -33,7 +39,8 @@ public class EndGame : MonoBehaviour
     public Text highScoreEightScore;
     public Text highScoreNineScore;
     public Text highScoreTenScore;
-
+    [Space(10)]
+    [Header("Winner Text")]
     public Text Winner; // Text that displays the winner
 
     private void Update()

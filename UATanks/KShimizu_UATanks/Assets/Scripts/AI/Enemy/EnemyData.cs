@@ -6,10 +6,10 @@ using UnityEngine;
 public class EnemyData : AIData
 {
     public List<Transform> enemyWaypoints; // Array of all the enemy waypoints being used by the AI
-    public int currentWaypoint = 0; // Tracks the waypoint that is currently being used by an AI
+    [HideInInspector] public int currentWaypoint = 0; // Tracks the waypoint that is currently being used by an AI
     public PatrolType patrolType; // Allows the patrol type to be changed in the Inspector
     public WaypointType waypointType; // Allows the type of waypoints used to be changed in the Inspector
-    public int enemyListIndex;
+    public int enemyListIndex; // Index number of enemy
 
     public enum WaypointType { Global, Local } // Selection for Waypoint Type (Global are waypoints saved in GameManager, local would be local waypoints that are used with prefabs in local space
     public enum PatrolType { Random, Stop, Loop, PingPong }; // Selections for Patrol Type

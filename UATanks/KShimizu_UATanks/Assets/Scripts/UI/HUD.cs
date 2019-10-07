@@ -6,8 +6,8 @@ using UnityEngine.UI;
 // Component that contains all HUD elements
 public class HUD : MonoBehaviour
 {
-    public PlayerData playerData;
-    public Text scoreValue;
+    [HideInInspector] public PlayerData playerData; 
+    [Header("HUD Images")]
     public Image healthBar;
     public Image invulnerabilityIcon;
     public Image invisibilityIcon;
@@ -20,8 +20,11 @@ public class HUD : MonoBehaviour
     public Image playerLifeOne;
     public Image playerLifeTwo;
     public Image playerLifeThree;
-    public Text coinAmount;
     public Image reloadTimer;
+    [Space(10)]
+    [Header("HUD Text")]
+    public Text coinAmount;
+    public Text scoreValue;
     public Text playerName;
 
     // Start is called before the first frame update

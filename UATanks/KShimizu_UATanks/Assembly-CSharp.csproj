@@ -86,6 +86,8 @@
     <Compile Include="Assets\Scripts\Managers\Scoring\ScoreData.cs" />
     <Compile Include="Assets\Scripts\Managers\Scoring\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\SpawnManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\Map\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\Map\Room.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnProximity.cs" />

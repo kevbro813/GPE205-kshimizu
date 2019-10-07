@@ -5,8 +5,8 @@ using UnityEngine;
 // Component attached to a pickup object
 public class PickupObject : MonoBehaviour
 {
-    public PickupData pickupData;
-    public int pickupListIndex; // Pickup index is used to add or remove from list of active pickups
+    [HideInInspector] public PickupData pickupData;
+    [HideInInspector] public int pickupListIndex; // Pickup index is used to add or remove from list of active pickups
     [HideInInspector] public SphereCollider sphereCollider;
     [HideInInspector] public MeshRenderer[] meshRenderer;
     private void Start()

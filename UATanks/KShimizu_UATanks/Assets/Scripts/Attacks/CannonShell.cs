@@ -7,12 +7,12 @@ public class CannonShell : MonoBehaviour
 {
     private Rigidbody rb;
     private TankData tankData;
-    public int originTankIndex;
-    public GameObject explosionHit;
     private Transform tf;
-    public float explosionHitDuration = 1.2f;
-    public GameObject explosionDestroy;
-    public float explosionDestroyDuration = 1.2f;
+    public int originTankIndex;
+    public GameObject explosionHit; // Set in inspector
+    public GameObject explosionDestroy; // Set in inspector
+    public float explosionHitDuration = 1.2f; // Duration of explosion hit FX
+    public float explosionDestroyDuration = 1.2f; // Duration of explosion destroy FX
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,7 @@ public class CannonShell : MonoBehaviour
                 {
                     GameManager.instance.soundManager.SoundTankHit(); // Play sound when tank is hit
                     tankData.score += enemyData.pointValue;
+                    // Add explosionHit FX
                     GameObject explosionHitClone = Instantiate(explosionHit, tf.position, tf.rotation);
                     Destroy(explosionHitClone, explosionHitDuration);
                 }
@@ -51,6 +52,7 @@ public class CannonShell : MonoBehaviour
                     tankData.score += (int)(enemyData.pointValue * GameManager.instance.killMultiplier); // Add score multiplier for destroying tank
                     // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
                     col.gameObject.GetComponent<EnemyPawn>().TankDestroyed();
+                    // Add explosionDestroy FX
                     GameObject explosionDestroyClone = Instantiate(explosionDestroy, tf.position, tf.rotation);
                     Destroy(explosionDestroyClone, explosionDestroyDuration);
                 }   
@@ -73,6 +75,7 @@ public class CannonShell : MonoBehaviour
                 {
                     GameManager.instance.soundManager.SoundTankHit(); // Play sound when tank is hit
                     tankData.score += playerData.pointValue;
+                    // Add explosionHit FX
                     GameObject explosionHitClone = Instantiate(explosionHit, tf.position, tf.rotation);
                     Destroy(explosionHitClone, explosionHitDuration);
                 }
@@ -81,6 +84,7 @@ public class CannonShell : MonoBehaviour
                     tankData.score += (int)(playerData.pointValue * GameManager.instance.killMultiplier); // Add score multiplier for destroying tank
                     // Check tank destroyed after collision, rather than checking in Update() to lower resource requirement
                     col.gameObject.GetComponent<PlayerPawn>().TankDestroyed();
+                    // Add explosionDestroy FX
                     GameObject explosionDestroyClone = Instantiate(explosionDestroy, tf.position, tf.rotation);
                     Destroy(explosionDestroyClone, explosionDestroyDuration);
                 }

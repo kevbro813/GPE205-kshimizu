@@ -7,8 +7,8 @@ public class AIVision : MonoBehaviour
 {
     private Transform ttf; // Target transform component
     private Transform tf;
-    public AIData aiData;
-    public float targetDistance; // Distance from the AI to the target
+    [HideInInspector] public AIData aiData;
+    [HideInInspector] public float targetDistance; // Distance from the AI to the target
 
     void Start()
     {

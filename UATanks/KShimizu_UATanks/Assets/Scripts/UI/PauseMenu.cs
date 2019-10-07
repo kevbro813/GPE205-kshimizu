@@ -14,11 +14,18 @@ public class PauseMenu : MonoBehaviour
     // Sliders that will adjust music and sound effects volume, respectively
     public void MusicSlider()
     {
-        GameManager.instance.soundManager.SetMusicVolume(musicSlider.value);
+        if (musicSlider != null)
+        {
+            GameManager.instance.soundManager.SetMusicVolume(musicSlider.value);
+        } 
     }
     public void SFXSlider()
     {
-        GameManager.instance.soundManager.SetSFXVolume(sfxSlider.value);
+        if (sfxSlider != null)
+        {
+            GameManager.instance.soundManager.SetSFXVolume(sfxSlider.value);
+        }
+        
     }
 
     // Save and Load volume settings

@@ -5,8 +5,8 @@ using UnityEngine;
 // Holds all the player data variables, most of the variables are found in the "TankData" parent
 public class PlayerData : TankData
 {
+    [HideInInspector] public Transform tf;
     public int playerLives = 3;
-    public Transform tf;
     public int playerIndex;
     public string playerName;
     public List<Transform> activeSpawnsList;

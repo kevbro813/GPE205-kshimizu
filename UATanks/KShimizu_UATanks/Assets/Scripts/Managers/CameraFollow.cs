@@ -5,9 +5,9 @@ using UnityEngine;
 // Camera script used to follow the player
 public class CameraFollow : MonoBehaviour
 {
-    public GameObject playerTank; // player object
+    [HideInInspector] public GameObject playerTank; // player object
     public float speed = 0.5f; // Sets the speed the camera follows behind player
-    public float cameraTrailDistance = 15.0f;
+    public float cameraTrailDistance = 15.0f; // Distance camera follows behind player
 
     void Update()
     {

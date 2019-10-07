@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public ScoreData scoreData; // Score Manager component
+    [HideInInspector] public ScoreData scoreData; // Score Manager component
     // Initialize ScoreManager
     public void InitializeValues()
     {

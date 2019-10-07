@@ -7,8 +7,8 @@ using System;
 [System.Serializable]
 public class ScoreData : IComparable<ScoreData>
 {
-    public float savedScore;
-    public string savedPlayerName;
+    [HideInInspector] public float savedScore;
+    [HideInInspector] public string savedPlayerName;
 
     // Default ScoreManager
     public ScoreData()

@@ -5,8 +5,8 @@ using UnityEngine;
 // Enemy Controller can be used for an AI with all states
 public class EnemyController : AIController
 {
-    public EnemyPawn enemyPawn;
-    public EnemyData enemyData;
+    [HideInInspector] public EnemyPawn enemyPawn;
+    [HideInInspector] public EnemyData enemyData;
     private float stateEnterTime; // Saves the last time the AI transitioned to a new state
     private bool isFleeing = false; // Indicates whether the AI tank is in the act of fleeing (The flee state has multiple stages)
     public AIState aiState; // Allows the AI state to be changed in the Inspector
